@@ -1,0 +1,362 @@
+<div class="parchment-table" id="mob-calc-root">
+<style>
+  #mob-calc-root.parchment-table {
+    font-family: "Garamond","Georgia",serif;
+    color:#111;
+    padding:20px;
+    border:2px solid #660000;
+    border-radius:6px;
+    max-width:15500px;
+    margin:auto;
+    background:linear-gradient(180deg,#fafafa 0%,#f0f0f0 100%);
+    box-shadow:0 0 12px rgba(0,0,0,0.25);
+  }
+
+  #mob-calc-root h2 {
+    margin-top:0;
+    margin-bottom:0.5rem;
+    font-size:1.4rem;
+  }
+  #mob-calc-root p.note {
+    margin-top:0;
+    font-size:0.9rem;
+    font-style:italic;
+  }
+
+  #mob-calc-root table {
+    border-collapse:collapse;
+    width:100%;
+    margin-top:0.75rem;
+  }
+
+  #mob-calc-root thead th {
+    background:#7b1113;
+    color:#fff;
+    border:1px solid #440000;
+    padding:6px 8px;
+    text-align:center;
+    vertical-align:middle;
+    font-size:0.95rem;
+  }
+
+  #mob-calc-root tbody td {
+    border:1px solid #c0c0c0;
+    padding:4px 6px;
+    text-align:center;
+    vertical-align:middle;
+    font-size:0.95rem;
+  }
+
+  #mob-calc-root tbody tr:nth-child(odd) { background:#ffffff; }
+  #mob-calc-root tbody tr:nth-child(even){ background:#f4f4f4; }
+
+  /* highlight when the mob is too small to land a hit */
+  #mob-calc-root tbody tr.insufficient-mob {
+    background-color:#fff8b3 !important; /* pale yellow */
+  }
+
+  #mob-calc-root input[type="text"],
+  #mob-calc-root input[type="number"] {
+    width:100%;
+    box-sizing:border-box;
+    padding:3px 4px;
+    border:1px solid #888;
+    border-radius:3px;
+    font-family:inherit;
+    font-size:0.9rem;
+  }
+
+  #mob-calc-root .controls {
+    margin-top:0.5rem;
+    display:flex;
+    gap:0.5rem;
+    flex-wrap:wrap;
+  }
+
+  #mob-calc-root .controls button {
+    padding:4px 10px;
+    border-radius:4px;
+    border:1px solid #660000;
+    background:#7b1113;
+    color:#fff;
+    cursor:pointer;
+    font-family:inherit;
+    font-size:0.9rem;
+  }
+  #mob-calc-root .controls button:hover {
+    background:#990000;
+  }
+
+  #mob-calc-root .dmg-note {
+    margin-top:0.75rem;
+    font-size:0.85rem;
+    font-style:italic;
+  }
+
+  @media (max-width:800px){
+    #mob-calc-root thead th,
+    #mob-calc-root tbody td {
+      font-size:0.8rem;
+    }
+  }
+</style>
+
+<h2>Mob Combat Calculator</h2>
+
+<table id="mobTable">
+  <thead>
+    <tr>
+      <th>PC Name</th>
+      <th>PC Armor Class</th>
+      <th>Mob Description</th>
+      <th>Mob Attack Bonus</th>
+      <th>Min. d20 Roll to Hit</th>
+      <th>Attackers Needed for 1 Hit</th>
+      <th>Number of Hits</th>
+      <th>Mob Members</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><input type="text" class="pc-name" placeholder="Fighter"></td>
+      <td><input type="number" class="pc-ac" min="1" max="40" value="17"></td>
+      <td><input type="text" class="mob-name" placeholder="Goblins"></td>
+      <td><input type="number" class="mob-bonus" min="-10" max="40" value="4"></td>
+      <td class="min-roll"></td>
+      <td class="mob-count"></td>
+      <td class="mob-hits"></td>
+      <td><input type="number" class="mob-members" min="0" max="500" value="5"></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="controls">
+  <button type="button" id="addRowBtn">+ Add PC Row</button>
+  <button type="button" id="removeRowBtn">– Remove Last Row</button>
+  <button type="button" id="resetMobBtn">Reset Calculator</button>
+</div>
+
+<div class="dmg-note">
+Mob combat can be used to speed up large battles.  By forgoing individual enemy attack rolls, you can approximate an
+average number of hits a large enemy group can inflict on a target.  The calculator above will show how many enemies
+are needed in a mob to successfully land a single hit, each round, against a target, and how many hits a mob of a
+given size can deliver.
+<br><br>
+Enemy critical hits or misses are not possible in mob combat.  A mob composed of fewer members than necessary, or
+reduced to members fewer than necessary, does not land a hit that round (rows will highlight yellow when this occurs).  
+As enemies dwindle, you can switch back to individual attack rolls.
+<br><br>
+For mob combat with lower level enemies, the optional rule for cleaving through creatures can additionally help manage combat pace. 
+<br><br>
+<b>For full details, see Mob Combat (Pg. 250) and Cleaving Through Creatures (Pg. 272) in the 2014 DMG.</b>
+</div>
+
+<script>
+(function() {
+  const table         = document.getElementById("mobTable");
+  const tbody         = table.querySelector("tbody");
+  const addRowBtn     = document.getElementById("addRowBtn");
+  const removeRowBtn  = document.getElementById("removeRowBtn");
+  const resetMobBtn   = document.getElementById("resetMobBtn");
+
+  // NEW: localStorage key + template row for reset/load
+  const MOB_CALC_STORE_KEY = "mobCombatCalculatorState_v1";
+  const initialRowTemplate = tbody.querySelector("tr").cloneNode(true);
+
+  function attackersFromRoll(minRoll) {
+    // DMG p.250 mapping
+    if (minRoll <= 5)  return 1;
+    if (minRoll <= 12) return 2;
+    if (minRoll <= 14) return 3;
+    if (minRoll <= 16) return 4;
+    if (minRoll <= 18) return 5;
+    if (minRoll === 19) return 10;
+    if (minRoll > 19)  return 20;
+  }
+
+  function recalcRow(tr) {
+    const acInput        = tr.querySelector(".pc-ac");
+    const bonusInput     = tr.querySelector(".mob-bonus");
+    const mobMembersInp  = tr.querySelector(".mob-members");
+    const minRollCell    = tr.querySelector(".min-roll");
+    const mobCountCell   = tr.querySelector(".mob-count");
+    const hitsCell       = tr.querySelector(".mob-hits");
+
+    const ac          = parseInt(acInput.value, 10);
+    const bonus       = parseInt(bonusInput.value, 10);
+    const mobMembers  = parseInt(mobMembersInp.value, 10);
+
+    // clear base state
+    tr.classList.remove("insufficient-mob");
+
+    if (isNaN(ac) || isNaN(bonus)) {
+      minRollCell.textContent  = "";
+      mobCountCell.textContent = "";
+      hitsCell.textContent     = "";
+      return;
+    }
+
+    let needed = ac - bonus;         // AC 15, bonus +5 → need 10+
+    if (needed < 1)  needed = 1;     // always at least 1
+    if (needed > 20) needed = 20;    // cap at 20
+
+    const attackers = attackersFromRoll(needed);
+    minRollCell.textContent  = needed;
+    mobCountCell.textContent = attackers;
+
+    // Calculate hits if mob size is known
+    if (!isNaN(mobMembers) && attackers > 0) {
+      if (mobMembers < attackers) {
+        hitsCell.textContent = "0";
+        tr.classList.add("insufficient-mob");
+      } else {
+        const hits = Math.floor(mobMembers / attackers);
+        hitsCell.textContent = String(hits);
+      }
+    } else {
+      hitsCell.textContent = "";
+    }
+  }
+
+  function recalcAll() {
+    tbody.querySelectorAll("tr").forEach(recalcRow);
+  }
+
+  // NEW: Save state of all rows to localStorage
+  function saveMobCalcState() {
+    const rowsData = [];
+    tbody.querySelectorAll("tr").forEach(tr => {
+      rowsData.push({
+        pcName:     (tr.querySelector(".pc-name")     || {}).value || "",
+        pcAC:       (tr.querySelector(".pc-ac")       || {}).value || "",
+        mobName:    (tr.querySelector(".mob-name")    || {}).value || "",
+        mobBonus:   (tr.querySelector(".mob-bonus")   || {}).value || "",
+        mobMembers: (tr.querySelector(".mob-members") || {}).value || ""
+      });
+    });
+
+    try {
+      const payload = { rows: rowsData };
+      localStorage.setItem(MOB_CALC_STORE_KEY, JSON.stringify(payload));
+    } catch (e) {
+      console.warn("Could not save mob calc state:", e);
+    }
+  }
+
+  // NEW: Load state from localStorage (rebuild table)
+  function loadMobCalcState() {
+    try {
+      const stored = localStorage.getItem(MOB_CALC_STORE_KEY);
+      if (!stored) return;
+
+      const data = JSON.parse(stored);
+      if (!data.rows || !Array.isArray(data.rows) || data.rows.length === 0) {
+        return;
+      }
+
+      tbody.innerHTML = "";
+
+      data.rows.forEach(rowState => {
+        const tr = initialRowTemplate.cloneNode(true);
+
+        const pcNameInp     = tr.querySelector(".pc-name");
+        const pcACInp       = tr.querySelector(".pc-ac");
+        const mobNameInp    = tr.querySelector(".mob-name");
+        const mobBonusInp   = tr.querySelector(".mob-bonus");
+        const mobMembersInp = tr.querySelector(".mob-members");
+
+        if (pcNameInp)     pcNameInp.value     = rowState.pcName     || "";
+        if (pcACInp)       pcACInp.value       = rowState.pcAC       || "";
+        if (mobNameInp)    mobNameInp.value    = rowState.mobName    || "";
+        if (mobBonusInp)   mobBonusInp.value   = rowState.mobBonus   || "";
+        if (mobMembersInp) mobMembersInp.value = rowState.mobMembers || "";
+
+        tr.classList.remove("insufficient-mob");
+        const minRollCell  = tr.querySelector(".min-roll");
+        const mobCountCell = tr.querySelector(".mob-count");
+        const hitsCell     = tr.querySelector(".mob-hits");
+        if (minRollCell)  minRollCell.textContent  = "";
+        if (mobCountCell) mobCountCell.textContent = "";
+        if (hitsCell)     hitsCell.textContent     = "";
+
+        tbody.appendChild(tr);
+      });
+
+      recalcAll();
+    } catch (e) {
+      console.warn("Could not load mob calc state:", e);
+    }
+  }
+
+  // input changes → recalc row + save
+  tbody.addEventListener("input", function(e) {
+    const tr = e.target.closest("tr");
+    if (!tr) return;
+    if (e.target.classList.contains("pc-ac") ||
+        e.target.classList.contains("mob-bonus") ||
+        e.target.classList.contains("mob-members") ||
+        e.target.classList.contains("pc-name") ||
+        e.target.classList.contains("mob-name")) {
+      recalcRow(tr);
+      saveMobCalcState();
+    }
+  });
+
+  // Add / remove rows
+  addRowBtn.addEventListener("click", function() {
+    const newRow = initialRowTemplate.cloneNode(true);
+
+    // Start new rows blank (like your original behavior)
+    newRow.querySelectorAll("input").forEach(inp => {
+      if (inp.classList.contains("pc-ac"))       inp.value = "";
+      else if (inp.classList.contains("mob-bonus"))   inp.value = "";
+      else if (inp.classList.contains("mob-members")) inp.value = "";
+      else inp.value = "";
+    });
+    const minRollCell  = newRow.querySelector(".min-roll");
+    const mobCountCell = newRow.querySelector(".mob-count");
+    const hitsCell     = newRow.querySelector(".mob-hits");
+    if (minRollCell)  minRollCell.textContent  = "";
+    if (mobCountCell) mobCountCell.textContent = "";
+    if (hitsCell)     hitsCell.textContent     = "";
+    newRow.classList.remove("insufficient-mob");
+
+    tbody.appendChild(newRow);
+    recalcRow(newRow);
+    saveMobCalcState();
+  });
+
+  removeRowBtn.addEventListener("click", function() {
+    const rows = tbody.querySelectorAll("tr");
+    if (rows.length > 1) {
+      tbody.removeChild(rows[rows.length - 1]);
+      recalcAll();
+      saveMobCalcState();
+    }
+  });
+
+  // NEW: Reset button – restore original single row and clear storage
+  resetMobBtn.addEventListener("click", function() {
+    try {
+      localStorage.removeItem(MOB_CALC_STORE_KEY);
+    } catch (e) {
+      console.warn("Could not clear mob calc state:", e);
+    }
+
+    tbody.innerHTML = "";
+    const tr = initialRowTemplate.cloneNode(true);
+    tbody.appendChild(tr);
+
+    recalcAll();
+    // Optional: you can call saveMobCalcState() here if you want the reset state persisted immediately
+  });
+
+  // Initial setup:
+  // 1) try to load saved state
+  // 2) if none, use existing HTML
+  // 3) recalc all rows
+  loadMobCalcState();
+  recalcAll();
+})();
+</script>
+</div>
