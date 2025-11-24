@@ -72,23 +72,20 @@
 
 
   /* --- RESULTS BOX --- */
-  #social-calc-root .results {
-    border:1px solid #c0c0c0;
-    background:#ffffff;
-    padding:8px 10px;
-    font-size:0.92rem;
+  /* Result layout for Social Interaction Calculator */
+  #social-calc-root .result-block {
+    margin-bottom: 0.75rem;   /* space between result sections */
   }
-  #social-calc-root .results p {
-    margin:0.3rem 0;
+  
+  #social-calc-root .result-title {
+    color: #7b1113;           /* red header line */
+    font-weight: bold;
+    margin-bottom: 0.2rem;    /* small gap before explanation */
   }
-  #social-calc-root .results strong {
-    color:#7b1113;
-  }
-
-  #social-calc-root .small {
-    font-size:0.85rem;
-    font-style:italic;
-    color:#444;
+  
+  #social-calc-root .result-text {
+    margin: 0;                /* keep explanation tight */
+    color: #111;              /* normal black text */
   }
 </style>
 
@@ -322,20 +319,20 @@ as a result of an interaction and request.
   function evaluateInteraction() {
     const attitude = npcAttitudeSel.value;
     const roll     = parseInt(charInput.value, 10);
-
+  
     if (isNaN(roll)) {
       resultsDiv.innerHTML = "<p>Please enter the Charisma check total.</p>";
       return;
     }
-
+  
     const options     = REQUEST_OPTIONS[attitude] || [];
     const selectedKey = requestTypeSel.value;
     const reqOpt      = options.find(o => o.key === selectedKey) || options[0];
-
+  
     const table     = ATTITUDE_TABLE[attitude];
     const targetRow = table[reqOpt.rowIndex];
     const targetDC  = targetRow.dc;
-
+  
     // Determine highest reaction level achieved by this roll (table outcome)
     let achievedRow = table[0];
     for (let i = 0; i < table.length; i++) {
@@ -343,41 +340,97 @@ as a result of an interaction and request.
         achievedRow = table[i];
       }
     }
-
+  
     const success = roll >= targetDC;
     const shift   = computeAttitudeShift(attitude, success, roll, targetDC);
-
+  
     let html = "";
-
-    html += "<p><strong>Starting Attitude:</strong> " + attitude + "</p>";
-    html += "<p><strong>Request you’re making:</strong> " + reqOpt.label +
-            " – " + reqOpt.description + "</p>";
-    html += "<p><strong>Target DC for this request level:</strong> " +
-            targetDC + " (" + targetRow.label + ")</p>";
-
-    html += "<p><strong>Request result:</strong> " +
-            (success
-              ? "Success – the NPC is willing to meet this level of request."
-              : "Failure – the NPC is not willing to go as far as this level of request."
-            ) +
-            "</p>";
-
-    html += "<p><strong>What the NPC is actually willing to do (from the table):</strong> " +
-            achievedRow.text + "</p>";
-
-    // Attitude shift explanation, framed as optional DM guidance
+  
+    // Starting attitude
+    html += `
+      <div class="result-block">
+        <div class="result-title">Starting Attitude</div>
+        <p class="result-text">${attitude}</p>
+      </div>
+    `;
+  
+    // Request being made
+    html += `
+      <div class="result-block">
+        <div class="result-title">Request You’re Making</div>
+        <p class="result-text">
+          <strong>${reqOpt.label}</strong><br>
+          ${reqOpt.description}
+        </p>
+      </div>
+    `;
+  
+    // DC + roll
+    html += `
+      <div class="result-block">
+        <div class="result-title">Target DC for This Request Level</div>
+        <p class="result-text">
+          DC ${targetDC} (${targetRow.label})
+        </p>
+      </div>
+  
+      <div class="result-block">
+        <div class="result-title">Charisma Check Total</div>
+        <p class="result-text">
+          ${roll}
+        </p>
+      </div>
+    `;
+  
+    // Request result (did you meet the level you asked for?)
+    html += `
+      <div class="result-block">
+        <div class="result-title">Request Result</div>
+        <p class="result-text">
+          ${success
+            ? "Success – the NPC is willing to meet this level of request."
+            : "Failure – the NPC is not willing to go as far as this level of request."
+          }
+        </p>
+      </div>
+    `;
+  
+    // What the NPC is actually willing to do from the table
+    html += `
+      <div class="result-block">
+        <div class="result-title">What the NPC Is Actually Willing to Do (Table Outcome)</div>
+        <p class="result-text">
+          ${achievedRow.text}
+        </p>
+      </div>
+    `;
+  
+    // Attitude change guidance
     if (shift.newAttitude === attitude) {
-      html += "<p><strong>Attitude change (optional DM guidance):</strong> " +
-              attitude + " → " + shift.newAttitude +
-              " (no automatic step change). " + shift.explanation + "</p>";
+      html += `
+        <div class="result-block">
+          <div class="result-title">Attitude Change (Optional DM Guidance)</div>
+          <p class="result-text">
+            ${attitude} → ${shift.newAttitude} (no automatic step change).<br>
+            ${shift.explanation}
+          </p>
+        </div>
+      `;
     } else {
-      html += "<p><strong>Attitude change (optional DM guidance):</strong> " +
-              attitude + " → " + shift.newAttitude +
-              " (one-step change). " + shift.explanation + "</p>";
+      html += `
+        <div class="result-block">
+          <div class="result-title">Attitude Change (Optional DM Guidance)</div>
+          <p class="result-text">
+            ${attitude} → ${shift.newAttitude} (one-step change).<br>
+            ${shift.explanation}
+          </p>
+        </div>
+      `;
     }
-
+  
     resultsDiv.innerHTML = html;
   }
+
 
   // Persistence helpers
   function saveSocialCalcState() {
