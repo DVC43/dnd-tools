@@ -92,7 +92,7 @@
   }
 </style>
 
-<h2>Social Interaction Outcome Calculator</h2>
+<h2>Interaction Outcome Calculator</h2>
 <p class="note">
 
 </p>
@@ -120,21 +120,25 @@
   </div>
 </div>
 
-<div class="controls">
-  <button type="button" id="socialCalcBtn">Evaluate Interaction</button>
-  <button type="button" id="socialResetBtn">Reset</button>
-</div>
-
 <div class="results" id="socialResults">
   <p>Set the inputs above and click <strong>Evaluate Interaction</strong> to see the outcome.</p>
 </div>
 
+<div class="controls">
+  <button type="button" id="socialResetBtn">Reset</button>
+</div>
+  
 <p class="small">
-This calculator is based on the DMG “Conversation Reaction” table (p.244–245). Select the NPC’s starting attitude and the type of request being made.  After roleplaying the interaction and request, input party’s Charisma check outcome to see the likely outcome and any shift in attitude.
-<br>
-<br>
-Typically, a creature can have their attitude improved or worsened by one step maximum (Friendly ⇄ Indifferent ⇄ Hostile) from an interaction and request.
+This calculator is based on the DMG’s “Conversation Reaction” guidelines (p. 244–245). 
+Choose the NPC’s starting attitude and the type of request being made. After roleplaying 
+the conversation and request, enter the party’s Charisma check total to see the likely outcome.
+<br><br>
+Changes in NPC attitude are always at the DM’s discretion. This tool offers a suggested 
+attitude worsening only when a request check fails by five or more. Typically, a creature’s 
+attitude can improve or worsen by at most one step (Friendly ⇄ Indifferent ⇄ Hostile) 
+as a result of an interaction and request.
 </p>
+
 
 <script>
 (function() {
@@ -193,7 +197,7 @@ Typically, a creature can have their attitude improved or worsened by one step m
     ]
   };
 
-  // Request options that make sense for each starting attitude
+  // Request options keyed by starting attitude.
   // Each entry points at a specific row index in ATTITUDE_TABLE[attitude].
   const REQUEST_OPTIONS = {
     Friendly: [
@@ -246,20 +250,18 @@ Typically, a creature can have their attitude improved or worsened by one step m
     ]
   };
 
-  // ---- NEW: localStorage key for persistence ----
+  // Local storage key for persistence
   const SOCIAL_CALC_STORE_KEY = "socialInteractionCalculatorState_v1";
 
   const npcAttitudeSel = document.getElementById("npcAttitude");
   const requestTypeSel = document.getElementById("requestType");
-  const charInput = document.getElementById("charCheck");
-  const resultsDiv = document.getElementById("socialResults");
-  const resetBtn = document.getElementById("socialResetBtn");
-  const evalBtn = document.getElementById("socialCalcBtn");
+  const charInput      = document.getElementById("charCheck");
+  const resultsDiv     = document.getElementById("socialResults");
 
   function populateRequestOptions() {
     const attitude = npcAttitudeSel.value;
-    const options = REQUEST_OPTIONS[attitude];
-    const prevKey = requestTypeSel.value;
+    const options  = REQUEST_OPTIONS[attitude] || [];
+    const prevKey  = requestTypeSel.value;
 
     requestTypeSel.innerHTML = "";
     options.forEach(opt => {
@@ -278,14 +280,15 @@ Typically, a creature can have their attitude improved or worsened by one step m
     }
   }
 
+  // NEW: “second opinion” rule: success improves, fail by 5+ can worsen.
   function computeAttitudeShift(startAttitude, success, roll, targetDC) {
-    // One-step max per check: success improves, failure worsens.
     let newAttitude = startAttitude;
-    let explanation = "Attitude remains " + startAttitude.toLowerCase() + ".";
+    let explanation;
 
-    const failBy = targetDC - roll;
+    const failBy = targetDC - roll; // positive if you missed the DC
 
     if (success) {
+      // Improve one step on success
       if (startAttitude === "Hostile") {
         newAttitude = "Indifferent";
         explanation = "Success improves the creature's attitude from hostile to indifferent.";
@@ -296,39 +299,44 @@ Typically, a creature can have their attitude improved or worsened by one step m
         newAttitude = "Friendly";
         explanation = "The creature is already friendly; its goodwill is reinforced.";
       }
-    } else if (failBy >= 0) {
+    } else if (failBy >= 5) {
+      // Only big failures worsen attitude
       if (startAttitude === "Friendly") {
         newAttitude = "Indifferent";
-        explanation = "A poor impression worsens the attitude from friendly to indifferent.";
+        explanation = "A notably poor impression suggests the attitude may worsen from friendly to indifferent.";
       } else if (startAttitude === "Indifferent") {
         newAttitude = "Hostile";
-        explanation = "A poor impression worsens the attitude from indifferent to hostile.";
+        explanation = "A notably poor impression suggests the attitude may worsen from indifferent to hostile.";
       } else {
         newAttitude = "Hostile";
-        explanation = "The creature is already hostile; its hostility is reinforced.";
+        explanation = "The creature is already hostile; its hostility may be reinforced by this exchange.";
       }
+    } else {
+      // Small failures do not automatically change attitude
+      explanation = "This result doesn’t strongly suggest an attitude shift on its own. Use roleplay and context to decide whether the creature’s outlook drifts over time.";
     }
 
-    return { newAttitude, explanation };
+    return { newAttitude, explanation, failBy };
   }
 
   function evaluateInteraction() {
     const attitude = npcAttitudeSel.value;
-    const roll = parseInt(charInput.value, 10);
+    const roll     = parseInt(charInput.value, 10);
+
     if (isNaN(roll)) {
       resultsDiv.innerHTML = "<p>Please enter the Charisma check total.</p>";
       return;
     }
 
-    const options = REQUEST_OPTIONS[attitude];
+    const options     = REQUEST_OPTIONS[attitude] || [];
     const selectedKey = requestTypeSel.value;
-    const reqOpt = options.find(o => o.key === selectedKey) || options[0];
+    const reqOpt      = options.find(o => o.key === selectedKey) || options[0];
 
-    const table = ATTITUDE_TABLE[attitude];
+    const table     = ATTITUDE_TABLE[attitude];
     const targetRow = table[reqOpt.rowIndex];
-    const targetDC = targetRow.dc;
+    const targetDC  = targetRow.dc;
 
-    // Determine highest reaction level achieved by this roll
+    // Determine highest reaction level achieved by this roll (table outcome)
     let achievedRow = table[0];
     for (let i = 0; i < table.length; i++) {
       if (roll >= table[i].dc) {
@@ -337,40 +345,47 @@ Typically, a creature can have their attitude improved or worsened by one step m
     }
 
     const success = roll >= targetDC;
-    const shift = computeAttitudeShift(attitude, success, roll, targetDC);
+    const shift   = computeAttitudeShift(attitude, success, roll, targetDC);
 
     let html = "";
-    html += "<p><strong>Starting Attitude:</strong> " + attitude + "</p>";
-    html += "<p><strong>Request Type:</strong> " + reqOpt.label + " - " +
-            reqOpt.description + "</p>";
-    html += "<p><strong>Target DC:</strong> " + targetDC +
-            " - " + targetRow.label + "</p>";
 
-    html += "<p><strong>Result vs. this request:</strong> " +
-            (success ? "Success – the NPC is willing to meet this level of request." :
-                       "Failure – the NPC does not reach this level of cooperation.") +
+    html += "<p><strong>Starting Attitude:</strong> " + attitude + "</p>";
+    html += "<p><strong>Request you’re making:</strong> " + reqOpt.label +
+            " – " + reqOpt.description + "</p>";
+    html += "<p><strong>Target DC for this request level:</strong> " +
+            targetDC + " (" + targetRow.label + ")</p>";
+    html += "<p><strong>Charisma check total:</strong> " + roll + "</p>";
+
+    html += "<p><strong>Request result:</strong> " +
+            (success
+              ? "Success – the NPC is willing to meet this level of request."
+              : "Failure – the NPC is not willing to go as far as this level of request."
+            ) +
             "</p>";
 
-    html += "<p><strong>Likely overall reaction:</strong> " +
+    html += "<p><strong>What the NPC is actually willing to do (from the table):</strong> " +
             achievedRow.text + "</p>";
 
+    // Attitude shift explanation, framed as optional DM guidance
     if (shift.newAttitude === attitude) {
-      html += "<p><strong>Attitude Shift:</strong> " + attitude + " → " + shift.newAttitude +
-              " (no step change). " + shift.explanation + "</p>";
+      html += "<p><strong>Attitude change (optional DM guidance):</strong> " +
+              attitude + " → " + shift.newAttitude +
+              " (no automatic step change). " + shift.explanation + "</p>";
     } else {
-      html += "<p><strong>Attitude Shift:</strong> " + attitude + " → " + shift.newAttitude +
+      html += "<p><strong>Attitude change (optional DM guidance):</strong> " +
+              attitude + " → " + shift.newAttitude +
               " (one-step change). " + shift.explanation + "</p>";
     }
 
     resultsDiv.innerHTML = html;
   }
 
-  // ---- NEW: persistence helpers ----
+  // Persistence helpers
   function saveSocialCalcState() {
     const state = {
       npcAttitude: npcAttitudeSel.value,
       requestType: requestTypeSel.value,
-      charCheck: charInput.value
+      charCheck:   charInput.value
     };
     try {
       localStorage.setItem(SOCIAL_CALC_STORE_KEY, JSON.stringify(state));
@@ -390,7 +405,7 @@ Typically, a creature can have their attitude improved or worsened by one step m
         npcAttitudeSel.value = state.npcAttitude;
       }
 
-      // Rebuild request options for the stored attitude before applying requestType
+      // Rebuild request options for the stored attitude
       populateRequestOptions();
 
       if (state.requestType) {
@@ -405,14 +420,7 @@ Typically, a creature can have their attitude improved or worsened by one step m
     }
   }
 
-  // ---- Event wiring (with persistence + reset) ----
-  if (evalBtn) {
-    evalBtn.addEventListener("click", function() {
-      evaluateInteraction();
-      saveSocialCalcState();
-    });
-  }
-
+  // Event wiring (reactive, no button needed)
   npcAttitudeSel.addEventListener("change", function() {
     populateRequestOptions();
     evaluateInteraction();
@@ -429,34 +437,11 @@ Typically, a creature can have their attitude improved or worsened by one step m
     saveSocialCalcState();
   });
 
-  // NEW: Reset button behavior
-  if (resetBtn) {
-    resetBtn.addEventListener("click", function() {
-      try {
-        localStorage.removeItem(SOCIAL_CALC_STORE_KEY);
-      } catch (e) {
-        console.warn("Could not clear social calc state:", e);
-      }
-
-      // Reset to defaults
-      npcAttitudeSel.value = "Friendly";
-      charInput.value = "";
-
-      populateRequestOptions(); // rebuild options for Friendly
-      // ensure first option is selected
-      const opts = REQUEST_OPTIONS["Friendly"];
-      if (opts && opts.length > 0) {
-        requestTypeSel.value = opts[0].key;
-      }
-
-      evaluateInteraction();
-    });
-  }
-
-  // Initial setup: build options, load any saved state, then evaluate
+  // Initial setup: build options, load state, then evaluate once
   populateRequestOptions();
   loadSocialCalcState();
   evaluateInteraction();
 })();
 </script>
+
 </div>
