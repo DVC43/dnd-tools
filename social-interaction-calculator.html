@@ -1,0 +1,462 @@
+<div class="parchment-table" id="social-calc-root">
+<style>
+  /* --- WRAPPER / THEME --- */
+  #social-calc-root.parchment-table {
+    font-family: "Garamond","Georgia",serif;
+    color:#111;
+    padding:20px;
+    border:2px solid #660000;
+    border-radius:6px;
+    max-width:1550px;
+    margin:auto;
+    background:linear-gradient(180deg,#fafafa 0%,#f0f0f0 100%);
+    box-shadow:0 0 12px rgba(0,0,0,0.25);
+  }
+
+  #social-calc-root h2 {
+    margin:0 0 0.5rem 0;
+    font-size:1.4rem;
+  }
+  #social-calc-root p.note {
+    margin:0 0 0.75rem 0;
+    font-size:0.9rem;
+    font-style:italic;
+  }
+
+  /* --- INPUT GRID --- */
+  #social-calc-root .inputs {
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+    gap:0.75rem;
+    margin-bottom:0.75rem;
+  }
+
+  #social-calc-root label {
+    font-size:0.9rem;
+    font-weight:bold;
+    display:block;
+    margin-bottom:0.15rem;
+  }
+
+  #social-calc-root select,
+  #social-calc-root input[type="number"] {
+    width:100%;
+    padding:4px 6px;
+    border-radius:3px;
+    border:1px solid #888;
+    font-family:inherit;
+    font-size:0.9rem;
+    box-sizing:border-box;
+  }
+
+  /* --- BUTTON --- */
+  #social-calc-root .controls {
+    margin-bottom:0.75rem;
+  }
+  #social-calc-root button {
+    padding:4px 10px;
+    border-radius:4px;
+    border:1px solid #660000;
+    background:#7b1113;
+    color:#fff;
+    cursor:pointer;
+    font-family:inherit;
+    font-size:0.9rem;
+  }
+  #social-calc-root button:hover {
+    background:#990000;
+  }
+  #social-calc-root .controls button + button {
+  margin-left: 0.5rem;
+  }
+
+
+  /* --- RESULTS BOX --- */
+  #social-calc-root .results {
+    border:1px solid #c0c0c0;
+    background:#ffffff;
+    padding:8px 10px;
+    font-size:0.92rem;
+  }
+  #social-calc-root .results p {
+    margin:0.3rem 0;
+  }
+  #social-calc-root .results strong {
+    color:#7b1113;
+  }
+
+  #social-calc-root .small {
+    font-size:0.85rem;
+    font-style:italic;
+    color:#444;
+  }
+</style>
+
+<h2>Social Interaction Outcome Calculator</h2>
+<p class="note">
+This calculator is based on the DMG “Conversation Reaction” table (p.244–245). Select the NPC’s starting attitude and the type of request being made.  After roleplaying the interaction and request, input party’s Charisma check outcome to see the likely outcome and any shift in attitude.
+<br>
+<br>
+Typically, a creature can have their attitude improved or worsened by one step maximum (Friendly ⇄ Indifferent ⇄ Hostile) from an interaction and request.
+</p>
+
+<div class="inputs">
+  <div>
+    <label for="npcAttitude">NPC Starting Attitude</label>
+    <select id="npcAttitude">
+      <option value="Friendly">Friendly</option>
+      <option value="Indifferent">Indifferent</option>
+      <option value="Hostile">Hostile</option>
+    </select>
+  </div>
+
+  <div>
+    <label for="requestType">Request Type (varies by starting attitude)</label>
+    <select id="requestType">
+      <!-- options are filled dynamically by JS based on attitude -->
+    </select>
+  </div>
+
+  <div>
+    <label for="charCheck">PC Charisma Check Total</label>
+    <input type="number" id="charCheck" value="" min="-15" max="40" />
+  </div>
+</div>
+
+<div class="controls">
+  <button type="button" id="socialCalcBtn">Evaluate Interaction</button>
+  <button type="button" id="socialResetBtn">Reset</button>
+</div>
+
+<div class="results" id="socialResults">
+  <p>Set the inputs above and click <strong>Evaluate Interaction</strong> to see the outcome.</p>
+</div>
+
+<p class="small">
+
+</p>
+
+<script>
+(function() {
+  // Conversation Reaction table (DMG p.244–245)
+  const ATTITUDE_TABLE = {
+    Friendly: [
+      {
+        dc: 0,
+        label: "No risk or sacrifice",
+        text: "The creature does as asked without taking risks or making sacrifices."
+      },
+      {
+        dc: 10,
+        label: "Minor risk or sacrifice",
+        text: "The creature accepts a minor risk or sacrifice to do as asked."
+      },
+      {
+        dc: 20,
+        label: "Significant risk or sacrifice",
+        text: "The creature accepts a significant risk or sacrifice to do as asked."
+      }
+    ],
+    Indifferent: [
+      {
+        dc: 0,
+        label: "No help",
+        text: "The creature offers no help but does no harm."
+      },
+      {
+        dc: 10,
+        label: "Help with no risk",
+        text: "The creature does as asked as long as no risks or sacrifices are involved."
+      },
+      {
+        dc: 20,
+        label: "Minor risk or sacrifice",
+        text: "The creature accepts a minor risk or sacrifice to do as asked."
+      }
+    ],
+    Hostile: [
+      {
+        dc: 0,
+        label: "Opposes the party",
+        text: "The creature opposes the adventurers' actions and might take risks to do so."
+      },
+      {
+        dc: 10,
+        label: "No help, no harm",
+        text: "The creature offers no help but does no harm."
+      },
+      {
+        dc: 20,
+        label: "Help with no risk",
+        text: "The creature does as asked as long as no risks or sacrifices are involved."
+      }
+    ]
+  };
+
+  // Request options that make sense for each starting attitude
+  // Each entry points at a specific row index in ATTITUDE_TABLE[attitude].
+  const REQUEST_OPTIONS = {
+    Friendly: [
+      {
+        key: "friendly_simple",
+        label: "Simple Favor (no real risk or sacrifice)",
+        rowIndex: 0,
+        description: "You’re asking for something easy that costs the NPC little to nothing."
+      },
+      {
+        key: "friendly_minor",
+        label: "Minor Risk or Sacrifice",
+        rowIndex: 1,
+        description: "You’re asking for a favor that carries a modest risk or cost for the NPC."
+      },
+      {
+        key: "friendly_major",
+        label: "Significant Risk or Sacrifice",
+        rowIndex: 2,
+        description: "You’re asking for a big favor: real danger, serious cost, or major obligation."
+      }
+    ],
+    Indifferent: [
+      {
+        key: "indiff_simple",
+        label: "Simple Favor (no risks or sacrifices)",
+        rowIndex: 1,
+        description: "You’re asking the NPC to help, but only in ways that don’t cost them anything."
+      },
+      {
+        key: "indiff_risky",
+        label: "Risky Favor (minor risk or sacrifice)",
+        rowIndex: 2,
+        description: "You’re asking the NPC to help in a way that costs them something or carries minor risk."
+      }
+    ],
+    Hostile: [
+      {
+        key: "hostile_standdown",
+        label: "Stand Down (no help, no harm)",
+        rowIndex: 1,
+        description: "You’re trying to get the NPC to stop actively opposing you, but not to help you."
+      },
+      {
+        key: "hostile_cautious",
+        label: "Cautious Cooperation (help with no risks or sacrifices)",
+        rowIndex: 2,
+        description: "You’re pushing for careful cooperation—doing as asked, but only if it carries no real risk."
+      }
+    ]
+  };
+
+  // ---- NEW: localStorage key for persistence ----
+  const SOCIAL_CALC_STORE_KEY = "socialInteractionCalculatorState_v1";
+
+  const npcAttitudeSel = document.getElementById("npcAttitude");
+  const requestTypeSel = document.getElementById("requestType");
+  const charInput = document.getElementById("charCheck");
+  const resultsDiv = document.getElementById("socialResults");
+  const resetBtn = document.getElementById("socialResetBtn");
+  const evalBtn = document.getElementById("socialCalcBtn");
+
+  function populateRequestOptions() {
+    const attitude = npcAttitudeSel.value;
+    const options = REQUEST_OPTIONS[attitude];
+    const prevKey = requestTypeSel.value;
+
+    requestTypeSel.innerHTML = "";
+    options.forEach(opt => {
+      const o = document.createElement("option");
+      o.value = opt.key;
+      o.textContent = opt.label;
+      if (opt.key === prevKey) {
+        o.selected = true;
+      }
+      requestTypeSel.appendChild(o);
+    });
+
+    // If nothing preserved, default to first
+    if (!requestTypeSel.value && options.length > 0) {
+      requestTypeSel.value = options[0].key;
+    }
+  }
+
+  function computeAttitudeShift(startAttitude, success, roll, targetDC) {
+    // One-step max per check: success improves, failure worsens.
+    let newAttitude = startAttitude;
+    let explanation = "Attitude remains " + startAttitude.toLowerCase() + ".";
+
+    const failBy = targetDC - roll;
+
+    if (success) {
+      if (startAttitude === "Hostile") {
+        newAttitude = "Indifferent";
+        explanation = "Success improves the creature's attitude from hostile to indifferent.";
+      } else if (startAttitude === "Indifferent") {
+        newAttitude = "Friendly";
+        explanation = "Success improves the creature's attitude from indifferent to friendly.";
+      } else {
+        newAttitude = "Friendly";
+        explanation = "The creature is already friendly; its goodwill is reinforced.";
+      }
+    } else if (failBy >= 0) {
+      if (startAttitude === "Friendly") {
+        newAttitude = "Indifferent";
+        explanation = "A poor impression worsens the attitude from friendly to indifferent.";
+      } else if (startAttitude === "Indifferent") {
+        newAttitude = "Hostile";
+        explanation = "A poor impression worsens the attitude from indifferent to hostile.";
+      } else {
+        newAttitude = "Hostile";
+        explanation = "The creature is already hostile; its hostility is reinforced.";
+      }
+    }
+
+    return { newAttitude, explanation };
+  }
+
+  function evaluateInteraction() {
+    const attitude = npcAttitudeSel.value;
+    const roll = parseInt(charInput.value, 10);
+    if (isNaN(roll)) {
+      resultsDiv.innerHTML = "<p>Please enter the Charisma check total.</p>";
+      return;
+    }
+
+    const options = REQUEST_OPTIONS[attitude];
+    const selectedKey = requestTypeSel.value;
+    const reqOpt = options.find(o => o.key === selectedKey) || options[0];
+
+    const table = ATTITUDE_TABLE[attitude];
+    const targetRow = table[reqOpt.rowIndex];
+    const targetDC = targetRow.dc;
+
+    // Determine highest reaction level achieved by this roll
+    let achievedRow = table[0];
+    for (let i = 0; i < table.length; i++) {
+      if (roll >= table[i].dc) {
+        achievedRow = table[i];
+      }
+    }
+
+    const success = roll >= targetDC;
+    const shift = computeAttitudeShift(attitude, success, roll, targetDC);
+
+    let html = "";
+    html += "<p><strong>Starting Attitude:</strong> " + attitude + "</p>";
+    html += "<p><strong>Request Type:</strong> " + reqOpt.label + " - " +
+            reqOpt.description + "</p>";
+    html += "<p><strong>Target DC:</strong> " + targetDC +
+            " - " + targetRow.label + "</p>";
+
+    html += "<p><strong>Result vs. this request:</strong> " +
+            (success ? "Success – the NPC is willing to meet this level of request." :
+                       "Failure – the NPC does not reach this level of cooperation.") +
+            "</p>";
+
+    html += "<p><strong>Likely overall reaction:</strong> " +
+            achievedRow.text + "</p>";
+
+    if (shift.newAttitude === attitude) {
+      html += "<p><strong>Attitude Shift:</strong> " + attitude + " → " + shift.newAttitude +
+              " (no step change). " + shift.explanation + "</p>";
+    } else {
+      html += "<p><strong>Attitude Shift:</strong> " + attitude + " → " + shift.newAttitude +
+              " (one-step change). " + shift.explanation + "</p>";
+    }
+
+    resultsDiv.innerHTML = html;
+  }
+
+  // ---- NEW: persistence helpers ----
+  function saveSocialCalcState() {
+    const state = {
+      npcAttitude: npcAttitudeSel.value,
+      requestType: requestTypeSel.value,
+      charCheck: charInput.value
+    };
+    try {
+      localStorage.setItem(SOCIAL_CALC_STORE_KEY, JSON.stringify(state));
+    } catch (e) {
+      console.warn("Could not save social calc state:", e);
+    }
+  }
+
+  function loadSocialCalcState() {
+    try {
+      const stored = localStorage.getItem(SOCIAL_CALC_STORE_KEY);
+      if (!stored) return;
+
+      const state = JSON.parse(stored);
+
+      if (state.npcAttitude) {
+        npcAttitudeSel.value = state.npcAttitude;
+      }
+
+      // Rebuild request options for the stored attitude before applying requestType
+      populateRequestOptions();
+
+      if (state.requestType) {
+        requestTypeSel.value = state.requestType;
+      }
+
+      if (state.charCheck !== undefined && state.charCheck !== null) {
+        charInput.value = state.charCheck;
+      }
+    } catch (e) {
+      console.warn("Could not load social calc state:", e);
+    }
+  }
+
+  // ---- Event wiring (with persistence + reset) ----
+  if (evalBtn) {
+    evalBtn.addEventListener("click", function() {
+      evaluateInteraction();
+      saveSocialCalcState();
+    });
+  }
+
+  npcAttitudeSel.addEventListener("change", function() {
+    populateRequestOptions();
+    evaluateInteraction();
+    saveSocialCalcState();
+  });
+
+  requestTypeSel.addEventListener("change", function() {
+    evaluateInteraction();
+    saveSocialCalcState();
+  });
+
+  charInput.addEventListener("input", function() {
+    evaluateInteraction();
+    saveSocialCalcState();
+  });
+
+  // NEW: Reset button behavior
+  if (resetBtn) {
+    resetBtn.addEventListener("click", function() {
+      try {
+        localStorage.removeItem(SOCIAL_CALC_STORE_KEY);
+      } catch (e) {
+        console.warn("Could not clear social calc state:", e);
+      }
+
+      // Reset to defaults
+      npcAttitudeSel.value = "Friendly";
+      charInput.value = "";
+
+      populateRequestOptions(); // rebuild options for Friendly
+      // ensure first option is selected
+      const opts = REQUEST_OPTIONS["Friendly"];
+      if (opts && opts.length > 0) {
+        requestTypeSel.value = opts[0].key;
+      }
+
+      evaluateInteraction();
+    });
+  }
+
+  // Initial setup: build options, load any saved state, then evaluate
+  populateRequestOptions();
+  loadSocialCalcState();
+  evaluateInteraction();
+})();
+</script>
+</div>
