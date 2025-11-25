@@ -6,7 +6,7 @@
     padding:20px;
     border:2px solid #660000;
     border-radius:6px;
-    max-width:15500px;
+    max-width:1550px; /* fixed from 15500px to match other tools */
     margin:auto;
     background:linear-gradient(180deg,#fafafa 0%,#f0f0f0 100%);
     box-shadow:0 0 12px rgba(0,0,0,0.25);
@@ -17,16 +17,20 @@
     margin-bottom:0.5rem;
     font-size:1.4rem;
   }
-  #mob-calc-root p.note {
-    margin-top:0;
-    font-size:0.9rem;
-    font-style:italic;
+
+  /* Red-outlined inner panel to match social calc "results" box */
+  #mob-calc-root .mob-panel {
+    border:2px solid #7b1113;
+    background:#ffffff;
+    padding:12px 14px;
+    margin-top:0.75rem;
+    border-radius:4px;
   }
 
   #mob-calc-root table {
     border-collapse:collapse;
     width:100%;
-    margin-top:0.75rem;
+    margin-top:0.25rem;
   }
 
   #mob-calc-root thead th {
@@ -103,58 +107,56 @@
 
 <h2>Mob Combat Calculator</h2>
 
-<table id="mobTable">
-  <thead>
-    <tr>
-      <th>PC Name</th>
-      <th>PC Armor Class</th>
-      <th>Mob Description</th>
-      <th>Mob Attack Bonus</th>
-      <th>Min. d20 Roll to Hit</th>
-      <th>Attackers Needed for 1 Hit</th>
-      <th>Number of Hits</th>
-      <th>Mob Members</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><input type="text" class="pc-name" placeholder="Fighter"></td>
-      <td><input type="number" class="pc-ac" min="1" max="40" value="17"></td>
-      <td><input type="text" class="mob-name" placeholder="Goblins"></td>
-      <td><input type="number" class="mob-bonus" min="-10" max="40" value="4"></td>
-      <td class="min-roll"></td>
-      <td class="mob-count"></td>
-      <td class="mob-hits"></td>
-      <td><input type="number" class="mob-members" min="0" max="500" value="5"></td>
-    </tr>
-  </tbody>
-</table>
+<div class="mob-panel">
+  <table id="mobTable">
+    <thead>
+      <tr>
+        <th>PC Name</th>
+        <th>PC Armor Class</th>
+        <th>Mob Description</th>
+        <th>Mob Attack Bonus</th>
+        <th>Min. d20 Roll to Hit</th>
+        <th>Attackers Needed for 1 Hit</th>
+        <th>Number of Hits</th>
+        <th>Mob Members</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><input type="text" class="pc-name" placeholder="Fighter"></td>
+        <td><input type="number" class="pc-ac" min="1" max="40" value="17"></td>
+        <td><input type="text" class="mob-name" placeholder="Goblins"></td>
+        <td><input type="number" class="mob-bonus" min="-10" max="40" value="4"></td>
+        <td class="min-roll"></td>
+        <td class="mob-count"></td>
+        <td class="mob-hits"></td>
+        <td><input type="number" class="mob-members" min="0" max="500" value="5"></td>
+      </tr>
+    </tbody>
+  </table>
 
-<div class="controls">
-  <button type="button" id="addRowBtn">+ Add PC Row</button>
-  <button type="button" id="removeRowBtn">– Remove Last Row</button>  
+  <div class="controls">
+    <button type="button" id="addRowBtn">+ Add PC Row</button>
+    <button type="button" id="removeRowBtn">– Remove Last Row</button>
+    <button type="button" id="resetMobBtn">Reset Calculator</button>
+  </div>
 </div>
 
-
 <div class="dmg-note">
-Mob combat can be used to speed up large battles.  By forgoing individual enemy attack rolls, you can approximate an
-average number of hits a large enemy group can inflict on a target.  The calculator above will show how many enemies
-are needed in a mob to successfully land a single hit, each round, against a target, and how many hits a mob of a
+Mob combat can be used to speed up large battles. By forgoing individual enemy attack rolls, you can approximate an
+average number of hits a large enemy group can inflict on a target. The calculator above will show how many enemies
+are needed in a mob to successfully land a single hit each round against a target, and how many hits a mob of a
 given size can deliver.
 <br><br>
-Enemy critical hits or misses are not possible in mob combat.  A mob composed of fewer members than necessary, or
+Enemy critical hits or misses are not possible in mob combat. A mob composed of fewer members than necessary, or
 reduced to members fewer than necessary, does not land a hit that round (rows will highlight yellow when this occurs).  
 As enemies dwindle, you can switch back to individual attack rolls.
 <br><br>
-For mob combat with lower level enemies, the optional rule for cleaving through creatures can additionally help manage combat pace. 
+For mob combat with lower-level enemies, the optional rule for cleaving through creatures can additionally help manage combat pace. 
 <br><br>
-<b>For full details, see Mob Combat (Pg. 250) and Cleaving Through Creatures (Pg. 272) in the 2014 DMG.</b>
+<b>For full details, see Mob Combat (p.250) and Cleaving Through Creatures (p.272) in the 2014 DMG.</b>
 </div>
 
-<div class="controls">
-  <button type="button" id="resetMobBtn">Reset Calculator</button>
-</div>
-  
 <script>
 (function() {
   const table         = document.getElementById("mobTable");
@@ -163,7 +165,7 @@ For mob combat with lower level enemies, the optional rule for cleaving through 
   const removeRowBtn  = document.getElementById("removeRowBtn");
   const resetMobBtn   = document.getElementById("resetMobBtn");
 
-  // NEW: localStorage key + template row for reset/load
+  // localStorage key + template row for reset/load
   const MOB_CALC_STORE_KEY = "mobCombatCalculatorState_v1";
   const initialRowTemplate = tbody.querySelector("tr").cloneNode(true);
 
@@ -226,7 +228,7 @@ For mob combat with lower level enemies, the optional rule for cleaving through 
     tbody.querySelectorAll("tr").forEach(recalcRow);
   }
 
-  // NEW: Save state of all rows to localStorage
+  // Save state of all rows to localStorage
   function saveMobCalcState() {
     const rowsData = [];
     tbody.querySelectorAll("tr").forEach(tr => {
@@ -247,7 +249,7 @@ For mob combat with lower level enemies, the optional rule for cleaving through 
     }
   }
 
-  // NEW: Load state from localStorage (rebuild table)
+  // Load state from localStorage (rebuild table)
   function loadMobCalcState() {
     try {
       const stored = localStorage.getItem(MOB_CALC_STORE_KEY);
@@ -312,7 +314,7 @@ For mob combat with lower level enemies, the optional rule for cleaving through 
 
     // Start new rows blank (like your original behavior)
     newRow.querySelectorAll("input").forEach(inp => {
-      if (inp.classList.contains("pc-ac"))       inp.value = "";
+      if (inp.classList.contains("pc-ac"))            inp.value = "";
       else if (inp.classList.contains("mob-bonus"))   inp.value = "";
       else if (inp.classList.contains("mob-members")) inp.value = "";
       else inp.value = "";
@@ -339,7 +341,7 @@ For mob combat with lower level enemies, the optional rule for cleaving through 
     }
   });
 
-  // NEW: Reset button – restore original single row and clear storage
+  // Reset button – restore original single row and clear storage
   resetMobBtn.addEventListener("click", function() {
     try {
       localStorage.removeItem(MOB_CALC_STORE_KEY);
@@ -352,7 +354,8 @@ For mob combat with lower level enemies, the optional rule for cleaving through 
     tbody.appendChild(tr);
 
     recalcAll();
-    // Optional: you can call saveMobCalcState() here if you want the reset state persisted immediately
+    // Optional: save reset state
+    saveMobCalcState();
   });
 
   // Initial setup:
