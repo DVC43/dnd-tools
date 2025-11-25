@@ -225,7 +225,7 @@ data_action = [
     },
     {
         title: "Mark*",
-        icon: "crosshair",
+        icon: "targeting",
         subtitle: "Variant melee option",
         description: "Focus on one foe for punishing opportunity attacks.",
         reference: "DMG, p. 271",
@@ -251,7 +251,7 @@ data_action = [
     },
     {
         title: "Shove Aside*",
-        icon: "shield-bash",
+        icon: "strong",
         subtitle: "Variant shove option",
         description: "Push a foe to the side instead of away.",
         reference: "DMG, p. 272",
@@ -263,7 +263,7 @@ data_action = [
     },
     {
         title: "Tumble*",
-        icon: "somersault",
+        icon: "two-shadows",
         subtitle: "Variant action or bonus action",
         description: "Dart through an enemy’s space.",
         reference: "DMG, p. 272",
