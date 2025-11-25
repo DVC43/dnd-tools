@@ -38,7 +38,7 @@
 }
 
 .action-note {
-  color: #fff;
+  color: white;
 }
 
 
@@ -132,11 +132,11 @@
 }
 
 #section-action, #section-action .item-icon {
-    background-color: black;
-    border-color: black;
+    background-color: darkslateblue;
+    border-color: darkslateblue;
 }
 #section-action .text {
-    color: black;
+    color: darkslateblue;
 }
 
 #section-bonus-action, #section-bonus-action .item-icon {
