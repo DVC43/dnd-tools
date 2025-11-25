@@ -144,7 +144,6 @@ attitude can improve or worsen by at most one step (Friendly ⇄ Indifferent ⇄
 as a result of an interaction and request.
 </p>
 
-
 <script>
 (function() {
   // Conversation Reaction table (DMG p.244–245)
@@ -262,6 +261,7 @@ as a result of an interaction and request.
   const requestTypeSel = document.getElementById("requestType");
   const charInput      = document.getElementById("charCheck");
   const resultsDiv     = document.getElementById("socialResults");
+  const resetBtn       = document.getElementById("socialResetBtn");
 
   function populateRequestOptions() {
     const attitude = npcAttitudeSel.value;
@@ -285,7 +285,7 @@ as a result of an interaction and request.
     }
   }
 
-  // NEW: “second opinion” rule: success improves, fail by 5+ can worsen.
+  // Success improves, fail by 5+ can worsen (DM guidance)
   function computeAttitudeShift(startAttitude, success, roll, targetDC) {
     let newAttitude = startAttitude;
     let explanation;
@@ -327,20 +327,20 @@ as a result of an interaction and request.
   function evaluateInteraction() {
     const attitude = npcAttitudeSel.value;
     const roll     = parseInt(charInput.value, 10);
-  
+
     if (isNaN(roll)) {
       resultsDiv.innerHTML = "<p>Please enter the Charisma check total.</p>";
       return;
     }
-  
+
     const options     = REQUEST_OPTIONS[attitude] || [];
     const selectedKey = requestTypeSel.value;
     const reqOpt      = options.find(o => o.key === selectedKey) || options[0];
-  
+
     const table     = ATTITUDE_TABLE[attitude];
     const targetRow = table[reqOpt.rowIndex];
     const targetDC  = targetRow.dc;
-  
+
     // Determine highest reaction level achieved by this roll (table outcome)
     let achievedRow = table[0];
     for (let i = 0; i < table.length; i++) {
@@ -348,12 +348,12 @@ as a result of an interaction and request.
         achievedRow = table[i];
       }
     }
-  
+
     const success = roll >= targetDC;
     const shift   = computeAttitudeShift(attitude, success, roll, targetDC);
-  
+
     let html = "";
-  
+
     // Starting attitude
     html += `
       <div class="result-block">
@@ -361,7 +361,7 @@ as a result of an interaction and request.
         <p class="result-text">${attitude}</p>
       </div>
     `;
-  
+
     // Request being made
     html += `
       <div class="result-block">
@@ -372,7 +372,7 @@ as a result of an interaction and request.
         </p>
       </div>
     `;
-  
+
     // DC + roll
     html += `
       <div class="result-block">
@@ -381,7 +381,7 @@ as a result of an interaction and request.
           DC ${targetDC} (${targetRow.label})
         </p>
       </div>
-  
+
       <div class="result-block">
         <div class="result-title">Charisma Check Total</div>
         <p class="result-text">
@@ -389,7 +389,7 @@ as a result of an interaction and request.
         </p>
       </div>
     `;
-  
+
     // Request result (did you meet the level you asked for?)
     html += `
       <div class="result-block">
@@ -402,7 +402,7 @@ as a result of an interaction and request.
         </p>
       </div>
     `;
-  
+
     // What the NPC is actually willing to do from the table
     html += `
       <div class="result-block">
@@ -412,7 +412,7 @@ as a result of an interaction and request.
         </p>
       </div>
     `;
-  
+
     // Attitude change guidance
     if (shift.newAttitude === attitude) {
       html += `
@@ -435,10 +435,9 @@ as a result of an interaction and request.
         </div>
       `;
     }
-  
+
     resultsDiv.innerHTML = html;
   }
-
 
   // Persistence helpers
   function saveSocialCalcState() {
@@ -480,7 +479,7 @@ as a result of an interaction and request.
     }
   }
 
-  // Event wiring (reactive, no button needed)
+  // Event wiring (reactive, no Evaluate button)
   npcAttitudeSel.addEventListener("change", function() {
     populateRequestOptions();
     evaluateInteraction();
@@ -496,6 +495,32 @@ as a result of an interaction and request.
     evaluateInteraction();
     saveSocialCalcState();
   });
+
+  // RESET BUTTON – restore defaults + clear storage
+  if (resetBtn) {
+    resetBtn.addEventListener("click", function() {
+      try {
+        localStorage.removeItem(SOCIAL_CALC_STORE_KEY);
+      } catch (e) {
+        console.warn("Could not clear social calc state:", e);
+      }
+
+      // Reset to defaults
+      npcAttitudeSel.value = "Friendly";
+      populateRequestOptions();
+
+      const friendlyOpts = REQUEST_OPTIONS["Friendly"] || [];
+      if (friendlyOpts.length > 0) {
+        requestTypeSel.value = friendlyOpts[0].key;
+      }
+
+      charInput.value = "";
+
+      evaluateInteraction();
+      // Optional: save clean state after reset
+      saveSocialCalcState();
+    });
+  }
 
   // Initial setup: build options, load state, then evaluate once
   populateRequestOptions();
