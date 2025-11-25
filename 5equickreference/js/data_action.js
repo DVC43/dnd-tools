@@ -195,8 +195,7 @@ data_action = [
         bullets: [
             "When you describe an action not detailed elsewhere in the rules, the DM tells you whether that action is possible and what kind of roll you need to make, if any, to determine success or failure."
         ]
-    }
-        // --- DMG Optional Action Options (variant rules) ---
+    },
 
     {
         title: "Climb onto a Bigger Creature*",
