@@ -37,6 +37,11 @@
     font-size: 16pt;
 }
 
+.action-note {
+  color: #fff;
+}
+
+
 .float-right {
     float: right;
 }
