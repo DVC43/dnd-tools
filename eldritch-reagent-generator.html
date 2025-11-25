@@ -1,0 +1,1554 @@
+<!-- Eldritch Reagent Generator – CR + Alignment + Corporeal Parts -->
+<div id="reagent-generator">
+  <h2>Eldritch Reagent Generator</h2>
+
+  <div id="rg-filters">
+  
+	<div class="rg-filter-row">
+	  <label for="rgCreatureSelect"><strong>Creature:</strong></label>
+	  <select id="rgCreatureSelect">
+		<option value="any">Any</option>
+		<!-- individual creature options will be added by JS on init -->
+	  </select>
+	</div>
+  
+    <div class="rg-filter-row">
+      <label for="rg-cr-min"><strong>CR Min:</strong></label>
+      <input id="rg-cr-min" type="number" step="0.25" value="0">
+      <label for="rg-cr-max"><strong>CR Max:</strong></label>
+      <input id="rg-cr-max" type="number" step="0.25" value="30">
+    </div>
+
+    <div class="rg-filter-row">
+      <label for="rg-align-filter"><strong>Alignment:</strong></label>
+      <select id="rg-align-filter">
+        <option value="any">Any</option>
+        <option value="good">Any good</option>
+        <option value="neutral">Any neutral</option>
+        <option value="evil">Any evil</option>
+        <option value="non-evil">Non-evil</option>
+        <option value="lawful">Lawful</option>
+        <option value="chaotic">Chaotic</option>
+        <option value="unaligned">Unaligned / none</option>
+      </select>
+    </div>
+
+    <div class="rg-filter-row">
+      <label>
+        <input id="rg-legendary" type="checkbox">
+        Legendary only
+      </label>
+    </div>
+  </div>
+
+  <button id="rg-roll" class="rg-button">Roll Reagent</button>
+
+  <div id="rg-card">
+    <p><strong>Creature:</strong> <span id="rg-creature-name">—</span></p>
+
+    <p><strong>CR:</strong> <span id="rg-cr">—</span></p>
+    <p><strong>Type:</strong> <span id="rg-type">—</span></p>
+    <p><strong>Alignment:</strong> <span id="rg-alignment">—</span></p>
+    <p><strong>Legendary?</strong> <span id="rg-legendary-flag">—</span></p>
+	<p><strong>AideDD Link:</strong> 
+		<a id="rg-aidedd-link" href="#" target="_blank" style="color:#8cf;">Open&nbsp;Entry</a>
+	</p>
+    <hr>
+    <p><strong>Preparation:</strong> <span id="rg-preparation">—</span></p>
+    <p><strong>Part(s):</strong> <span id="rg-parts">—</span></p>
+	<p><strong>Eldritch Properties:</strong> <span id="rg-eldritch">—</span></p>
+	<hr>
+	<p><strong>Possible Use:</strong> <span id="rg-use">—</span></p>
+	<p><strong>Crafting DC:</strong> <span id="rg-brew-dc">—</span></p>
+	<div><p><strong>Hazard:</strong></div>
+	<div id="rg-hazard-line1"></div>
+	<div id="rg-hazard-line2"></div>
+	<br>
+	<div id="rg-hazard-line3"></div>
+	<hr>
+    <p><strong>Container:</strong> <span id="rg-container">—</span></p>
+  </div>
+
+  <div id="rg-error" style="display:none;"></div>
+</div>
+
+<style>
+  #reagent-generator {
+    max-width: 540px;
+    margin: 1.5rem auto 0;
+    padding: 1rem 1.25rem 1.5rem;
+    border-radius: 10px;
+    border: 1px solid #444;
+    background: radial-gradient(circle at top, #222 0, #111 50%, #050505 100%);
+    color: #f5f5f5;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+  }
+
+  #reagent-generator h2 {
+    margin: 0 0 0.75rem;
+    text-align: center;
+    letter-spacing: 0.05em;
+  }
+
+  #rg-filters {
+    font-size: 0.85rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .rg-filter-row {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 0.3rem;
+    flex-wrap: wrap;
+  }
+
+  #rg-filters label {
+    white-space: nowrap;
+  }
+
+  #rg-filters input[type="number"] {
+    width: 70px;
+    padding: 0.15rem 0.25rem;
+    border-radius: 4px;
+    border: 1px solid #555;
+    background: #1a1a1a;
+    color: #f5f5f5;
+    font-size: 0.8rem;
+  }
+
+  #rg-filters select {
+    padding: 0.15rem 0.25rem;
+    border-radius: 4px;
+    border: 1px solid #555;
+    background: #1a1a1a;
+    color: #f5f5f5;
+    font-size: 0.8rem;
+	flex: 1 1 auto;
+	min-width: 160px;
+  }
+
+  #rg-filters input[type="checkbox"] {
+    margin-right: 0.25rem;
+  }
+
+  .rg-button {
+    display: block;
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    margin-bottom: 0.6rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, #4a148c, #7b1fa2);
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+    transition: transform 0.08s ease-out, box-shadow 0.08s ease-out, opacity 0.08s;
+  }
+
+  .rg-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.7);
+  }
+
+  .rg-button:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.6);
+  }
+
+  #rg-card {
+    border-radius: 6px;
+    border: 1px solid #555;
+    padding: 0.9rem 0.9rem 0.8rem;
+    background: rgba(0, 0, 0, 0.35);
+    font-size: 0.9rem;
+  }
+
+  #rg-card p {
+    margin: 0.45rem 0;
+    line-height: 1.35;
+  }
+
+  #rg-card hr {
+    border: none;
+    border-top: 1px solid #555;
+    margin: 0.5rem 0 0.6rem;
+  }
+
+  #rg-error {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: #ffb3b3;
+  }
+</style>
+
+<script>
+  /* ---------- Small helpers ---------- */
+
+  function rgRandomFrom(list) {
+    return list[Math.floor(Math.random() * list.length)];
+  }
+
+  function matchesAlignment(alignment, filter) {
+    const a = (alignment || "").toLowerCase().trim();
+
+    if (filter === "any") return true;
+
+    if (filter === "good") {
+      return a.includes("good");
+    }
+
+    if (filter === "evil") {
+      return a.includes("evil");
+    }
+
+    if (filter === "neutral") {
+      // anything with 'neutral' in it (true neutral, NG, NE, etc.)
+      return a.includes("neutral");
+    }
+
+    if (filter === "non-evil") {
+      return !a.includes("evil");
+    }
+
+    if (filter === "lawful") {
+      return a.includes("lawful");
+    }
+
+    if (filter === "chaotic") {
+      return a.includes("chaotic");
+    }
+
+    if (filter === "unaligned") {
+      return a.includes("unaligned") || a === "" || a === "any alignment";
+    }
+
+    return true;
+  }
+
+  /* ---------- DATA ---------- */
+
+  const RG_SOURCES = [
+  { name: 'Aarakocra', cr: 0.25, type: 'Humanoid (Aarakocra)', size: '', alignment: 'neutral good', legendary: false, corporeal: true },
+  { name: 'Aboleth', cr: 10.0, type: 'Aberration', size: '', alignment: 'lawful evil', legendary: true, corporeal: true },
+  { name: 'Abominable Yeti', cr: 9.0, type: 'Monstrosity', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Acolyte', cr: 0.25, type: 'Humanoid (any race)', size: '', alignment: 'any alignment', legendary: false, corporeal: true },
+  { name: 'Adult Black Dragon', cr: 14.0, type: 'Dragon (Chromatic)', size: '', alignment: 'chaotic evil', legendary: true, corporeal: true },
+  { name: 'Adult Blue Dracolich', cr: 17.0, type: 'Undead', size: '', alignment: 'lawful evil', legendary: true, corporeal: true },
+  { name: 'Adult Blue Dragon', cr: 16.0, type: 'Dragon (Chromatic)', size: '', alignment: 'lawful evil', legendary: true, corporeal: true },
+  { name: 'Adult Brass Dragon', cr: 13.0, type: 'Dragon (Metallic)', size: '', alignment: 'chaotic good', legendary: true, corporeal: true },
+  { name: 'Adult Bronze Dragon', cr: 15.0, type: 'Dragon (Metallic)', size: '', alignment: 'lawful good', legendary: true, corporeal: true },
+  { name: 'Adult Copper Dragon', cr: 14.0, type: 'Dragon (Metallic)', size: '', alignment: 'chaotic good', legendary: true, corporeal: true },
+  { name: 'Adult Gold Dragon', cr: 17.0, type: 'Dragon (Metallic)', size: '', alignment: 'lawful good', legendary: true, corporeal: true },
+  { name: 'Adult Green Dragon', cr: 15.0, type: 'Dragon (Chromatic)', size: '', alignment: 'lawful evil', legendary: true, corporeal: true },
+  { name: 'Adult Red Dragon', cr: 17.0, type: 'Dragon (Chromatic)', size: '', alignment: 'chaotic evil', legendary: true, corporeal: true },
+  { name: 'Adult Silver Dragon', cr: 16.0, type: 'Dragon (Metallic)', size: '', alignment: 'lawful good', legendary: true, corporeal: true },
+  { name: 'Adult White Dragon', cr: 13.0, type: 'Dragon (Chromatic)', size: '', alignment: 'chaotic evil', legendary: true, corporeal: true },
+  { name: 'Air Elemental', cr: 5.0, type: 'Elemental', size: '', alignment: 'neutral', legendary: false, corporeal: false },
+  { name: 'Allosaurus', cr: 2.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Ancient Black Dragon', cr: 21.0, type: 'Dragon (Chromatic)', size: '', alignment: 'chaotic evil', legendary: true, corporeal: true },
+  { name: 'Ancient Blue Dragon', cr: 23.0, type: 'Dragon (Chromatic)', size: '', alignment: 'lawful evil', legendary: true, corporeal: true },
+  { name: 'Ancient Brass Dragon', cr: 20.0, type: 'Dragon (Metallic)', size: '', alignment: 'chaotic good', legendary: true, corporeal: true },
+  { name: 'Ancient Bronze Dragon', cr: 22.0, type: 'Dragon (Metallic)', size: '', alignment: 'lawful good', legendary: true, corporeal: true },
+  { name: 'Ancient Copper Dragon', cr: 21.0, type: 'Dragon (Metallic)', size: '', alignment: 'chaotic good', legendary: true, corporeal: true },
+  { name: 'Ancient Gold Dragon', cr: 24.0, type: 'Dragon (Metallic)', size: '', alignment: 'lawful good', legendary: true, corporeal: true },
+  { name: 'Ancient Green Dragon', cr: 22.0, type: 'Dragon (Chromatic)', size: '', alignment: 'lawful evil', legendary: true, corporeal: true },
+  { name: 'Ancient Red Dragon', cr: 24.0, type: 'Dragon (Chromatic)', size: '', alignment: 'chaotic evil', legendary: true, corporeal: true },
+  { name: 'Ancient Silver Dragon', cr: 23.0, type: 'Dragon (Metallic)', size: '', alignment: 'lawful good', legendary: true, corporeal: true },
+  { name: 'Ancient White Dragon', cr: 20.0, type: 'Dragon (Chromatic)', size: '', alignment: 'chaotic evil', legendary: true, corporeal: true },
+  { name: 'Androsphinx', cr: 17.0, type: 'Monstrosity', size: '', alignment: 'lawful neutral', legendary: true, corporeal: true },
+  { name: 'Animated Armor', cr: 1.0, type: 'Construct', size: '', alignment: 'unaligned', legendary: false, corporeal: false },
+  { name: 'Ankheg', cr: 2.0, type: 'Monstrosity', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Ankylosaurus', cr: 3.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Ape', cr: 0.5, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Arcanaloth', cr: 12.0, type: 'Fiend (Yugoloth)', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Archmage', cr: 12.0, type: 'Humanoid (any race)', size: '', alignment: 'any alignment', legendary: false, corporeal: true },
+  { name: 'Assassin', cr: 8.0, type: 'Humanoid (any race)', size: '', alignment: 'any non-good alignment', legendary: false, corporeal: true },
+  { name: 'Awakened Shrub', cr: 0.0, type: 'Plant', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Awakened Tree', cr: 2.0, type: 'Plant', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Axe Beak', cr: 0.25, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Azer', cr: 2.0, type: 'Elemental', size: '', alignment: 'lawful neutral', legendary: false, corporeal: true },
+  { name: 'Baboon', cr: 0.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Badger', cr: 0.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Balor', cr: 19.0, type: 'Fiend (Demon)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Bandit', cr: 0.125, type: 'Humanoid (any race)', size: '', alignment: 'any non-lawful alignment', legendary: false, corporeal: true },
+  { name: 'Bandit Captain', cr: 2.0, type: 'Humanoid (any race)', size: '', alignment: 'any non-lawful alignment', legendary: false, corporeal: true },
+  { name: 'Banshee', cr: 4.0, type: 'Undead', size: '', alignment: 'chaotic evil', legendary: false, corporeal: false },
+  { name: 'Barbed Devil', cr: 5.0, type: 'Fiend (Devil)', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Barlgura', cr: 5.0, type: 'Fiend (Demon)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Basilisk', cr: 3.0, type: 'Monstrosity', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Bat', cr: 0.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Bearded Devil', cr: 3.0, type: 'Fiend (Devil)', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Behir', cr: 11.0, type: 'Monstrosity', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Beholder', cr: 13.0, type: 'Aberration', size: '', alignment: 'lawful evil', legendary: true, corporeal: true },
+  { name: 'Beholder Zombie', cr: 5.0, type: 'Undead', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Berserker', cr: 2.0, type: 'Humanoid (any race)', size: '', alignment: 'any chaotic alignment', legendary: false, corporeal: true },
+  { name: 'Black Bear', cr: 0.5, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Black Dragon Wyrmling', cr: 2.0, type: 'Dragon (Chromatic)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Black Pudding', cr: 4.0, type: 'Ooze', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Blink Dog', cr: 0.25, type: 'Fey', size: '', alignment: 'lawful good', legendary: false, corporeal: true },
+  { name: 'Blood Hawk', cr: 0.125, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Blue Dragon Wyrmling', cr: 3.0, type: 'Dragon (Chromatic)', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Blue Slaad', cr: 7.0, type: 'Aberration', size: '', alignment: 'chaotic neutral', legendary: false, corporeal: true },
+  { name: 'Boar', cr: 0.25, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Bone Devil', cr: 9.0, type: 'Fiend (Devil)', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Bone Naga', cr: 4.0, type: 'Undead', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Brass Dragon Wyrmling', cr: 1.0, type: 'Dragon (Metallic)', size: '', alignment: 'chaotic good', legendary: false, corporeal: true },
+  { name: 'Bronze Dragon Wyrmling', cr: 2.0, type: 'Dragon (Metallic)', size: '', alignment: 'lawful good', legendary: false, corporeal: true },
+  { name: 'Brown Bear', cr: 1.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Bugbear', cr: 1.0, type: 'Humanoid (Goblinoid)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Bugbear Chief', cr: 3.0, type: 'Humanoid (Goblinoid)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Bulette', cr: 5.0, type: 'Monstrosity', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Bullywug', cr: 0.25, type: 'Humanoid (Bullywug)', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Cambion', cr: 5.0, type: 'Fiend', size: '', alignment: 'any evil alignment', legendary: false, corporeal: true },
+  { name: 'Camel', cr: 0.125, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Carrion Crawler', cr: 2.0, type: 'Monstrosity', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Cat', cr: 0.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Centaur', cr: 2.0, type: 'Monstrosity', size: '', alignment: 'neutral good', legendary: false, corporeal: true },
+  { name: 'Chain Devil', cr: 8.0, type: 'Fiend (Devil)', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Chasme', cr: 6.0, type: 'Fiend (Demon)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Chimera', cr: 6.0, type: 'Monstrosity', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Chuul', cr: 4.0, type: 'Aberration', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Clay Golem', cr: 9.0, type: 'Construct', size: '', alignment: 'unaligned', legendary: false, corporeal: false },
+  { name: 'Cloaker', cr: 8.0, type: 'Aberration', size: '', alignment: 'chaotic neutral', legendary: false, corporeal: true },
+  { name: 'Cloud Giant', cr: 9.0, type: 'Giant', size: '', alignment: 'neutral good', legendary: false, corporeal: true },
+  { name: 'Cockatrice', cr: 0.5, type: 'Monstrosity', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Commoner', cr: 0.0, type: 'Humanoid (any race)', size: '', alignment: 'any alignment', legendary: false, corporeal: true },
+  { name: 'Constrictor Snake', cr: 0.25, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Copper Dragon Wyrmling', cr: 1.0, type: 'Dragon (Metallic)', size: '', alignment: 'chaotic good', legendary: false, corporeal: true },
+  { name: 'Couatl', cr: 4.0, type: 'Celestial', size: '', alignment: 'lawful good', legendary: false, corporeal: true },
+  { name: 'Crab', cr: 0.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Crawling Claw', cr: 0.0, type: 'Undead', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Crocodile', cr: 0.5, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Cult Fanatic', cr: 2.0, type: 'Humanoid (any race)', size: '', alignment: 'any non-good alignment', legendary: false, corporeal: true },
+  { name: 'Cultist', cr: 0.125, type: 'Humanoid (any race)', size: '', alignment: 'any non-good alignment', legendary: false, corporeal: true },
+  { name: 'Cyclops', cr: 6.0, type: 'Giant', size: '', alignment: 'chaotic neutral', legendary: false, corporeal: true },
+  { name: 'Dao', cr: 11.0, type: 'Elemental', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Darkmantle', cr: 0.5, type: 'Monstrosity', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Death Dog', cr: 1.0, type: 'Monstrosity', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Death Knight', cr: 17.0, type: 'Undead', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Death Slaad', cr: 10.0, type: 'Aberration (Shapechanger)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Death Tyrant', cr: 14.0, type: 'Undead', size: '', alignment: 'lawful evil', legendary: true, corporeal: true },
+  { name: 'Deep Gnome (Svirfneblin)', cr: 0.5, type: 'Humanoid (Gnome)', size: '', alignment: 'neutral good', legendary: false, corporeal: true },
+  { name: 'Deer', cr: 0.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Demilich', cr: 18.0, type: 'Undead', size: '', alignment: 'neutral evil', legendary: true, corporeal: false },
+  { name: 'Deva', cr: 10.0, type: 'Celestial', size: '', alignment: 'lawful good', legendary: false, corporeal: true },
+  { name: 'Dire Wolf', cr: 1.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Displacer Beast', cr: 3.0, type: 'Monstrosity', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Djinni', cr: 11.0, type: 'Elemental', size: '', alignment: 'chaotic good', legendary: false, corporeal: true },
+  { name: 'Doppelganger', cr: 3.0, type: 'Monstrosity (Shapechanger)', size: '', alignment: 'neutral', legendary: false, corporeal: true },
+  { name: 'Draft Horse', cr: 0.25, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Dragon Turtle', cr: 17.0, type: 'Dragon', size: '', alignment: 'neutral', legendary: false, corporeal: true },
+  { name: 'Dretch', cr: 0.25, type: 'Fiend (Demon)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Drider', cr: 6.0, type: 'Monstrosity', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Drow', cr: 0.25, type: 'Humanoid (Elf)', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Drow Elite Warrior', cr: 5.0, type: 'Humanoid (Elf)', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Drow Mage', cr: 7.0, type: 'Humanoid (Elf)', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Drow Priestess of Lolth', cr: 8.0, type: 'Humanoid (Elf)', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Druid', cr: 2.0, type: 'Humanoid (any race)', size: '', alignment: 'any alignment', legendary: false, corporeal: true },
+  { name: 'Dryad', cr: 1.0, type: 'Fey', size: '', alignment: 'neutral', legendary: false, corporeal: true },
+  { name: 'Duergar', cr: 1.0, type: 'Humanoid (Dwarf)', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Duodrone', cr: 0.25, type: 'Construct', size: '', alignment: 'lawful neutral', legendary: false, corporeal: false },
+  { name: 'Dust Mephit', cr: 0.5, type: 'Elemental', size: '', alignment: 'neutral evil', legendary: false, corporeal: false },
+  { name: 'Eagle', cr: 0.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Earth Elemental', cr: 5.0, type: 'Elemental', size: '', alignment: 'neutral', legendary: false, corporeal: true },
+  { name: 'Efreeti', cr: 11.0, type: 'Elemental', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Elephant', cr: 4.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Elk', cr: 0.25, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Empyrean', cr: 23.0, type: 'Celestial (Titan)', size: '', alignment: 'chaotic good', legendary: true, corporeal: true },
+  { name: 'Erinyes', cr: 12.0, type: 'Fiend (Devil)', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Ettercap', cr: 2.0, type: 'Monstrosity', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Ettin', cr: 4.0, type: 'Giant', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Faerie Dragon', cr: 1.0, type: 'Dragon', size: '', alignment: 'chaotic good', legendary: false, corporeal: true },
+  { name: 'Fire Elemental', cr: 5.0, type: 'Elemental', size: '', alignment: 'neutral', legendary: false, corporeal: false },
+  { name: 'Fire Giant', cr: 9.0, type: 'Giant', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Fire Snake', cr: 1.0, type: 'Elemental', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Flameskull', cr: 4.0, type: 'Undead', size: '', alignment: 'neutral evil', legendary: false, corporeal: false },
+  { name: 'Flesh Golem', cr: 5.0, type: 'Construct', size: '', alignment: 'neutral', legendary: false, corporeal: true },
+  { name: 'Flumph', cr: 0.125, type: 'Aberration', size: '', alignment: 'lawful good', legendary: false, corporeal: true },
+  { name: 'Flying Snake', cr: 0.125, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Flying Sword', cr: 0.25, type: 'Construct', size: '', alignment: 'unaligned', legendary: false, corporeal: false },
+  { name: 'Fomorian', cr: 8.0, type: 'Giant', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Frog', cr: 0.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Frost Giant', cr: 8.0, type: 'Giant', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Galeb Duhr', cr: 6.0, type: 'Elemental', size: '', alignment: 'neutral', legendary: false, corporeal: true },
+  { name: 'Gargoyle', cr: 2.0, type: 'Elemental', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Gas Spore', cr: 0.5, type: 'Plant', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Gelatinous Cube', cr: 2.0, type: 'Ooze', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Ghast', cr: 2.0, type: 'Undead', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Ghost', cr: 4.0, type: 'Undead', size: '', alignment: 'any alignment', legendary: false, corporeal: false },
+  { name: 'Ghoul', cr: 1.0, type: 'Undead', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Giant Ape', cr: 7.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Giant Badger', cr: 0.25, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Giant Bat', cr: 0.25, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Giant Boar', cr: 2.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Giant Centipede', cr: 0.25, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Giant Constrictor Snake', cr: 2.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Giant Crab', cr: 0.125, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Giant Crocodile', cr: 5.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Giant Eagle', cr: 1.0, type: 'Beast', size: '', alignment: 'neutral good', legendary: false, corporeal: true },
+  { name: 'Giant Elk', cr: 2.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Giant Fire Beetle', cr: 0.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Giant Frog', cr: 0.25, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Giant Goat', cr: 0.5, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Giant Hyena', cr: 1.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Giant Lizard', cr: 0.25, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Giant Octopus', cr: 1.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Giant Owl', cr: 0.25, type: 'Beast', size: '', alignment: 'neutral', legendary: false, corporeal: true },
+  { name: 'Giant Poisonous Snake', cr: 0.25, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Giant Rat', cr: 0.125, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Giant Scorpion', cr: 3.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Giant Sea Horse', cr: 0.5, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Giant Shark', cr: 5.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Giant Spider', cr: 1.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Giant Toad', cr: 1.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Giant Vulture', cr: 1.0, type: 'Beast', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Giant Wasp', cr: 0.5, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Giant Weasel', cr: 0.125, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Giant Wolf Spider', cr: 0.25, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Gibbering Mouther', cr: 2.0, type: 'Aberration', size: '', alignment: 'neutral', legendary: false, corporeal: true },
+  { name: 'Githyanki Knight', cr: 8.0, type: 'Humanoid (Gith)', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Githyanki Warrior', cr: 3.0, type: 'Humanoid (Gith)', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Githzerai Monk', cr: 2.0, type: 'Humanoid (Gith)', size: '', alignment: 'lawful neutral', legendary: false, corporeal: true },
+  { name: 'Githzerai Zerth', cr: 6.0, type: 'Humanoid (Gith)', size: '', alignment: 'lawful neutral', legendary: false, corporeal: true },
+  { name: 'Glabrezu', cr: 9.0, type: 'Fiend (Demon)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Gladiator', cr: 5.0, type: 'Humanoid (any race)', size: '', alignment: 'any alignment', legendary: false, corporeal: true },
+  { name: 'Gnoll', cr: 0.5, type: 'Humanoid (Gnoll)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Gnoll Fang of Yeenoghu', cr: 4.0, type: 'Fiend (Gnoll)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Gnoll Pack Lord', cr: 2.0, type: 'Humanoid (Gnoll)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Goat', cr: 0.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Goblin', cr: 0.25, type: 'Humanoid (Goblinoid)', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Goblin Boss', cr: 1.0, type: 'Humanoid (Goblinoid)', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Gold Dragon Wyrmling', cr: 3.0, type: 'Dragon (Metallic)', size: '', alignment: 'lawful good', legendary: false, corporeal: true },
+  { name: 'Gorgon', cr: 5.0, type: 'Monstrosity', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Goristro', cr: 17.0, type: 'Fiend (Demon)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Gray Ooze', cr: 0.5, type: 'Ooze', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Gray Slaad', cr: 9.0, type: 'Aberration (Shapechanger)', size: '', alignment: 'chaotic neutral', legendary: false, corporeal: true },
+  { name: 'Green Dragon Wyrmling', cr: 2.0, type: 'Dragon (Chromatic)', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Green Hag', cr: 3.0, type: 'Fey', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Green Slaad', cr: 8.0, type: 'Aberration (Shapechanger)', size: '', alignment: 'chaotic neutral', legendary: false, corporeal: true },
+  { name: 'Grell', cr: 3.0, type: 'Aberration', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Grick', cr: 2.0, type: 'Monstrosity', size: '', alignment: 'neutral', legendary: false, corporeal: true },
+  { name: 'Grick alpha', cr: 7.0, type: 'Monstrosity', size: '', alignment: 'neutral', legendary: false, corporeal: true },
+  { name: 'Griffon', cr: 2.0, type: 'Monstrosity', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Grimlock', cr: 0.25, type: 'Humanoid (Grimlock)', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Guard', cr: 0.125, type: 'Humanoid (any race)', size: '', alignment: 'any alignment', legendary: false, corporeal: true },
+  { name: 'Guardian Naga', cr: 10.0, type: 'Monstrosity', size: '', alignment: 'lawful good', legendary: false, corporeal: true },
+  { name: 'Gynosphinx', cr: 11.0, type: 'Monstrosity', size: '', alignment: 'lawful neutral', legendary: true, corporeal: true },
+  { name: 'Half-Ogre', cr: 1.0, type: 'Giant', size: '', alignment: 'any chaotic alignment', legendary: false, corporeal: true },
+  { name: 'Half-Red Dragon Veteran', cr: 5.0, type: 'Humanoid (Human)', size: '', alignment: 'any alignment', legendary: false, corporeal: true },
+  { name: 'Harpy', cr: 1.0, type: 'Monstrosity', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Hawk', cr: 0.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Hell Hound', cr: 3.0, type: 'Fiend', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Helmed Horror', cr: 4.0, type: 'Construct', size: '', alignment: 'neutral', legendary: false, corporeal: false },
+  { name: 'Hezrou', cr: 8.0, type: 'Fiend (Demon)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Hill Giant', cr: 5.0, type: 'Giant', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Hippogriff', cr: 1.0, type: 'Monstrosity', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Hobgoblin', cr: 0.5, type: 'Humanoid (Goblinoid)', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Hobgoblin Captain', cr: 3.0, type: 'Humanoid (Goblinoid)', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Hobgoblin Warlord', cr: 6.0, type: 'Humanoid (Goblinoid)', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Homunculus', cr: 0.0, type: 'Construct', size: '', alignment: 'neutral', legendary: false, corporeal: false },
+  { name: 'Hook Horror', cr: 3.0, type: 'Monstrosity', size: '', alignment: 'neutral', legendary: false, corporeal: true },
+  { name: 'Horned Devil', cr: 11.0, type: 'Fiend (Devil)', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Hunter Shark', cr: 2.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Hydra', cr: 8.0, type: 'Monstrosity', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Hyena', cr: 0.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Ice Devil', cr: 14.0, type: 'Fiend (Devil)', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Ice Mephit', cr: 0.5, type: 'Elemental', size: '', alignment: 'neutral evil', legendary: false, corporeal: false },
+  { name: 'Imp', cr: 1.0, type: 'Fiend (Devil, Shapechanger)', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Intellect Devourer', cr: 2.0, type: 'Aberration', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Invisible Stalker', cr: 6.0, type: 'Elemental', size: '', alignment: 'neutral', legendary: false, corporeal: true },
+  { name: 'Iron Golem', cr: 16.0, type: 'Construct', size: '', alignment: 'unaligned', legendary: false, corporeal: false },
+  { name: 'Jackal', cr: 0.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Jackalwere', cr: 0.5, type: 'Humanoid (Shapechanger)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Kenku', cr: 0.25, type: 'Humanoid (Kenku)', size: '', alignment: 'chaotic neutral', legendary: false, corporeal: true },
+  { name: 'Killer Whale', cr: 3.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Knight', cr: 3.0, type: 'Humanoid (any race)', size: '', alignment: 'any alignment', legendary: false, corporeal: true },
+  { name: 'Kobold', cr: 0.125, type: 'Humanoid (Kobold)', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Kraken', cr: 23.0, type: 'Monstrosity (Titan)', size: '', alignment: 'chaotic evil', legendary: true, corporeal: true },
+  { name: 'Kuo-toa', cr: 0.25, type: 'Humanoid (Kuo-toa)', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Kuo-toa Archpriest', cr: 6.0, type: 'Humanoid (Kuo-toa)', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Kuo-toa Whip', cr: 1.0, type: 'Humanoid (Kuo-toa)', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Lamia', cr: 4.0, type: 'Monstrosity', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Lemure', cr: 0.0, type: 'Fiend (Devil)', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Lich', cr: 21.0, type: 'Undead', size: '', alignment: 'any evil alignment', legendary: true, corporeal: false },
+  { name: 'Lion', cr: 1.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Lizard', cr: 0.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Lizard King/Queen', cr: 4.0, type: 'Humanoid (Lizardfolk)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Lizardfolk', cr: 0.5, type: 'Humanoid (Lizardfolk)', size: '', alignment: 'neutral', legendary: false, corporeal: true },
+  { name: 'Lizardfolk Shaman', cr: 2.0, type: 'Humanoid (Lizardfolk)', size: '', alignment: 'neutral', legendary: false, corporeal: true },
+  { name: 'Mage', cr: 6.0, type: 'Humanoid (any race)', size: '', alignment: 'any alignment', legendary: false, corporeal: true },
+  { name: 'Magma Mephit', cr: 0.5, type: 'Elemental', size: '', alignment: 'neutral evil', legendary: false, corporeal: false },
+  { name: 'Magmin', cr: 0.5, type: 'Elemental', size: '', alignment: 'chaotic neutral', legendary: false, corporeal: true },
+  { name: 'Mammoth', cr: 6.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Manes', cr: 0.125, type: 'Fiend (Demon)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Manticore', cr: 3.0, type: 'Monstrosity', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Marid', cr: 11.0, type: 'Elemental', size: '', alignment: 'chaotic neutral', legendary: false, corporeal: true },
+  { name: 'Marilith', cr: 16.0, type: 'Fiend (Demon)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Mastiff', cr: 0.125, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Medusa', cr: 6.0, type: 'Monstrosity', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Merfolk', cr: 0.125, type: 'Humanoid (Merfolk)', size: '', alignment: 'neutral', legendary: false, corporeal: true },
+  { name: 'Merrow', cr: 2.0, type: 'Monstrosity', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Mezzoloth', cr: 5.0, type: 'Fiend (Yugoloth)', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Mimic', cr: 2.0, type: 'Monstrosity (Shapechanger)', size: '', alignment: 'neutral', legendary: false, corporeal: true },
+  { name: 'Mind Flayer', cr: 7.0, type: 'Aberration', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Minotaur', cr: 3.0, type: 'Monstrosity', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Minotaur Skeleton', cr: 2.0, type: 'Undead', size: '', alignment: 'lawful evil', legendary: false, corporeal: false },
+  { name: 'Monodrone', cr: 0.125, type: 'Construct', size: '', alignment: 'lawful neutral', legendary: false, corporeal: false },
+  { name: 'Mud Mephit', cr: 0.25, type: 'Elemental', size: '', alignment: 'neutral evil', legendary: false, corporeal: false },
+  { name: 'Mule', cr: 0.125, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Mummy', cr: 3.0, type: 'Undead', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Mummy Lord', cr: 15.0, type: 'Undead', size: '', alignment: 'lawful evil', legendary: true, corporeal: true },
+  { name: 'Myconid Adult', cr: 0.5, type: 'Plant', size: '', alignment: 'lawful neutral', legendary: false, corporeal: true },
+  { name: 'Myconid Sovereign', cr: 2.0, type: 'Plant', size: '', alignment: 'lawful neutral', legendary: false, corporeal: true },
+  { name: 'Myconid Sprout', cr: 0.0, type: 'Plant', size: '', alignment: 'lawful neutral', legendary: false, corporeal: true },
+  { name: 'Nalfeshnee', cr: 13.0, type: 'Fiend (Demon)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Needle Blight', cr: 0.25, type: 'Plant', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Night Hag', cr: 5.0, type: 'Fiend', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Nightmare', cr: 3.0, type: 'Fiend', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Noble', cr: 0.125, type: 'Humanoid (any race)', size: '', alignment: 'any alignment', legendary: false, corporeal: true },
+  { name: 'Nothic', cr: 2.0, type: 'Aberration', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Nycaloth', cr: 9.0, type: 'Fiend (Yugoloth)', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Ochre Jelly', cr: 2.0, type: 'Ooze', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Octopus', cr: 0.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Ogre', cr: 2.0, type: 'Giant', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Ogre Zombie', cr: 2.0, type: 'Undead', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Oni', cr: 7.0, type: 'Giant', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Orc', cr: 0.5, type: 'Humanoid (Orc)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Orc Eye of Gruumsh', cr: 2.0, type: 'Humanoid (Orc)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Orc War Chief', cr: 4.0, type: 'Humanoid (Orc)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Orog', cr: 2.0, type: 'Humanoid (Orc)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Otyugh', cr: 5.0, type: 'Aberration', size: '', alignment: 'neutral', legendary: false, corporeal: true },
+  { name: 'Owl', cr: 0.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Owlbear', cr: 3.0, type: 'Monstrosity', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Panther', cr: 0.25, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Pegasus', cr: 2.0, type: 'Celestial', size: '', alignment: 'chaotic good', legendary: false, corporeal: true },
+  { name: 'Pentadrone', cr: 2.0, type: 'Construct', size: '', alignment: 'lawful neutral', legendary: false, corporeal: false },
+  { name: 'Peryton', cr: 2.0, type: 'Monstrosity', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Phase Spider', cr: 3.0, type: 'Monstrosity', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Piercer', cr: 0.5, type: 'Monstrosity', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Pit Fiend', cr: 20.0, type: 'Fiend (Devil)', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Pixie', cr: 0.25, type: 'Fey', size: '', alignment: 'neutral good', legendary: false, corporeal: true },
+  { name: 'Planetar', cr: 16.0, type: 'Celestial', size: '', alignment: 'lawful good', legendary: false, corporeal: true },
+  { name: 'Plesiosaurus', cr: 2.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Poisonous Snake', cr: 0.125, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Polar Bear', cr: 2.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Pony', cr: 0.125, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Priest', cr: 2.0, type: 'Humanoid (any race)', size: '', alignment: 'any alignment', legendary: false, corporeal: true },
+  { name: 'Pseudodragon', cr: 0.25, type: 'Dragon', size: '', alignment: 'neutral good', legendary: false, corporeal: true },
+  { name: 'Pteranodon', cr: 0.25, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Purple Worm', cr: 15.0, type: 'Monstrosity', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Quadrone', cr: 1.0, type: 'Construct', size: '', alignment: 'lawful neutral', legendary: false, corporeal: false },
+  { name: 'Quaggoth', cr: 2.0, type: 'Humanoid (Quaggoth)', size: '', alignment: 'chaotic neutral', legendary: false, corporeal: true },
+  { name: 'Quaggoth Spore Servant', cr: 1.0, type: 'Plant', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Quasit', cr: 1.0, type: 'Fiend (Demon, Shapechanger)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Quipper', cr: 0.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Rakshasa', cr: 13.0, type: 'Fiend', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Rat', cr: 0.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Raven', cr: 0.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Red Dragon Wyrmling', cr: 4.0, type: 'Dragon (Chromatic)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Red Slaad', cr: 5.0, type: 'Aberration', size: '', alignment: 'chaotic neutral', legendary: false, corporeal: true },
+  { name: 'Reef Shark', cr: 0.5, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Remorhaz', cr: 11.0, type: 'Monstrosity', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Revenant', cr: 5.0, type: 'Undead', size: '', alignment: 'neutral', legendary: false, corporeal: true },
+  { name: 'Rhinoceros', cr: 2.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Riding Horse', cr: 0.25, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Roc', cr: 11.0, type: 'Monstrosity', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Roper', cr: 5.0, type: 'Monstrosity', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Rug of Smothering', cr: 2.0, type: 'Construct', size: '', alignment: 'unaligned', legendary: false, corporeal: false },
+  { name: 'Rust Monster', cr: 0.5, type: 'Monstrosity', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Saber-Toothed Tiger', cr: 2.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Sahuagin', cr: 0.5, type: 'Humanoid (Sahuagin)', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Sahuagin Baron', cr: 5.0, type: 'Humanoid (Sahuagin)', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Sahuagin Priestess', cr: 2.0, type: 'Humanoid (Sahuagin)', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Salamander', cr: 5.0, type: 'Elemental', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Satyr', cr: 0.5, type: 'Fey', size: '', alignment: 'chaotic neutral', legendary: false, corporeal: true },
+  { name: 'Scarecrow', cr: 1.0, type: 'Construct', size: '', alignment: 'chaotic evil', legendary: false, corporeal: false },
+  { name: 'Scorpion', cr: 0.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Scout', cr: 0.5, type: 'Humanoid (any race)', size: '', alignment: 'any alignment', legendary: false, corporeal: true },
+  { name: 'Sea Hag', cr: 2.0, type: 'Fey', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Sea Horse', cr: 0.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Shadow', cr: 0.5, type: 'Undead', size: '', alignment: 'chaotic evil', legendary: false, corporeal: false },
+  { name: 'Shadow Demon', cr: 4.0, type: 'Fiend (Demon)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Shambling Mound', cr: 5.0, type: 'Plant', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Shield Guardian', cr: 7.0, type: 'Construct', size: '', alignment: 'unaligned', legendary: false, corporeal: false },
+  { name: 'Shrieker', cr: 0.0, type: 'Plant', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Silver Dragon Wyrmling', cr: 2.0, type: 'Dragon (Metallic)', size: '', alignment: 'lawful good', legendary: false, corporeal: true },
+  { name: 'Skeleton', cr: 0.25, type: 'Undead', size: '', alignment: 'lawful evil', legendary: false, corporeal: false },
+  { name: 'Slaad Tadpole', cr: 0.125, type: 'Aberration', size: '', alignment: 'chaotic neutral', legendary: false, corporeal: true },
+  { name: 'Smoke Mephit', cr: 0.25, type: 'Elemental', size: '', alignment: 'neutral evil', legendary: false, corporeal: false },
+  { name: 'Solar', cr: 21.0, type: 'Celestial', size: '', alignment: 'lawful good', legendary: true, corporeal: true },
+  { name: 'Spectator', cr: 3.0, type: 'Aberration', size: '', alignment: 'lawful neutral', legendary: false, corporeal: true },
+  { name: 'Specter', cr: 1.0, type: 'Undead', size: '', alignment: 'chaotic evil', legendary: false, corporeal: false },
+  { name: 'Spider', cr: 0.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Spined Devil', cr: 2.0, type: 'Fiend (Devil)', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Spirit Naga', cr: 8.0, type: 'Monstrosity', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Sprite', cr: 0.25, type: 'Fey', size: '', alignment: 'neutral good', legendary: false, corporeal: true },
+  { name: 'Spy', cr: 1.0, type: 'Humanoid (any race)', size: '', alignment: 'any alignment', legendary: false, corporeal: true },
+  { name: 'Steam Mephit', cr: 0.25, type: 'Elemental', size: '', alignment: 'neutral evil', legendary: false, corporeal: false },
+  { name: 'Stirge', cr: 0.125, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Stone Giant', cr: 7.0, type: 'Giant', size: '', alignment: 'neutral', legendary: false, corporeal: true },
+  { name: 'Stone Golem', cr: 10.0, type: 'Construct', size: '', alignment: 'unaligned', legendary: false, corporeal: false },
+  { name: 'Storm Giant', cr: 13.0, type: 'Giant', size: '', alignment: 'chaotic good', legendary: false, corporeal: true },
+  { name: 'Succubus', cr: 4.0, type: 'Fiend (Shapechanger)', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Swarm of Bats', cr: 0.25, type: 'Swarm of Tiny beasts', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Swarm of Insects', cr: 0.5, type: 'Swarm of Tiny beasts', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Swarm of Poisonous Snakes', cr: 2.0, type: 'Swarm of Tiny beasts', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Swarm of Quippers', cr: 1.0, type: 'Swarm of Tiny beasts', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Swarm of Rats', cr: 0.25, type: 'Swarm of Tiny beasts', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Swarm of Ravens', cr: 0.25, type: 'Swarm of Tiny beasts', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Tarrasque', cr: 30.0, type: 'Monstrosity (Titan)', size: '', alignment: 'unaligned', legendary: true, corporeal: true },
+  { name: 'Thri-kreen', cr: 1.0, type: 'Humanoid (Thri-kreen)', size: '', alignment: 'chaotic neutral', legendary: false, corporeal: true },
+  { name: 'Thug', cr: 0.5, type: 'Humanoid (any race)', size: '', alignment: 'any non-good alignment', legendary: false, corporeal: true },
+  { name: 'Tiger', cr: 1.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Treant', cr: 9.0, type: 'Plant', size: '', alignment: 'chaotic good', legendary: false, corporeal: true },
+  { name: 'Tribal Warrior', cr: 0.125, type: 'Humanoid (any race)', size: '', alignment: 'any alignment', legendary: false, corporeal: true },
+  { name: 'Triceratops', cr: 5.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Tridrone', cr: 0.5, type: 'Construct', size: '', alignment: 'lawful neutral', legendary: false, corporeal: false },
+  { name: 'Troglodyte', cr: 0.25, type: 'Humanoid (Troglodyte)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Troll', cr: 5.0, type: 'Giant', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Twig Blight', cr: 0.125, type: 'Plant', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Tyrannosaurus Rex', cr: 8.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Ultroloth', cr: 13.0, type: 'Fiend (Yugoloth)', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Umber Hulk', cr: 5.0, type: 'Monstrosity', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Unicorn', cr: 5.0, type: 'Celestial', size: '', alignment: 'lawful good', legendary: true, corporeal: true },
+  { name: 'Vampire', cr: 13.0, type: 'Undead (Shapechanger)', size: '', alignment: 'lawful evil', legendary: true, corporeal: true },
+  { name: 'Vampire Spawn', cr: 5.0, type: 'Undead', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Veteran', cr: 3.0, type: 'Humanoid (any race)', size: '', alignment: 'any alignment', legendary: false, corporeal: true },
+  { name: 'Vine Blight', cr: 0.5, type: 'Plant', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Violet Fungus', cr: 0.25, type: 'Plant', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Vrock', cr: 6.0, type: 'Fiend (Demon)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Vulture', cr: 0.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Warhorse', cr: 0.5, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Warhorse Skeleton', cr: 0.5, type: 'Undead', size: '', alignment: 'lawful evil', legendary: false, corporeal: false },
+  { name: 'Water Elemental', cr: 5.0, type: 'Elemental', size: '', alignment: 'neutral', legendary: false, corporeal: false },
+  { name: 'Water Weird', cr: 3.0, type: 'Elemental', size: '', alignment: 'neutral', legendary: false, corporeal: false },
+  { name: 'Weasel', cr: 0.0, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Werebear', cr: 5.0, type: 'Humanoid (Human, Shapechanger)', size: '', alignment: 'neutral good', legendary: false, corporeal: true },
+  { name: 'Wereboar', cr: 4.0, type: 'Humanoid (Human, Shapechanger)', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Wererat', cr: 2.0, type: 'Humanoid (Human, Shapechanger)', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Weretiger', cr: 4.0, type: 'Humanoid (Human, Shapechanger)', size: '', alignment: 'neutral', legendary: false, corporeal: true },
+  { name: 'Werewolf', cr: 3.0, type: 'Humanoid (Human, Shapechanger)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'White Dragon Wyrmling', cr: 2.0, type: 'Dragon (Chromatic)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Wight', cr: 3.0, type: 'Undead', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Will-o\'-Wisp', cr: 2.0, type: 'Undead', size: '', alignment: 'chaotic evil', legendary: false, corporeal: false },
+  { name: 'Winged Kobold', cr: 0.25, type: 'Humanoid (Kobold)', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Winter Wolf', cr: 3.0, type: 'Monstrosity', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Wolf', cr: 0.25, type: 'Beast', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Worg', cr: 0.5, type: 'Monstrosity', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Wraith', cr: 5.0, type: 'Undead', size: '', alignment: 'neutral evil', legendary: false, corporeal: false },
+  { name: 'Wyvern', cr: 6.0, type: 'Dragon', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Xorn', cr: 5.0, type: 'Elemental', size: '', alignment: 'neutral', legendary: false, corporeal: true },
+  { name: 'Yeti', cr: 3.0, type: 'Monstrosity', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Yochlol', cr: 10.0, type: 'Fiend (Demon, Shapechanger)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Young Black Dragon', cr: 7.0, type: 'Dragon (Chromatic)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Young Blue Dragon', cr: 9.0, type: 'Dragon (Chromatic)', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Young Brass Dragon', cr: 6.0, type: 'Dragon (Metallic)', size: '', alignment: 'chaotic good', legendary: false, corporeal: true },
+  { name: 'Young Bronze Dragon', cr: 8.0, type: 'Dragon (Metallic)', size: '', alignment: 'lawful good', legendary: false, corporeal: true },
+  { name: 'Young Copper Dragon', cr: 7.0, type: 'Dragon (Metallic)', size: '', alignment: 'chaotic good', legendary: false, corporeal: true },
+  { name: 'Young Gold Dragon', cr: 10.0, type: 'Dragon (Metallic)', size: '', alignment: 'lawful good', legendary: false, corporeal: true },
+  { name: 'Young Green Dragon', cr: 8.0, type: 'Dragon (Chromatic)', size: '', alignment: 'lawful evil', legendary: false, corporeal: true },
+  { name: 'Young Red Dragon', cr: 10.0, type: 'Dragon (Chromatic)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Young Red Shadow Dragon', cr: 13.0, type: 'Dragon', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Young Remorhaz', cr: 5.0, type: 'Monstrosity', size: '', alignment: 'unaligned', legendary: false, corporeal: true },
+  { name: 'Young Silver Dragon', cr: 9.0, type: 'Dragon (Metallic)', size: '', alignment: 'lawful good', legendary: false, corporeal: true },
+  { name: 'Young White Dragon', cr: 6.0, type: 'Dragon (Chromatic)', size: '', alignment: 'chaotic evil', legendary: false, corporeal: true },
+  { name: 'Yuan-ti Abomination', cr: 7.0, type: 'Monstrosity (Shapechanger, Yuan-ti)', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Yuan-ti Malison', cr: 3.0, type: 'Monstrosity (Shapechanger, Yuan-ti)', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Yuan-ti Pureblood', cr: 1.0, type: 'Humanoid (Yuan-ti)', size: '', alignment: 'neutral evil', legendary: false, corporeal: true },
+  { name: 'Zombie', cr: 0.25, type: 'Undead', size: '', alignment: 'neutral evil', legendary: false, corporeal: true }
+  ];
+
+  // Preparations
+  const RG_PREPARATIONS = [
+    "Flakes of",
+    "Juices of",
+    "Salted",
+    "Chunks of",
+    "Extract of",
+    "Scalded",
+    "Ash of",
+    "Essence of",
+    "Ground",
+    "Brined",
+    "Boiled",
+    "Mashed",
+    "Tincture of",
+    "Oil of",
+    "Dried",
+    "Decoction of",
+    "Scent of",
+    "Roasted",
+    "Pickled",
+    "Charred",
+    "Crushed",
+    "Powdered",
+    "Petrified",
+    "Chopped",
+    "Sliced"
+  ];
+
+  // Corporeal parts
+  const RG_PARTS_CORPOREAL = [
+    "Hair(s) / Skin(s) / Bark",
+    "Sap / Blood",
+    "Urine / Sap",
+    "Mucus",
+    "Spleen(s)",
+    "Fat(s)",
+    "Pus",
+    "Scabs",
+    "Bone(s) Asst.",
+    "Saliva",
+    "Toe Bone(s)",
+    "Fur(s) / Skin(s) / Bark",
+    "Glands",
+    "Ligaments",
+    "Lymph",
+    "Tendons",
+    "Bone Dust / Ash",
+    "Teeth / Fang(s) / Tounge(s)",
+    "Bladder(s)",
+    "Face(s)",
+    "Feet / Fin(s) / Toe(s) / Hoof(s)",
+    "Feather(s) / Skin(s) / Bark",
+    "Skull(s)",
+    "Liver(s)",
+    "Eyelash(s)",
+    "Wing(s)",
+    "Cartilage",
+    "Tongue(s)",
+    "Lung(s)",
+    "Ear(s)",
+    "Vertebrae(s)",
+    "Eye(s)",
+    "Toenail(s) / Claw(s)",
+    "Cheeks",
+    "Tentacle(s) / Limb(s)",
+    "Tear(s)",
+    "Blood / Sap",
+    "Flesh",
+    "Fingernail(s) / Claw(s) / Hoof(s)",
+    "Brain(s)",
+    "Rib Bone(s)",
+    "Finger / Wing Bone(s)",
+    "Hand(s) / Fin(s) / Finger(s)",
+    "Head(s)",
+    "Root(s) / Feet",
+    "Intestines",
+    "Fang(s)",
+    "Kidney(s)",
+    "Sinew",
+    "Scale(s) / Skin(s) / Bark",
+    "Ichor",
+    "Heart(s)",
+    "Noses",
+    "Egg(s) / Embryo(s)",
+    "Bile"
+  ];
+
+  // Incorporeal parts
+  const RG_PARTS_INCORPOREAL = [
+    "Residual Echoes",
+    "Haunting Essence",
+    "Spectral Shards",
+    "Ghost Mist",
+    "Whispered Lament(s)",
+    "Echoed Wail(s)",
+    "Shadow-Stuff",
+    "Lingering Terror",
+    "Phantasmal Residue",
+    "Spirit Dust",
+    "Grave-Chill",
+    "Silent Scream(s)",
+    "Dream Shavings",
+    "Nightmare Fragments",
+    "Faded Silhouette(s)",
+    "Soul Ember(s)",
+    "Twilight Ichor",
+    "Ethereal Drift(s)",
+    "Veil-Torn Threads",
+    "Grim Afterimage(s)",
+    "Specter’s Breath",
+    "Wraith-Touched Ash",
+    "Will-o’-Wisp Sparks",
+    "Funeral Whisper(s)"
+  ];
+
+  const RG_CONTAINERS = [
+    "Crock",
+    "Jug",
+    "Bottle",
+    "Urn",
+    "Jar",
+    "Flask",
+    "Cauldron",
+    "Ewer",
+    "Bowl",
+    "Barrel",
+    "Vial"
+  ];
+
+  // Aesthetic / description flavor
+	const RG_AESTHETICS = [
+	  "Faintly transparent, as if half-present in another plane.",
+	  "Marked with slow-crawling runes that fade if stared at directly.",
+	  "Veined with deep violet light that pulses like a heartbeat.",
+	  "Emanates soft motes that drift away and vanish mid-air.",
+	  "Glows faintly when held in silence or total darkness.",
+	  "Whispers indistinctly when near sleeping creatures.",
+	  "Casting a shadow that moves slightly out of sync.",
+	  "Surrounded by drifting sparks that behave like fireflies.",
+	  "Cold to the emotions rather than to the touch.",
+	  "Exudes a faint scent of incense, ash, and old prayers.",
+	  "Hums quietly when brought near consecrated objects.",
+	  "Flickers between different hues under moonlight.",
+	  "Seems heavier or lighter than its true weight.",
+	  "Absorbs nearby light, dimming its surroundings.",
+	  "Trails tiny static arcs when moved quickly.",
+	  "Reflects shapes that aren’t present in reality.",
+	  "Appears aged or ancient regardless of its source.",
+	  "Radiates an inexplicable aura of expectancy, like holding a question.",
+	  "Sheds phantom steam or mist that evaporates instantly.",
+	  "Warps air around it like distant heat on stone.",
+	  "Faint afterimages linger in sight after looking away.",
+	  "Reacts with soft musical tones when brushed by magic.",
+	  "Leaves behind symbolic patterns in dust or frost.",
+	  "Seems to pulse in time with nearby living beings.",
+	  "Edges blur, as if refusing to be fully observed.",
+	  "Reacts violently to reflected surfaces or mirrors.",
+	  "Leaves faint sigil-shaped marks on containers.",
+	  "Subtly shifts in appearance when unobserved.",
+	  "Feels present even when not physically nearby.",
+	  "Generates a subtle magnetic pull toward arcane foci.",
+	  "Dim echoes of past voices resonate at random.",
+	  "Sparks recognition or déjà-vu with no known source.",
+	  "Creates ripples in shadows rather than light.",
+	  "Sheds illusory feathers, petals, or embers.",
+	  "Causes nearby text to rearrange into new phrases.",
+	  "Air feels heavier and more reverent around it.",
+	  "Slightly distorts sound, dulling some tones and amplifying others.",
+	  "Leaves a lingering emotional impression when handled.",
+	  "Seems to watch back, even without eyes."
+	];
+
+
+
+	// Schools of magic for crafting-use flavor
+	const RG_SCHOOLS = [
+	  { noun: "abjuration", adj: "abjurant" },
+	  { noun: "conjuration", adj: "conjurative" },
+	  { noun: "divination", adj: "divinatory" },
+	  { noun: "enchantment", adj: "enchantment-focused" },
+	  { noun: "evocation", adj: "evocative" },
+	  { noun: "illusion", adj: "illusory" },
+	  { noun: "necromancy", adj: "necromantic" },
+	  { noun: "transmutation", adj: "transmutative" }
+	];
+
+	const RG_USE_MEDIA = [
+	  "moonless rites of supplication",
+	  "dawn-lit prayers for unseen patrons",
+	  "hushed gatherings sworn to secrecy",
+	  "funereal processions through burial mists",
+	  "silent vigils held over running water",
+	  "ancestral petitions beneath starless skies",
+	  "twilight gatherings where the world feels thin",
+	  "wordless midnight observances",
+	  "secret conclaves behind closed doors",
+	  "dream-walk rites guided by masked attendants",
+	  "quiet rites of remembrance",
+	  "ritual fasts observed in absolute silence",
+	  "ceremonies marking the end of old names",
+	  "crossroads rites at places where paths converge",
+	  "solitary devotions whispered into the earth",
+	  "processions carried out in veiled silence",
+	  "vigils undertaken without speaking",
+	  "rites performed beneath dying light",
+	  "ritual offerings given without witnesses",
+	  "observances that welcome unseen powers"
+	];
+
+
+
+	// Ritual purposes / what the working is for
+	const RG_USE_PURPOSES = [
+	  "sever or rewrite oaths and sworn bonds",
+	  "twist or rewrite memories and personal histories",
+	  "bind restless spirits to specific places or objects",
+	  "veil the caster from unwanted divination",
+	  "invite omens and visions of possible futures",
+	  "strike bargains with celestial, fiendish, or eldritch powers",
+	  "soften the boundary between dream and waking",
+	  "seal away the influence of a particular entity or relic",
+	  "awaken the stiffled influence of a particular entity or relic",
+	  "call back fragments of a soul scattered across planes",
+	  "scatter a soul into fragments across the planes",
+	  "suppress the powers of a possessing spirit or power",
+	  "sanctify grounds desecrated by blasphemous rites",
+	  "desecrate grounds sancitfied by blessed rites",
+	  "mark a lineage as blessed, cursed, or choosen",
+	  "break a marked lineage of blessings, curses, or choosen status",
+	  "compel truth during trials, councils, or confessions",
+	  "compel lies during trials, councils, or confessions",
+	  "bind the tongues of those who know dangerous secrets",
+	  "mask the spiritual scent of a creature from predators or hunters",
+	  "unmask the spiritual scent of a creature from predators or hunters",
+	  "invite guidance or wisdom from celestial, fiendish, or eldritch powers",
+	  "strengthen wards against a named foe",
+	  "unseal portals in the fabric of reality at bound gateways",
+	  "seal portals in the fabric of reality at unbound gateways"
+	];
+
+	const RG_USE_MEDIA_UNDEAD = [
+	  "grave-dust processions through solemn cemeteries",
+	  "unmarked burial grounds where nothing is recorded",
+	  "silent rows of ancient tombs",
+	  "crypt-entrances where unrest is meant to be stilled",
+	  "ossuaries where names are long forgotten"
+	];
+
+	const RG_USE_MEDIA_ABERRATION = [
+	  "dream-rites that warp perception",
+	  "long vigils kept without sleep",
+	  "places where geometry feels subtly wrong",
+	  "cracks and seams where reality thins",
+	  "circles walked backwards under starlight"
+	];
+
+	const RG_USE_MEDIA_CELESTIAL = [
+	  "hymns of praise beneath an open sky",
+	  "sunbeams cast over sanctified ground",
+	  "moments of absolute stillness and gratitude",
+	  "dawn prayers rising with the light",
+	  "processions of soft song and candle glow"
+	];
+
+	const RG_USE_MEDIA_FIEND = [
+	  "edges of blood-drawn circles",
+	  "bargains sealed with whispered promises",
+	  "smoke that smells faintly of brimstone",
+	  "fires fed with forbidden offerings",
+	  "places where curses have long taken root"
+	];
+
+	const RG_USE_MEDIA_FEY = [
+	  "paths that vanish when looked at directly",
+	  "groves where trees bloom out of season",
+	  "places where laughter and sobbing sound alike",
+	  "moss that never truly dries",
+	  "wordless dances under shifting moonlight"
+	];
+
+	const RG_USE_MEDIA_DRAGON = [
+	  "hoards and offerings of precious metals",
+	  "high places where storms gather",
+	  "cavernous, echoing spaces",
+	  "rituals that honor age, might, and dominion"
+	];
+
+	const RG_USE_MEDIA_ELEMENTAL = [
+	  "meeting points of colliding elements",
+	  "bonfires, tides, storms, or chasms in turn",
+	  "convergences of wind, stone, water, and flame",
+	  "places left untouched by mortal hands"
+	];
+
+	const RG_USE_MEDIA_CONSTRUCT = [
+	  "awakening rites over inert mechanisms",
+	  "chambers where tools never rest",
+	  "stillness between ticking gears",
+	  "corridors where footsteps echo with hollow resonance"
+	];
+
+	const RG_USE_MEDIA_BEAST_PLANT = [
+	  "quiet groves and hidden clearings",
+	  "game trails under watchful boughs",
+	  "stones worn smooth by many passing feet",
+	  "rich soil alive with unseen roots"
+	];
+
+	const RG_USE_MEDIA_HUMANOID_MONSTROSITY = [
+	  "hushed gatherings sworn to secrecy",
+	  "crossroads where old roads converge and diverge again",
+	  "back rooms where agreements are never written down",
+	  "ceremonies that bind communities—and those cast out"
+	];
+
+
+	// Weighted magic school preferences by creature category
+	const RG_SCHOOL_WEIGHTS = {
+	  undead:       ["necromancy", "necromancy", "divination", "abjuration", "illusion"],
+	  fiend:        ["conjuration", "evocation", "evocation", "enchantment", "necromancy"],
+	  celestial:    ["divination", "abjuration", "abjuration", "evocation", "enchantment"],
+	  fey:          ["enchantment", "illusion", "illusion", "divination", "transmutation"],
+	  aberration:   ["illusion", "conjuration", "transmutation", "divination", "enchantment"],
+	  dragon:       ["evocation", "evocation", "abjuration", "transmutation", "divination"],
+	  elemental:    ["evocation", "transmutation", "evocation", "abjuration", "conjuration"],
+	  construct:    ["transmutation", "abjuration", "evocation", "divination"],
+	  beast:        ["transmutation", "divination", "enchantment"],
+	  plant:        ["transmutation", "divination", "enchantment"],
+	  humanoid:     ["enchantment", "divination", "transmutation"],
+	  monstrosity:  ["transmutation", "evocation", "abjuration"],
+	  giant:        ["evocation", "transmutation", "abjuration"],
+
+	  // fallback
+	  generic:      ["divination", "abjuration", "transmutation", "enchantment"]
+	};
+
+	const RG_ELDRITCH_SCHOOL_PROPERTIES = {
+	  abjuration: [
+		"A faint abjurant shimmer clings to it, as if warding unseen forces.",
+		"It feels subtly resistant to intrusion, like a boundary that refuses to yield.",
+		"Its presence muffles hostile intent, turning sharp thoughts dull at the edges."
+	  ],
+	  conjuration: [
+		"It seems to lean toward elsewhere, tugging gently toward distant, unseen places.",
+		"Whispers of other locations echo faintly around it, as if it remembers being summoned.",
+		"Tiny motes appear and vanish near it, like half-formed things trying to arrive."
+	  ],
+	  divination: [
+		"It gives the uncanny sense of being observed from just beyond ordinary sight.",
+		"Faint impressions of unspoken questions gather around it like dust.",
+		"Looking at it too long leaves afterimages of eyes, symbols, or constellations."
+	  ],
+	  enchantment: [
+		"A subtle charm radiates from it, softening doubt and sharpening suggestion.",
+		"It feels oddly persuasive, as if it wants to be used to influence another will.",
+		"Brief contact coaxes buried desires slightly closer to the surface."
+	  ],
+	  evocation: [
+		"A quiet, contained violence hums within it, like a distant storm held in a bottle.",
+		"It crackles with restrained force, eager to become something brighter and louder.",
+		"Nearby air feels charged, as if waiting for a command word."
+	  ],
+	  illusion: [
+		"Its edges refuse to stay fixed, blurring or shifting when not directly observed.",
+		"It leaves faintly false reflections in glass, mirrors, or still water.",
+		"Sometimes it seems fractionally elsewhere, as though you’re seeing a copy of the real thing."
+	  ],
+	  necromancy: [
+		"A thin necromantic chill lingers around it, not of cold air but of absent warmth.",
+		"It feels gently hungry for endings and things that have already passed.",
+		"Shadows near it seem a little slower to move when their sources do."
+	  ],
+	  transmutation: [
+		"Its substance feels uncertain, as if it could decide to be something else at any moment.",
+		"Tiny shifts in color or density occur without any clear cause.",
+		"It seems to remember other forms it might have taken in different circumstances."
+	  ],
+	  generic: [
+		"It feels significant in a way that ordinary matter does not, like a sentence missing only one word.",
+		"A quiet awareness lingers in its presence, as if it is listening as much as being handled.",
+		"Something about it insists it belongs in a ritual, not on an ordinary shelf."
+	  ]
+	};
+
+	const RG_ELDRITCH_TYPE_PROPERTIES = {
+	  undead: [
+		"It carries the hush of tombs that have never been opened.",
+		"The air around it feels like the moment just before a name is spoken at a funeral.",
+		"Memories of places you’ve never been press faintly at the edge of thought."
+	  ],
+	  fiend: [
+		"Its presence is accompanied by the faint scent of hot iron and old smoke.",
+		"Tiny impulses toward cruelty or selfishness feel slightly easier to justify near it.",
+		"It seems to take quiet interest in any spoken bargains."
+	  ],
+	  celestial: [
+		"A sense of being weighed and quietly judged accompanies prolonged contact.",
+		"It feels like the echo of a blessing that has been bent but not entirely broken.",
+		"Simple acts of kindness feel subtly more meaningful nearby."
+	  ],
+	  fey: [
+		"Time feels a little uncertain near it, as if moments might fold out of order.",
+		"Laughter and sorrow both seem closer to the surface in its presence.",
+		"It leaves the impression that something unseen is amused by you."
+	  ],
+	  aberration: [
+		"Angles around it feel slightly wrong, as though space is remembering a different set of rules.",
+		"Thoughts come in unfamiliar shapes for a few heartbeats after contact.",
+		"It gives the sense that dreams might remember you later."
+	  ],
+	  dragon: [
+		"It carries a proud, old stillness, like air in a hall built to impress.",
+		"Nearby sounds feel slightly more resonant, important, and weighty.",
+		"It seems faintly offended by the idea of being considered ordinary."
+	  ],
+	  elemental: [
+		"It echoes with a simple, relentless drive—burn, flow, grind, or howl.",
+		"Being near it feels like standing too close to something vast and impersonal.",
+		"It resonates faintly with natural phenomena: wind, stone, tide, flame."
+	  ],
+	  construct: [
+		"There is a precise, measured quality to its presence, as if it prefers order.",
+		"It seems to respond minutely to patterns and repeated gestures.",
+		"Silences around it feel engineered rather than accidental."
+	  ],
+	  beast_plant: [
+		"It carries the quiet patience of things that grow whether watched or not.",
+		"Scents of soil, fur, sap, or leaf seem to linger just at the edge of perception.",
+		"You feel, briefly, like something is regarding you with a non-human kind of curiosity."
+	  ],
+	  humanoid_monstrosity: [
+		"It hums faintly with choices made and paths not taken.",
+		"There is a sense of stories cut short or twisted out of their intended shapes.",
+		"It feels like a relic of some community, bargain, or betrayal long past."
+	  ],
+	  generic: [
+		"It feels like it remembers something important that you do not.",
+		"Being near it invites a faint sense of anticipation, as if waiting for a cue.",
+		"It sits too easily in the role of ‘centerpiece’ whenever other objects are nearby."
+	  ]
+	};
+
+
+	function getCreatureCategory(typeStr) {
+	  const t = (typeStr || "").toLowerCase();
+
+	  if (t.includes("undead")) return "undead";
+	  if (t.includes("fiend")) return "fiend";
+	  if (t.includes("celestial")) return "celestial";
+	  if (t.includes("aberration")) return "aberration";
+	  if (t.includes("dragon")) return "dragon";
+	  if (t.includes("fey")) return "fey";
+	  if (t.includes("elemental")) return "elemental";
+	  if (t.includes("construct")) return "construct";
+	  if (t.includes("ooze")) return "ooze";
+	  if (t.includes("plant")) return "plant";
+	  if (t.includes("beast")) return "beast";
+	  if (t.includes("giant")) return "giant";
+	  if (t.includes("monstrosity")) return "monstrosity";
+	  if (t.includes("humanoid")) return "humanoid";
+
+	  return "generic";
+	}
+
+
+	function rgPopulateCreatureSelect() {
+	  const sel = document.getElementById("rgCreatureSelect");
+	  if (!sel || typeof RG_SOURCES === "undefined") return;
+
+	  // Clear any old options except "Any"
+	  sel.querySelectorAll("option:not([value='any'])").forEach(o => o.remove());
+
+	  // Unique list of creature names, sorted
+	  const names = Array.from(
+		new Set(RG_SOURCES.map(src => src.name))
+	  ).sort((a, b) => a.localeCompare(b));
+
+	  names.forEach(name => {
+		const opt = document.createElement("option");
+		opt.value = name;
+		opt.textContent = name;
+		sel.appendChild(opt);
+	  });
+	}
+
+
+
+	function pickUseMediumForType(typeStr) {
+		  const category = getCreatureCategory(typeStr);
+
+		  let extras = null;
+		  switch (category) {
+			case "undead":
+			  extras = RG_USE_MEDIA_UNDEAD;
+			  break;
+			case "aberration":
+			  extras = RG_USE_MEDIA_ABERRATION;
+			  break;
+			case "celestial":
+			  extras = RG_USE_MEDIA_CELESTIAL;
+			  break;
+			case "fiend":
+			  extras = RG_USE_MEDIA_FIEND;
+			  break;
+			case "fey":
+			  extras = RG_USE_MEDIA_FEY;
+			  break;
+			case "dragon":
+			  extras = RG_USE_MEDIA_DRAGON;
+			  break;
+			case "elemental":
+			  extras = RG_USE_MEDIA_ELEMENTAL;
+			  break;
+			case "construct":
+			  extras = RG_USE_MEDIA_CONSTRUCT;
+			  break;
+			case "beast":
+			case "plant":
+			  extras = RG_USE_MEDIA_BEAST_PLANT;
+			  break;
+			case "humanoid":
+			case "monstrosity":
+			  extras = RG_USE_MEDIA_HUMANOID_MONSTROSITY;
+			  break;
+			default:
+			  extras = null;
+		  }
+
+		  // 50/50: sometimes generic, sometimes type-flavored
+		  if (!extras || extras.length === 0 || Math.random() < 0.5) {
+			return rgRandomFrom(RG_USE_MEDIA);
+		  }
+		  return rgRandomFrom(extras);
+		}
+
+	function pickWeightedSchool(srcType) {
+	  const category = getCreatureCategory(srcType);
+	  const weights = RG_SCHOOL_WEIGHTS[category] || RG_SCHOOL_WEIGHTS.generic;
+
+	  const chosen = rgRandomFrom(weights);
+	  // Return the full school object (noun + adj) from RG_SCHOOLS
+	  return RG_SCHOOLS.find(s => s.noun === chosen) || rgRandomFrom(RG_SCHOOLS);
+	}
+
+
+
+	function generateCraftingUseSentence(src) {
+	  const school = pickWeightedSchool(src.type);      // { noun, adj }
+	  const medium = pickUseMediumForType(src.type);    // noun-phrase only
+	  const purpose = rgRandomFrom(RG_USE_PURPOSES);
+
+	  const pattern = Math.floor(Math.random() * 3);
+
+	  let s1, s2;
+
+	  switch (pattern) {
+		case 0:
+		  // “A rare abjuration reagent, used in moonless rites of supplication.”
+		  s1 = `A rare ${school.adj} reagent, used in ${medium}.`;
+		  s2 = `Such workings are undertaken to ${purpose}.`;
+		  break;
+
+		case 1:
+		  // “During divination rites, it is folded quietly into dawn-lit prayers for unseen patrons.”
+		  s1 = `During ${school.adj} rites, it is folded quietly into ${medium}.`;
+		  s2 = `Practitioners call upon it when they seek to ${purpose}.`;
+		  break;
+
+		case 2:
+		default:
+		  // “It serves as a transmutative focus in hushed gatherings sworn to secrecy.”
+		  s1 = `It serves as a ${school.adj} focus in ${medium}.`;
+		  s2 = `In careful hands, it helps to ${purpose}.`;
+		  break;
+	  }
+
+	  return `${s1} ${s2}`;
+	}
+
+
+
+
+	function generateEldritchProperties(src) {
+	  const school = pickWeightedSchool(src.type); // returns { noun, adj }
+	  const category = getCreatureCategory(src.type);
+
+	  const schoolProps =
+		RG_ELDRITCH_SCHOOL_PROPERTIES[school.noun] ||
+		RG_ELDRITCH_SCHOOL_PROPERTIES.generic;
+
+	  let typeKey = category;
+	  if (category === "beast" || category === "plant") {
+		typeKey = "beast_plant";
+	  } else if (category === "humanoid" || category === "monstrosity") {
+		typeKey = "humanoid_monstrosity";
+	  }
+
+	  const typeProps =
+		RG_ELDRITCH_TYPE_PROPERTIES[typeKey] ||
+		RG_ELDRITCH_TYPE_PROPERTIES.generic;
+
+	  const sProp = rgRandomFrom(schoolProps);
+	  const tProp = rgRandomFrom(typeProps);
+
+	  // Sometimes one sentence, sometimes two short ones for extra texture
+	  const pattern = Math.floor(Math.random() * 2); // 0 or 1
+
+	  if (pattern === 0) {
+		// Combine into a single flowing description
+		return `${sProp} ${tProp}`;
+	  } else {
+		// Two shorter sentences (both capitalized with periods already)
+		return `${sProp} ${tProp}`;
+	  }
+	}
+
+
+
+  function buildAideDDUrl(name) {
+    if (!name) return "#";
+
+    let slug = name.toLowerCase().trim();
+
+    // Remove punctuation that breaks URLs
+    slug = slug.replace(/[’'".,()]/g, "");
+
+    // Replace spaces with hyphens
+    slug = slug.replace(/\s+/g, "-");
+
+    return `https://www.aidedd.org/dnd/monstres.php?vo=${slug}`;
+  }
+
+	function computeBrewDC(cr, hazardTier) {
+		// We now assume hazardTier already encodes how nasty this is,
+		// including both CR and any special flags (like legendary).
+		let t = typeof hazardTier === "number" ? hazardTier : 0;
+		if (t < 0) t = 0;
+		if (t > 5) t = 5;
+		// Direct mapping:
+		// tier 0 →  5
+		// tier 1 → 10
+		// tier 2 → 15
+		// tier 3 → 20
+		// tier 4 → 25
+		// tier 5 → 30
+		return 5 * (t + 1);
+}
+	function computeHazardTier(cr, legendary) {
+	  const safeCr = isNaN(cr) ? 0 : cr;
+	  let tier = 0;
+
+	  // Base tier from CR band
+	  if (safeCr >= 4 && safeCr <= 8) {
+		tier = 1;            // CR 4–8
+	  } else if (safeCr >= 9 && safeCr <= 13) {
+		tier = 2;            // CR 9–13
+	  } else if (safeCr >= 14 && safeCr <= 18) {
+		tier = 3;            // CR 14–18
+	  } else if (safeCr >= 19) {
+		tier = 4;            // CR 19+
+	  } else {
+		tier = 0;            // CR 0–3
+	  }
+
+	  // Optional bump for legendary creatures:
+	  // pushes the most extreme cases into tier 5 → DC 30
+	  if (legendary) {
+		tier += 1;
+	  }
+
+	  if (tier < 0) tier = 0;
+	  if (tier > 5) tier = 5;
+	  return tier;
+	}
+
+	function hazardFlavorByType(src) {
+	  const typeStr = (src && src.type ? src.type : "").toLowerCase();
+
+	  if (typeStr.includes("undead")) {
+		return "In reagents drawn from undead, such instability often manifests as necrotic withering to body and soul.";
+	  }
+	  if (typeStr.includes("fiend")) {
+		return "In fiendish reagents, this volatility tends to amplify cruel impulses and destructive urges.";
+	  }
+	  if (typeStr.includes("celestial")) {
+		return "In celestial reagents, the backlash often takes the form of radiant judgment rather than pure chaos.";
+	  }
+	  if (typeStr.includes("fey")) {
+		return "Fey-touched reagents twist memory and emotion first, warping perception before they harm the flesh.";
+	  }
+	  if (typeStr.includes("aberration")) {
+		return "Aberrant reagents usually fracture thought and perception, bending minds before bodies.";
+	  }
+	  if (typeStr.includes("dragon")) {
+		return "Draconic reagents tend to erupt with overwhelming elemental force when mishandled.";
+	  }
+	  if (typeStr.includes("elemental")) {
+		return "Elemental reagents lash out through raw forces of nature—flame, storm, stone, or tide.";
+	  }
+	  if (typeStr.includes("construct")) {
+		return "Reagents distilled from constructs often destabilize order, pattern, and controlled motion nearby.";
+	  }
+	  if (typeStr.includes("plant") || typeStr.includes("beast")) {
+		return "Reagents drawn from beasts or verdant sources usually disturb instincts, flora, fauna, and natural cycles.";
+	  }
+	  if (typeStr.includes("humanoid") || typeStr.includes("monstrosity") || typeStr.includes("giant")) {
+		return "In reagents tied to mortal or monstrous forms, instability often instills impulses of varying vices.";
+	  }
+
+	  return "In reagents of uncertain origin, the form of the backlash is highly unpredictable.";
+	}
+
+
+	function hazardDetails(tier, src) {
+	  let intro;
+	  let tableInstr;
+
+	  switch (tier) {
+		case 0:
+		case 1:
+		  intro = "This substance is only mildly unstable under mundane conditions.";
+		  tableInstr = "Failed crafting or mishandling, roll on the Wild Magic Surge table.";
+		  break;
+
+		case 2:
+		case 3:
+		  intro = "This reagent exhibits dangerous arcane volatility if disturbed.";
+		  tableInstr = "Failed crafting or mishandling, roll on the Short-Term Madness table or the Wild Magic Surge table.";
+		  break;
+
+		case 4:
+		  intro = "This reagent carries severe metaphysical risks, even under controlled use.";
+		  tableInstr = "Failed crafting or mishandling, roll on the Long-Term Madness table and the Wild Magic Surge table.";
+		  break;
+
+		case 5:
+		default:
+		  intro = "This substance is catastrophically unstable and carries permanent consequences.";
+		  tableInstr = "Failed crafting or mishandling, roll on the Indefinite Madness table and the Wild Magic Surge table.";
+		  break;
+	  }
+
+	  const flavor = hazardFlavorByType(src);
+
+	  // Two-sentence structure:
+	  //  1) intro
+	  //  2) flavor + table instruction
+	  const secondSentence = `${flavor} ${tableInstr}`;
+
+	  return {
+		intro,
+		tableInstr,
+		flavor
+	  };
+	}
+	
+	function rgUpdateAlignmentAvailability() {
+	  const creatureSel = document.getElementById("rgCreatureSelect");
+	  const alignSel = document.getElementById("rg-align-filter");
+	  if (!creatureSel || !alignSel) return;
+
+	  if (creatureSel.value !== "any") {
+		// Specific creature chosen → alignment no longer matters
+		alignSel.disabled = true;
+	  } else {
+		// Back to "Any" creature → allow alignment filtering again
+		alignSel.disabled = false;
+	  }
+	}
+
+
+
+
+  /* ---------- Core logic ---------- */
+
+  function rollReagent() {
+    const errorEl = document.getElementById("rg-error");
+    errorEl.style.display = "none";
+    errorEl.textContent = "";
+
+    let minCr = parseFloat(document.getElementById("rg-cr-min").value);
+    let maxCr = parseFloat(document.getElementById("rg-cr-max").value);
+    if (isNaN(minCr)) minCr = 0;
+    if (isNaN(maxCr)) maxCr = 30;
+    if (maxCr < minCr) {
+      const tmp = minCr;
+      minCr = maxCr;
+      maxCr = tmp;
+    }
+
+    const legendaryOnly = document.getElementById("rg-legendary").checked;
+    const alignFilter = document.getElementById("rg-align-filter").value;
+	const creatureFilter = document.getElementById("rgCreatureSelect").value || "any";
+
+    const pool = RG_SOURCES.filter(src => {
+      if (legendaryOnly && !src.legendary) return false;
+      if (!matchesAlignment(src.alignment, alignFilter)) return false;
+	  if (creatureFilter !== "any" && src.name !== creatureFilter) return false;
+      if (src.cr < minCr || src.cr > maxCr) return false;
+
+	  //return src.cr >= minCr && src.cr <= maxCr;
+	  return true;
+    });
+
+    if (!pool.length) {
+      errorEl.textContent = "No creatures match the current CR / alignment / legendary filters.";
+      errorEl.style.display = "block";
+
+      document.getElementById("rg-creature-name").textContent = "—";
+      document.getElementById("rg-cr").textContent = "—";
+      document.getElementById("rg-type").textContent = "—";
+      document.getElementById("rg-alignment").textContent = "—";
+      document.getElementById("rg-legendary-flag").textContent = "—";
+      document.getElementById("rg-preparation").textContent = "—";
+      document.getElementById("rg-parts").textContent = "—";
+      document.getElementById("rg-container").textContent = "—";
+	  document.getElementById("rg-eldritch").textContent = "—";
+      document.getElementById("rg-hazard-line1").textContent = "-";
+	  document.getElementById("rg-hazard-line2").textContent = "-";
+	  document.getElementById("rg-hazard-line3").textContent = "-";
+	  //document.getElementById("rg-hazard").textContent = "—";
+      document.getElementById("rg-use").textContent = "—";
+	  document.getElementById("rg-brew-dc").textContent = "—";
+
+      return;
+    }
+
+    const src = rgRandomFrom(pool);
+    const isCorporeal = src.corporeal !== false;
+
+    const prep = rgRandomFrom(RG_PREPARATIONS);
+    const part = isCorporeal
+      ? rgRandomFrom(RG_PARTS_CORPOREAL)
+      : rgRandomFrom(RG_PARTS_INCORPOREAL);
+    const container = rgRandomFrom(RG_CONTAINERS);
+	const eldritchProperties = generateEldritchProperties(src);
+    
+	// Derive hazard tier from CR band + legendary status
+	// Turn that into the DM instruction text
+	const hazardTier = computeHazardTier(src.cr, src.legendary);
+	const hazardText = hazardDetails(hazardTier, src);
+
+	// Compute Brew DC directly from hazard tier (0–5 → 5–30)
+	const brewDC = computeBrewDC(src.cr, hazardTier);
+
+	// Craft possible use statement 
+	const use = generateCraftingUseSentence(src);
+    
+
+    document.getElementById("rg-creature-name").textContent = src.name;
+    document.getElementById("rg-cr").textContent = src.cr;
+    document.getElementById("rg-type").textContent = src.type;
+    document.getElementById("rg-alignment").textContent = src.alignment;
+    document.getElementById("rg-legendary-flag").textContent = src.legendary ? "Yes" : "No";
+	
+	document.getElementById("rg-aidedd-link").href = buildAideDDUrl(src.name);
+
+    document.getElementById("rg-preparation").textContent = prep;
+    document.getElementById("rg-parts").textContent = part;
+    document.getElementById("rg-container").textContent = container;
+	document.getElementById("rg-eldritch").textContent = eldritchProperties;
+	document.getElementById("rg-use").textContent = use;
+	document.getElementById("rg-hazard-line1").textContent = hazardText.intro;
+	document.getElementById("rg-hazard-line2").textContent = hazardText.tableInstr;
+	document.getElementById("rg-hazard-line3").textContent = hazardText.flavor;
+	//document.getElementById("rg-hazard").textContent = hazardText;
+	document.getElementById("rg-brew-dc").textContent = brewDC;
+
+
+  }
+
+(function rgInit() {
+  rgPopulateCreatureSelect();
+
+  const rollBtn = document.getElementById("rg-roll");
+  if (rollBtn) rollBtn.addEventListener("click", rollReagent);
+
+  const creatureSel = document.getElementById("rgCreatureSelect");
+  if (creatureSel) {
+    creatureSel.addEventListener("change", function () {
+      rgUpdateAlignmentAvailability();
+      rollReagent();
+    });
+  }
+  rgUpdateAlignmentAvailability();
+  rollReagent();
+})();
+
+</script>
