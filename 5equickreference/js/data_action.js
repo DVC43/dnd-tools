@@ -196,4 +196,89 @@ data_action = [
             "When you describe an action not detailed elsewhere in the rules, the DM tells you whether that action is possible and what kind of roll you need to make, if any, to determine success or failure."
         ]
     }
+        // --- DMG Optional Action Options (variant rules) ---
+
+    {
+        title: "Climb onto a Bigger Creature*",
+        icon: "back-pain",            // pick any icon you like from game-icons.net
+        subtitle: "Variant action option",
+        description: "Clamber onto a much larger foe.",
+        reference: "DMG, p. 271",
+        bullets: [
+            "Use this when you are adjacent to a creature that is several sizes larger than you (DM decides if it is big enough).",
+            "As your action, make a Strength (Athletics) or Dexterity (Acrobatics) check contested by the target's Dexterity (Acrobatics).",
+            "On a success, you move into the target's space and move with it, treating its body as difficult terrain.",
+            "While clinging to the creature, you typically gain advantage on attacks against it when your position makes sense.",
+            "The larger creature can spend its action to try to shake you off with a Strength (Athletics) check contested by your Strength (Athletics) or Dexterity (Acrobatics); on a success, you are dislodged as the DM describes."
+        ]
+    },
+
+    {
+        title: "Disarm*",
+        icon: "axe-swing",
+        subtitle: "Variant attack option",
+        description: "Knock an item from a foe's grasp.",
+        reference: "DMG, p. 271",
+        bullets: [
+            "When you make a weapon attack, you can attempt to disarm instead of dealing damage.",
+            "Make your attack roll contested by the target's Strength (Athletics) or Dexterity (Acrobatics) check.",
+            "On a success, the target drops one item it is holding in its space (no damage is dealt by the attack).",
+            "The DM can give advantage or disadvantage depending on size difference, number of hands holding the item, or other factors."
+        ]
+    },
+
+    {
+        title: "Mark*",
+        icon: "crosshair",
+        subtitle: "Variant melee option",
+        description: "Focus on one foe for punishing opportunity attacks.",
+        reference: "DMG, p. 271",
+        bullets: [
+            "When you hit a creature with a melee attack, you can choose to mark it until the end of your next turn.",
+            "While a creature is marked by you, any opportunity attack you make against that creature has advantage.",
+            "That opportunity attack does not cost your reaction, but you still can’t make more than one opportunity attack per turn.",
+            "If anything prevents you from taking reactions, you also can’t make the special opportunity attack granted by this mark."
+        ]
+    },
+
+    {
+        title: "Overrun*",
+        icon: "bull",
+        subtitle: "Variant action or bonus action",
+        description: "Force your way through an enemy's space.",
+        reference: "DMG, p. 272",
+        bullets: [
+            "Use this when you want to move through a hostile creature’s space.",
+            "As an action or bonus action, move toward the creature and make a Strength (Athletics) check contested by its Strength (Athletics).",
+            "On a success, you can move through the hostile creature’s space once on this turn.",
+            "The DM can apply advantage or disadvantage depending on size differences (larger charger vs smaller blocker, etc.)."
+        ]
+    },
+
+    {
+        title: "Shove Aside*",
+        icon: "shield-bash",
+        subtitle: "Variant shove option",
+        description: "Push a foe to the side instead of away.",
+        reference: "DMG, p. 272",
+        bullets: [
+            "When you use the special shove attack, you can choose to push the target to the side instead of straight away from you.",
+            "Make the normal shove check, but you have disadvantage on your Strength (Athletics) check for this maneuver.",
+            "On a success, you move the target 5 feet to a different space within your reach, rather than away from you."
+        ]
+    },
+
+    {
+        title: "Tumble*",
+        icon: "somersault",
+        subtitle: "Variant action or bonus action",
+        description: "Dart through an enemy’s space.",
+        reference: "DMG, p. 272",
+        bullets: [
+            "As an action or bonus action, you can try to move through a hostile creature’s space.",
+            "Make a Dexterity (Acrobatics) check contested by the creature’s Dexterity (Acrobatics) check.",
+            "On a success, you can move through that creature’s space once on this turn without treating it as blocked."
+        ]
+    }
+
 ]
