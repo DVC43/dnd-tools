@@ -196,7 +196,6 @@ data_action = [
             "When you describe an action not detailed elsewhere in the rules, the DM tells you whether that action is possible and what kind of roll you need to make, if any, to determine success or failure."
         ]
     },
-
     {
         title: "Climb onto a Bigger Creature*",
         icon: "back-pain",            // pick any icon you like from game-icons.net
@@ -211,7 +210,6 @@ data_action = [
             "The larger creature can spend its action to try to shake you off with a Strength (Athletics) check contested by your Strength (Athletics) or Dexterity (Acrobatics); on a success, you are dislodged as the DM describes."
         ]
     },
-
     {
         title: "Disarm*",
         icon: "axe-swing",
@@ -225,7 +223,6 @@ data_action = [
             "The DM can give advantage or disadvantage depending on size difference, number of hands holding the item, or other factors."
         ]
     },
-
     {
         title: "Mark*",
         icon: "crosshair",
@@ -239,7 +236,6 @@ data_action = [
             "If anything prevents you from taking reactions, you also can’t make the special opportunity attack granted by this mark."
         ]
     },
-
     {
         title: "Overrun*",
         icon: "bull",
@@ -253,7 +249,6 @@ data_action = [
             "The DM can apply advantage or disadvantage depending on size differences (larger charger vs smaller blocker, etc.)."
         ]
     },
-
     {
         title: "Shove Aside*",
         icon: "shield-bash",
@@ -266,7 +261,6 @@ data_action = [
             "On a success, you move the target 5 feet to a different space within your reach, rather than away from you."
         ]
     },
-
     {
         title: "Tumble*",
         icon: "somersault",
@@ -279,5 +273,4 @@ data_action = [
             "On a success, you can move through that creature’s space once on this turn without treating it as blocked."
         ]
     }
-
-]
+];
