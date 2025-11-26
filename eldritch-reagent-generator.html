@@ -86,185 +86,187 @@
 
 
 <style>
-  /* Outer parchment card – matches your other DMG tools */
+  /* Outer parchment card – aligned with #item-generator */
   #reagent-generator.parchment-table {
     font-family: "Garamond","Georgia",serif;
     color:#111;
-    max-width: 640px;
-    margin: 1.5rem auto 0;
-    padding: 20px;
-    border-radius: 6px;
-    border: 2px solid #7b1113;
-    background: linear-gradient(180deg,#faf7ec 0%,#f3e8d8 35%,#efe0c9 100%);
-    box-shadow: 0 0 12px rgba(0,0,0,0.35);
+    padding:20px;
+    border:2px solid #660000;              /* match item-generator */
+    border-radius:6px;
+    max-width:640px;                       /* narrower tool, but same feel */
+    margin:1.5rem auto 0;
+    background:linear-gradient(180deg,#fafafa 0%,#f0f0f0 100%); /* match item background */
+    box-shadow:0 0 12px rgba(0,0,0,0.25);  /* match item-generator */
   }
 
   #reagent-generator h2 {
-    margin: 0 0 0.35rem;
-    text-align: center;
-    letter-spacing: 0.04em;
-    font-size: 1.4rem;
+    margin:0 0 0.5rem;
+    font-size:1.4rem;
+    text-align:center;                     /* you had centered title, kept that */
   }
 
   #reagent-generator p.note {
-    margin: 0 0 0.75rem;
-    font-size: 0.9rem;
-    font-style: italic;
-    text-align: center;
+    margin:0 0 0.75rem;
+    font-size:0.9rem;
+    font-style:italic;
+    text-align:center;
   }
 
   #reagent-generator .small {
-    margin-top: 0.75rem;
-    font-size: 0.85rem;
-    font-style: italic;
-    color: #444;
+    font-size:0.85rem;
+    font-style:italic;
+    color:#444;
+    margin-top:0.75rem;
   }
 
-  /* Inner “rules text” panel */
+  /* Inner “rules text” panel – aligned with .ig-panel */
   #reagent-generator .rg-panel {
-    border: 2px solid #7b1113;
-    background: #fffdf7;
-    padding: 12px 14px;
-    border-radius: 4px;
+    border:2px solid #7b1113;  /* same inner red as item ig-panel */
+    background:#ffffff;
+    padding:12px 14px;
+    border-radius:4px;
+    margin-top:0.75rem;
   }
 
   /* Filters layout */
   #rg-filters {
-    font-size: 0.9rem;
-    margin-bottom: 0.6rem;
+    font-size:0.9rem;
+    margin-bottom:0.6rem;
   }
 
   #reagent-generator .rg-filter-row {
-    display: flex;
-    align-items: center;
-    gap: 0.45rem;
-    margin-bottom: 0.4rem;
-    flex-wrap: wrap;
+    display:flex;
+    align-items:center;
+    gap:0.45rem;
+    margin-bottom:0.4rem;
+    flex-wrap:wrap;
   }
 
   #reagent-generator label {
-    white-space: nowrap;
-    font-weight: bold;
+    white-space:nowrap;
+    font-weight:bold;
   }
 
   #rg-filters input[type="number"],
   #rg-filters select {
-    padding: 3px 5px;
-    border-radius: 3px;
-    border: 1px solid #999;
-    background: #fffdf7;
-    color: #222;
-    font-size: 0.9rem;
-    box-sizing: border-box;
+    box-sizing:border-box;
+    padding:3px 5px;
+    border-radius:3px;
+    border:1px solid #888;     /* align with #item-generator inputs */
+    background:#ffffff;
+    color:#111;
+    font-size:0.9rem;
+    font-family:inherit;
   }
 
   #rg-filters input[type="number"] {
-    width: 70px;
+    width:70px;
   }
 
   #rg-filters select {
-    flex: 1 1 auto;
-    min-width: 160px;
+    flex:1 1 auto;
+    min-width:160px;
   }
 
   #rg-filters input[type="checkbox"] {
-    margin-right: 0.25rem;
+    margin-right:0.25rem;
   }
 
-  /* Button – maroon DMG-ish */
+  /* Button – styled to match ig-button (just full-width) */
   #reagent-generator .rg-button {
-    display: block;
-    width: 100%;
-    padding: 0.5rem 0.75rem;
-    margin: 0 0 0.7rem;
-    border-radius: 5px;
-    border: 1px solid #4e0508;
-    cursor: pointer;
-    font-size: 0.95rem;
-    font-weight: 600;
-    background: linear-gradient(135deg,#7b1113,#a01a1e);
-    color: #fff;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.4);
-    transition: background 0.1s ease-out,
-                box-shadow 0.1s ease-out,
-                transform 0.05s ease-out;
+    display:block;
+    width:100%;
+    padding:4px 10px;
+    border-radius:4px;
+    border:1px solid #660000;
+    cursor:pointer;
+    font-size:0.9rem;
+    font-weight:600;
+    font-family:inherit;
+    background:#7b1113;
+    color:#fff;
+    box-shadow:0 2px 6px rgba(0,0,0,0.35);
+    transition:background 0.1s ease-out,
+               box-shadow 0.1s ease-out,
+               transform 0.05s ease-out;
+    margin:0 0 0.7rem;
   }
 
   #reagent-generator .rg-button:hover {
-    background: linear-gradient(135deg,#901417,#b02024);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    transform: translateY(-1px);
+    background:#990000;
+    box-shadow:0 4px 10px rgba(0,0,0,0.45);
+    transform:translateY(-1px);
   }
 
   #reagent-generator .rg-button:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    transform:translateY(0);
+    box-shadow:0 2px 6px rgba(0,0,0,0.35);
   }
 
-  /* Result “card” inside the panel */
+  /* Result “card” inside the panel – aligned with #ig-card */
   #rg-card {
-    border-radius: 4px;
-    border: 1px solid #c8b89d;
-    padding: 0.75rem 0.85rem 0.6rem;
-    background: #fffaf0;
-    font-size: 0.9rem;
+    border-radius:4px;
+    border:1px solid #c0c0c0;   /* match item card border */
+    padding:0.9rem 0.9rem 0.8rem;
+    background:#ffffff;
+    font-size:0.9rem;
+    margin-top:0.25rem;
   }
 
   #rg-card p {
-    margin: 0.35rem 0;
-    line-height: 1.35;
+    margin:0.5rem 0;
+    line-height:1.45;
   }
 
   #rg-card hr {
-    border: none;
-    border-top: 1px solid #d0c2a5;
-    margin: 0.5rem 0 0.55rem;
+    border:none;
+    border-top:1px solid #c0c0c0;
+    margin:0.5rem 0 0.55rem;
   }
 
-  /* AideDD link */
+  /* AideDD link – simple rules-text blue */
   #reagent-generator .rg-link {
-    text-decoration: underline;
-    color: #274b8a;
+    text-decoration:underline;
+    color:#274b8a;
   }
 
   #reagent-generator .rg-link:hover {
-    color: #19315c;
+    color:#19315c;
   }
 
   /* Hazard text blocks */
   #rg-hazard-line1,
   #rg-hazard-line2,
   #rg-hazard-line3 {
-    margin: 0.15rem 0;
+    margin:0.15rem 0;
   }
 
   #rg-hazard-line1 {
-    font-weight: 600;
+    font-weight:600;
   }
 
   /* Error message */
   #rg-error {
-    margin-top: 0.4rem;
-    font-size: 0.85rem;
-    color: #8b0000;
-    display: none; /* JS toggles this */
+    margin-top:0.4rem;
+    font-size:0.85rem;
+    color:#8b0000;
+    display:none; /* JS toggles this */
   }
 
-  @media (max-width: 700px) {
+  @media (max-width:700px){
     #reagent-generator.parchment-table {
-      padding: 14px;
+      padding:14px;
     }
-
     #reagent-generator .rg-filter-row {
-      flex-direction: column;
-      align-items: flex-start;
+      flex-direction:column;
+      align-items:flex-start;
     }
-
     #rg-filters input[type="number"] {
-      width: 100%;
+      width:100%;
     }
   }
 </style>
+
 
 
 <script>
