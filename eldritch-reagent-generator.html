@@ -48,23 +48,23 @@
     <button id="rg-roll" class="rg-button">Roll Reagent</button>
 
     <div id="rg-card">
-      <p><strong>Creature:</strong> <span id="rg-creature-name">—</span></p>
+      <p><strong>Creature:</strong> <br> <span id="rg-creature-name">—</span></p>
 
-      <p><strong>CR:</strong> <span id="rg-cr">—</span></p>
-      <p><strong>Type:</strong> <span id="rg-type">—</span></p>
-      <p><strong>Alignment:</strong> <span id="rg-alignment">—</span></p>
-      <p><strong>Legendary?</strong> <span id="rg-legendary-flag">—</span></p>
-      <p><strong>AideDD Link:</strong>
+      <p><strong>CR:</strong> <br> <span id="rg-cr">—</span></p>
+      <p><strong>Type:</strong> <br> <span id="rg-type">—</span></p>
+      <p><strong>Alignment:</strong> <br> <span id="rg-alignment">—</span></p>
+      <p><strong>Legendary?</strong> <br> <span id="rg-legendary-flag">—</span></p>
+      <p><strong>AideDD Link:</strong><br>
         <a id="rg-aidedd-link" href="#" target="_blank" class="rg-link">Open&nbsp;Entry</a>
       </p>
 
       <hr>
-      <p><strong>Preparation:</strong> <span id="rg-preparation">—</span></p>
-      <p><strong>Part(s):</strong> <span id="rg-parts">—</span></p>
-      <p><strong>Eldritch Properties:</strong> <span id="rg-eldritch">—</span></p>
+      <p><strong>Preparation:</strong> <br> <span id="rg-preparation">—</span></p>
+      <p><strong>Part(s):</strong> <br> <span id="rg-parts">—</span></p>
+      <p><strong>Eldritch Properties:</strong> <br> <span id="rg-eldritch">—</span></p>
       <hr>
-      <p><strong>Possible Use:</strong> <span id="rg-use">—</span></p>
-      <p><strong>Crafting DC:</strong> <span id="rg-brew-dc">—</span></p>
+      <p><strong>Possible Use:</strong> <br> <span id="rg-use">—</span></p>
+      <p><strong>Crafting DC:</strong> <br> <span id="rg-brew-dc">—</span></p>
 
       <div><p><strong>Hazard:</strong></p></div>
       <div id="rg-hazard-line1"></div>
@@ -72,7 +72,7 @@
       <br>
       <div id="rg-hazard-line3"></div>
       <hr>
-      <p><strong>Container:</strong> <span id="rg-container">—</span></p>
+      <p><strong>Container:</strong> <br> <span id="rg-container">—</span></p>
     </div>
 
     <div id="rg-error"></div>
@@ -152,7 +152,7 @@
     box-sizing:border-box;
     padding:3px 5px;
     border-radius:3px;
-    border:1px solid #888;     /* align with #item-generator inputs */
+    border:1px solid #888;
     background:#ffffff;
     color:#111;
     font-size:0.9rem;
@@ -172,7 +172,6 @@
     margin-right:0.25rem;
   }
 
-  /* Button – styled to match ig-button (just full-width) */
   #reagent-generator .rg-button {
     display:block;
     width:100%;
@@ -203,10 +202,9 @@
     box-shadow:0 2px 6px rgba(0,0,0,0.35);
   }
 
-  /* Result “card” inside the panel – aligned with #ig-card */
   #rg-card {
     border-radius:4px;
-    border:1px solid #c0c0c0;   /* match item card border */
+    border:1px solid #c0c0c0;
     padding:0.9rem 0.9rem 0.8rem;
     background:#ffffff;
     font-size:0.9rem;
@@ -224,7 +222,6 @@
     margin:0.5rem 0 0.55rem;
   }
 
-  /* AideDD link – simple rules-text blue */
   #reagent-generator .rg-link {
     text-decoration:underline;
     color:#274b8a;
@@ -241,9 +238,6 @@
     margin:0.15rem 0;
   }
 
-  #rg-hazard-line1 {
-    font-weight:600;
-  }
 
   /* Error message */
   #rg-error {
