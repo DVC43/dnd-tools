@@ -7,9 +7,9 @@
 
   <div class="ig-panel">
     <div id="ig-theme-row">
-      <label for="ig-theme-select"><strong>Theme:</strong></label>
+      <label for="ig-theme-select"><strong>Moral Axis:</strong></label>
       <select id="ig-theme-select">
-        <option value="any">Any</option>
+        <option value="">-</option>
         <option value="good">Hopeful / Benevolent</option>
         <option value="neutral">Neutral / Ambiguous</option>
         <option value="evil">Dark / Sinister</option>
@@ -230,24 +230,23 @@
     return list[Math.floor(Math.random() * list.length)];
   }
 
-  // group = { good: [], neutral: [], evil: [] }
-  function igPickThemed(group, theme) {
-    if (!group || !group.good) return "";
-    if (theme === "any") {
-      const merged = group.good.concat(group.neutral, group.evil);
-      return igRandomFrom(merged);
-    }
-    if (theme === "good") {
-      const pool = group.good.concat(group.neutral);
-      return igRandomFrom(pool);
-    }
-    if (theme === "evil") {
-      const pool = group.evil.concat(group.neutral);
-      return igRandomFrom(pool);
-    }
-    // neutral / default
-    return igRandomFrom(group.neutral);
-  }
+  
+	function igPickThemed(group, theme) {
+	  if (!group || !group.good || !group.neutral || !group.evil) return "";
+	
+	  if (theme === "good") {
+	    return igRandomFrom(group.good);
+	  }
+	  if (theme === "neutral") {
+	    return igRandomFrom(group.neutral);
+	  }
+	  if (theme === "evil") {
+	    return igRandomFrom(group.evil);
+	  }
+	
+	  // theme is "-" / empty or unknown
+	  return "";
+	}
 
   /* ---------- CREATOR / HISTORY / PROPERTY / QUIRK / LOCATIONS / NPC_KNOWERS ---------- */
   
@@ -705,26 +704,32 @@
 
   /* ---------- Core logic ---------- */
 
-  function rollTraits() {
-    const theme = (document.getElementById("ig-theme-select")?.value) || "any";
-
-    const creator  = igPickThemed(CREATOR, theme);
-    const history  = igPickThemed(HISTORY, theme);
-    const property = igPickThemed(MINOR_PROPERTY, theme);
-    const quirk    = igPickThemed(MINOR_QUIRK, theme);
-
-    document.getElementById("ig-creator").textContent  = creator;
-    document.getElementById("ig-history").textContent  = history;
-    document.getElementById("ig-property").textContent = property;
-    document.getElementById("ig-quirk").textContent    = quirk;
-
-    document.getElementById("ig-lore").textContent =
-      'Roll traits, then click “Generate Lore Paragraph” to stitch everything together.';
-
-    // Reroll location & NPC too
-    rollLocation();
-    rollNpc();
-  }
+	function rollTraits() {
+	  const theme = (document.getElementById("ig-theme-select")?.value) || "";
+	
+	  if (!theme) {
+	    document.getElementById("ig-lore").textContent =
+	      "Choose Good, Neutral, or Evil for the item’s moral axis, then roll traits.";
+	    return;
+	  }
+	
+	  const creator  = igPickThemed(CREATOR, theme);
+	  const history  = igPickThemed(HISTORY, theme);
+	  const property = igPickThemed(MINOR_PROPERTY, theme);
+	  const quirk    = igPickThemed(MINOR_QUIRK, theme);
+	
+	  document.getElementById("ig-creator").textContent  = creator || "—";
+	  document.getElementById("ig-history").textContent  = history || "—";
+	  document.getElementById("ig-property").textContent = property || "—";
+	  document.getElementById("ig-quirk").textContent    = quirk || "—";
+	
+	  document.getElementById("ig-lore").textContent =
+	    'Roll traits, then click “Generate Lore Paragraph” to stitch everything together.';
+	
+	  // Reroll location & NPC too, using same axis
+	  rollLocation();
+	  rollNpc();
+	}
 
   function generateLoreParagraph() {
     const creator   = document.getElementById("ig-creator").textContent || "";
@@ -762,17 +767,30 @@
     document.getElementById("ig-lore").textContent = lore.trim();
   }
 
-  function rollLocation() {
-    const theme = (document.getElementById("ig-theme-select")?.value) || "any";
-    const loc = igPickThemed(LOCATIONS, theme);
-    document.getElementById("ig-location").textContent = loc || "—";
-  }
+	function rollLocation() {
+	  const theme = (document.getElementById("ig-theme-select")?.value) || "";
+	
+	  if (!theme) {
+	    document.getElementById("ig-location").textContent = "—";
+	    return;
+	  }
+	
+	  const loc = igPickThemed(LOCATIONS, theme);
+	  document.getElementById("ig-location").textContent = loc || "—";
+	}
 
-  function rollNpc() {
-    const theme = (document.getElementById("ig-theme-select")?.value) || "any";
-    const npc = igPickThemed(NPC_KNOWERS, theme);
-    document.getElementById("ig-npc").textContent = npc || "—";
-  }
+	function rollNpc() {
+	  const theme = (document.getElementById("ig-theme-select")?.value) || "";
+	
+	  if (!theme) {
+	    document.getElementById("ig-npc").textContent = "—";
+	    return;
+	  }
+	
+	  const npc = igPickThemed(NPC_KNOWERS, theme);
+	  document.getElementById("ig-npc").textContent = npc || "—";
+	}
+
 
   (function igInit() {
     const rollBtn = document.getElementById("ig-roll");
@@ -784,7 +802,5 @@
     if (loreBtn) loreBtn.addEventListener("click", generateLoreParagraph);
     if (locBtn)  locBtn.addEventListener("click", rollLocation);
     if (npcBtn)  npcBtn.addEventListener("click", rollNpc);
-
-    rollTraits(); // auto-roll on load
   })();
 </script>
