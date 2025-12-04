@@ -1,803 +1,1502 @@
-<div class="parchment-table" id="item-generator">
-   <h2>Magic Item Trait Generator</h2>
-   <p class="note">
-      Discover details about an odd trinket, magical item, or dusty curio.
-   </p>
-   <div id="ig-theme-row">
-      <label for="ig-theme-select"><strong>Moral Axis:</strong></label>
-      <select id="ig-theme-select">
-         <option value="">-</option>
-         <option value="good">Hopeful / Benevolent</option>
-         <option value="neutral">Neutral / Ambiguous</option>
-         <option value="evil">Dark / Sinister</option>
-      </select>
-      <span id="ig-theme-message" class="ig-theme-message"></span>
-   </div>
-   <div class="ig-controls">
-      <button id="ig-roll" class="ig-button">Roll Traits</button>
-      <button id="ig-location-btn" class="ig-button ig-button-secondary">Roll Last Known Location</button>
-      <button id="ig-npc-btn" class="ig-button ig-button-secondary">Roll NPC Who Knows About It</button>
-      <button id="ig-lore-btn" class="ig-button ig-button-secondary">Generate Lore Paragraph</button>
-   </div>
-   <div id="ig-card">
-      <p><strong>Who Created It or Was Intended to Use It?</strong><br>
-         <span id="ig-creator">—</span>
-      </p>
-      <p><strong>What Is a Detail from Its History?</strong><br>
-         <span id="ig-history">—</span>
-      </p>
-      <p><strong>What Minor Property Does It Have?</strong><br>
-         <span id="ig-property">—</span>
-      </p>
-      <p><strong>What Quirk Does It Have?</strong><br>
-         <span id="ig-quirk">—</span>
-      </p>
-      <p><strong>Last Known Location:</strong><br>
-         <span id="ig-location">—</span>
-      </p>
-      <p><strong>NPC Who Knows About It:</strong><br>
-         <span id="ig-npc">—</span>
-      </p>
-   </div>
-   <div id="ig-lore-block">
-      <h3>Item Lore</h3>
-      <p id="ig-lore">
-         Roll traits, then click “Generate Lore Paragraph” to stitch everything together.
-      </p>
-   </div>
-</div>
-<div>
-   <p class="small">
-      This generator is inspired by the magic item property tables in the 2014 DMG. Use or tweak
-      the results to fit the tone, themes, and history of your own campaign.
-   </p>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Magic Item Trait Generator</title>
 <style>
-   /* Match Mob Combat / Social Interaction outer card */
-   #item-generator.parchment-table {
-   font-family: "Garamond","Georgia",serif;
-   color:#111;
-   padding:20px;
-   border:2px solid #660000;
-   border-radius:6px;
-   max-width:1550px;
-   margin:auto;
-   background:linear-gradient(180deg,#fafafa 0%,#f0f0f0 100%);
-   box-shadow:0 0 12px rgba(0,0,0,0.25);
-   }
-   #item-generator h2 {
-   margin:0 0 0.5rem 0;
-   font-size:1.4rem;
-   }
-   #item-generator p.note {
-   margin:0 0 0.75rem 0;
-   font-size:0.9rem;
-   font-style:italic;
-   }
-   #item-generator .small {
-   font-size:0.85rem;
-   font-style:italic;
-   color:#444;
-   margin-top:0.75rem;
-   }
-   /* Inner red-outlined panel (matches mob-panel / social results) */
-   #item-generator .ig-panel {
-   border:2px solid #7b1113;
-   background:#ffffff;
-   padding:12px 14px;
-   margin-top:0.75rem;
-   border-radius:4px;
-   }
-   /* Theme row */
-   #ig-theme-row {
-   display:flex;
-   align-items:center;
-   gap:0.5rem;
-   margin:0 0 0.75rem;
-   font-size:0.9rem;
-   flex-wrap: wrap;
-   }
-   .ig-theme-message {
-   font-size:0.85rem;
-   font-style:italic;
-   color:#7b1113;
-   flex: 1 1 auto;
-   }
-   #ig-theme-row label {
-   font-weight:bold;
-   }
-   #ig-theme-select {
-   padding:0.2rem 0.4rem;
-   border-radius:4px;
-   border:1px solid #888;
-   background:#ffffff;
-   color:#111;
-   font-size:0.85rem;
-   font-family:inherit;
-   }
-   /* Buttons – match Mob Combat buttons */
-   #item-generator .ig-controls {
-   display:flex;
-   flex-direction:column;
-   gap:0.4rem;
-   margin-bottom:0.75rem;
-   }
-   .ig-button {
-   display:block;
-   width:100%;
-   padding:4px 10px;
-   border-radius:4px;
-   border:1px solid #660000;
-   cursor:pointer;
-   font-size:0.9rem;
-   font-weight:600;
-   font-family:inherit;
-   background:#7b1113;
-   color:#fff;
-   box-shadow:0 2px 6px rgba(0,0,0,0.35);
-   transition:background 0.1s ease-out, box-shadow 0.1s ease-out, transform 0.05s ease-out;
-   }
-   .ig-button:hover {
-   background:#990000;
-   box-shadow:0 4px 10px rgba(0,0,0,0.45);
-   transform:translateY(-1px);
-   }
-   .ig-button:active {
-   transform:translateY(0);
-   box-shadow:0 2px 6px rgba(0,0,0,0.35);
-   }
-   .ig-button-secondary {
-   background:#f4f4f4;
-   color:#111;
-   border-color:#660000;
-   }
-   .ig-button-secondary:hover {
-   background:#e4e4e4;
-   }
-   /* Card + lore blocks – DMG-ish white panels */
-   #ig-card {
-   border-radius:4px;
-   border:1px solid #c0c0c0;
-   padding:0.9rem 0.9rem 0.8rem;
-   background:#ffffff;
-   font-size:0.9rem;
-   margin-top:0.25rem;
-   }
-   #ig-card p {
-   margin:0.5rem 0;
-   line-height:1.45;
-   }
-   #ig-lore-block {
-   margin-top:0.75rem;
-   border-radius:4px;
-   border:1px solid #c0c0c0;
-   padding:0.8rem 0.9rem 0.75rem;
-   background:#ffffff;
-   font-size:0.9rem;
-   }
-   #ig-lore-block h3 {
-   margin:0 0 0.4rem;
-   font-size:1rem;
-   }
-   #ig-lore-block p {
-   margin:0.35rem 0;
-   line-height:1.4;
-   }
-   /* General inputs, if you add more later */
-   #item-generator input[type="text"],
-   #item-generator input[type="number"],
-   #item-generator select {
-   box-sizing:border-box;
-   border-radius:3px;
-   border:1px solid #888;
-   font-family:inherit;
-   font-size:0.9rem;
-   }
-   @media (max-width:700px){
-   #ig-theme-row {
-   flex-direction:column;
-   align-items:flex-start;
-   }
-   #item-generator {
-   padding:14px;
-   }
-   }
+  /* Basic page */
+  body {
+    margin: 0;
+    padding: 20px;
+    background: #3c1111;
+    font-family: "Georgia", "Times New Roman", serif;
+    color: #2b1510;
+  }
+
+  .mig-wrapper {
+    max-width: 960px;
+    margin: 0 auto;
+    background: #fdf7f0;
+    background: linear-gradient(#fdf9f4, #f7efe5);
+    border: 4px solid #300808;
+    border-radius: 6px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.6);
+    padding: 20px 24px 24px 24px;
+  }
+
+  h1 {
+    margin: 0 0 4px 0;
+    font-size: 2.1em;
+    letter-spacing: 0.02em;
+    color: #2b1510;
+  }
+
+  .mig-subtitle {
+    font-style: italic;
+    font-size: 0.98em;
+    color: #5a3b2a;
+    margin-bottom: 18px;
+  }
+
+  /* Buttons */
+  .mig-button-bar {
+    margin: 8px 0 14px 0;
+  }
+
+  .mig-button {
+    display: block;
+    width: 100%;
+    text-align: center;
+    border: 1px solid #4b0000;
+    border-radius: 3px;
+    padding: 8px 10px;
+    margin: 4px 0;
+    cursor: pointer;
+    background: #7c1010;
+    background: linear-gradient(#8f1616, #5a0808);
+    color: #fdf7f0;
+    font-weight: bold;
+    font-size: 1.02em;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.7);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  }
+
+  .mig-button:hover {
+    background: linear-gradient(#a11b1b, #6c0c0c);
+  }
+
+  .mig-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 0px 1px rgba(0,0,0,0.6);
+  }
+
+  /* Sections */
+  .mig-section {
+    margin-top: 14px;
+    padding: 10px 12px 12px 12px;
+    border-radius: 4px;
+    border: 1px solid #d2c1af;
+    background: rgba(255,255,255,0.6);
+  }
+
+  .mig-section-header {
+    font-weight: bold;
+    font-size: 1.05em;
+    margin-bottom: 4px;
+    color: #3b1a0c;
+  }
+
+  .mig-section-subheader {
+    font-weight: bold;
+    margin: 8px 0 2px 0;
+  }
+
+  .mig-small-label {
+    font-weight: bold;
+    font-size: 0.95em;
+    margin-top: 6px;
+  }
+
+  .mig-output {
+    margin-top: 4px;
+    padding: 6px 8px;
+    min-height: 40px;
+    background: #fdf8f1;
+    border-radius: 3px;
+    border: 1px solid #e0d1c0;
+    font-size: 0.98em;
+    line-height: 1.45;
+    white-space: pre-wrap;
+  }
+
+  .mig-output.mig-lore {
+    min-height: 70px;
+  }
+
+  .mig-hint {
+    font-size: 0.9em;
+    color: #7d6350;
+    margin-top: 4px;
+  }
+
+  /* Optional: tiny meta line (axis / state) */
+  .mig-meta {
+    margin-top: 6px;
+    font-size: 0.85em;
+    color: #7b5d4b;
+    font-style: italic;
+  }
+
 </style>
+</head>
+<body>
+<div class="mig-wrapper">
+  <h1>Magic Item Trait Generator</h1>
+  <div class="mig-subtitle">
+    Discover details about an odd trinket, magical item, or dusty curio.
+  </div>
+
+  <div class="mig-button-bar">
+    <button id="rollTraitsBtn" class="mig-button">Roll Traits</button>
+    <button id="generateLoreBtn" class="mig-button">Generate Lore Paragraph</button>
+  </div>
+
+  <div class="mig-section">
+    <div class="mig-section-header">Who Created It or Was Intended to Use It?</div>
+    <div id="originOutput" class="mig-output"></div>
+    <div id="metaOutput" class="mig-meta"></div>
+  </div>
+
+  <div class="mig-section">
+    <div class="mig-section-header">What are some details from the item's history?</div>
+    <div id="historyOutput" class="mig-output"></div>
+
+    <div class="mig-small-label">Last Known Location:</div>
+    <div id="locationOutput" class="mig-output"></div>
+
+    <div class="mig-small-label">NPC Who Knows About It:</div>
+    <div id="witnessOutput" class="mig-output"></div>
+  </div>
+
+  <div class="mig-section">
+    <div class="mig-section-header">Item Lore</div>
+    <div id="loreOutput" class="mig-output mig-lore"></div>
+    <div class="mig-hint">
+      Roll traits, then click “Generate Lore Paragraph” to stitch everything together.
+    </div>
+  </div>
+</div>
+
 <script>
-   /* ---------- Helpers ---------- */
-   
-   function igRandomFrom(list) {
-     return list[Math.floor(Math.random() * list.length)];
-   }
-   
-   function igSetThemeMessage(msg) {
-   const el = document.getElementById("ig-theme-message");
-    if (!el) return;
-    el.textContent = msg || "";
-   }
-   
-   
-   function igPickThemed(group, theme) {
-    if (!group || !group.good || !group.neutral || !group.evil) return "";
-   
-    if (theme === "good") {
-      return igRandomFrom(group.good);
-    }
-    if (theme === "neutral") {
-      return igRandomFrom(group.neutral);
-    }
-    if (theme === "evil") {
-      return igRandomFrom(group.evil);
-    }
-   
-    // theme is "-" / empty or unknown
-    return "";
-   }
-   
-   /* ---------- CREATOR / HISTORY / PROPERTY / QUIRK / LOCATIONS / NPC_KNOWERS ---------- */
-   
-   const CREATOR = {
-     good: [
-       "Celestials: forged by radiant beings of the upper planes, lighter than expected and engraved with wings, suns, and other symbols of mercy; fiends find its presence deeply unpleasant.",
-       "Elves: crafted during an elven realm’s golden age, half the usual weight and adorned with leaves, stars, and flowing knotwork; it responds most keenly in moonlight.",
-       "Dwarves: hammered out by master dwarven smiths, dense and enduring, decorated with clan runes; many dwarves would gladly see it returned to ancestral halls.",
-       "Metallic Dragon: assembled from discarded scales, talons, and hoard treasures of a metallic dragon; it grows faintly warm when dragons come near.",
-       "Halflings: fashioned to be practical, subtle, and comforting; halflings say it feels like carrying a bit of home in one’s pocket.",
-       "A Circle of Druids: shaped from living wood, stone, and bone to aid those who guard the natural world; faint leaf and spiral patterns trace its edges.",
-       "An Order of Paladins: constructed under solemn vows to serve only just causes; holy iconography is woven into its design.",
-       "A Celestial-Touched Mortal: designed by a human or aasimar guided by recurring visions from the upper planes, its lines precise and quietly uplifting.",
-       "Ancestral Guardians: created by spirits bound to protect a particular bloodline; its symbols echo that family’s heraldry.",
-       "Empyrean Artisans: forged by a benevolent giant-kin of the upper planes, proportioned for mortals yet carrying a hint of giant grandeur.",
-       "A Council of Saints: assembled piece by piece through donations from multiple holy figures, each adding a small but meaningful detail.",
-       "Unseen Servants of a Temple: crafted through miracles rather than tools; surfaces are flawless, as if shaped directly by divine will.",
-       "Ancient Pegasus Riders: fashioned for knights who rode winged steeds in service to good-aligned powers.",
-       "A Monastic Order of Light: made in quiet workshops where meditation and craft were one discipline, producing simple but perfect lines.",
-       "Couatl Heralds: breathed into shape by serpent-angels who guard old secrets; feather and scale motifs intertwine along its form.",
-       "Guardians of a Lost Sanctuary: assembled to protect a hidden refuge of those fleeing persecution.",
-       "A Celestial War College: issued to champions trained to intervene in mortal conflicts only when absolutely necessary.",
-       "Archdruidic Conclave: grown, rather than forged, from living trees and shaped stone, meant to return to the earth when its duty is done.",
-       "Songweavers of a Holy Choir: crafted to resonate with specific hymns, its lines tuned for harmony as much as function.",
-       "A Benevolent Genie: granted as a reward at the end of a wishbound bargain, carrying a subtle sense of fulfilled promise.",
-       "A Celestial Smith Exiled to the Mortal Realm: created as a final gesture of hope before they vanished from history.",
-       "Good-Aligned Dragonborn Clan: forged as a sign that the clan would stand against tyranny, marked with stylized draconic crests.",
-       "A Circle of Empaths: constructed to be safe in the hands of those who feel others’ pain as their own.",
-       "A Vigil of Lantern-Bearers: made to be carried by those who guide others out of darkness, literal and metaphorical."
-     ],
-     neutral: [
-       "Human Empire: made during the height of a now-fallen human kingdom, tied to a legendary figure; its script and symbols reference a culture most people no longer recognize.",
-       "Giants: originally sized for giants and later altered for smaller hands; its proportions still feel just slightly too large.",
-       "Gnomes: crafted to look entirely ordinary, hiding tiny gears and clever mechanical tricks that aren’t strictly necessary.",
-       "Elemental Air: shaped from impossibly light materials; if it includes fabric, it hangs like mist and seems to catch every breath of wind.",
-       "Elemental Earth: built from stone, crystal, and heavy metals; leather or cloth parts are studded with polished rock.",
-       "Elemental Fire: always warm to the touch, with blackened iron and flame sigils; streaks of red and orange seem to smolder beneath the surface.",
-       "Elemental Water: decorated with glossy scales and shell-like plates; metal parts are replaced by coral-like material as hard as steel.",
-       "A Mage Collegium: produced as a standardized tool for members of a spellcasting order, each piece stamped discreetly with their sigil.",
-       "A Royal Workshop: created in the service of a particular crown, meant as a sign of favor or reward for distinguished service.",
-       "A Mercenary Company: tailored to the needs of a famous band of adventurers-for-hire, built more for reliability than beauty.",
-       "A Traveling Enchanter: pieced together from whatever components were available in distant markets and roadside forges.",
-       "Artificers’ Consortium: constructed as part of an experiment in shared designs between multiple competing crafters.",
-       "Rank-and-File Soldiers: designed to be rugged and simple, issued in small numbers to elite units.",
-       "A Nomad Tribe: made to be easily carried, repaired, and modified on long journeys across wild lands.",
-       "A Coastal City-State: built with brass, rope, and shells, intended to endure sea air and storms.",
-       "A Trade Guild: produced as both tool and badge of membership, with subtle workshop marks hidden inside.",
-       "A Wizard’s Apprentices: assembled as a rite of advancement when students proved they could focus their magic safely.",
-       "A Dwarven-Human Alliance: crafted jointly in a rare moment of cooperation, marrying two different styles into one coherent whole.",
-       "An Elven Embassy: given as a diplomatic gift to smooth relations, designed to be aesthetically pleasing and practical.",
-       "A Reclusive Sage: cobbled together over decades of study, with modifications that only make sense to its eccentric creator.",
-       "A City Watch: adopted as a specialized tool used in investigations, its origin tied to early urban lawkeeping.",
-       "A Collegiate Duelling Club: issued to competitors in magical or martial contests, more status symbol than weapon.",
-       "A Merchant Prince: commissioned as a personal safeguard on dangerous trade routes, reflecting wealth and paranoia.",
-       "A Desert Caravan: made to withstand heat, sand, and long journeys between distant settlements.",
-       "An Arcane Library: cataloged and warded as part of the library’s permanent tools, with a tiny shelf-code etched somewhere.",
-       "A Dragon’s Human Vassals: forged for sworn servants of a dragon, using techniques learned from their draconic patron.",
-       "A Guild of Cartographers: crafted to be compact and reliable, meant for those who map dangerous and unknown places.",
-       "A Bardic College: created to lend drama and presence to performances as much as practical use.",
-       "A Monastery of Balance: shaped with simple lines and unadorned surfaces, meant to avoid drawing too much attention."
-     ],
-     evil: [
-       "Aberrations: wrought by minds alien to mortal thought, perhaps for favored thralls; when glimpsed from the corner of the eye, it seems to shift, pulse, or breathe.",
-       "Drow: fashioned in the depths below, unnaturally light and jet black, carved with spider and web motifs; it seems to resent bright sunlight.",
-       "Fiends: formed of black iron, twisted horn, and infernal hide, crawling with cruel runes and leering faces; it radiates a faint, furnace-like heat.",
-       "Undead: assembled in necromantic workshops from bone, grave dirt, and corpse-remnants; it always feels like it has just come in from the cold.",
-       "Cult of a Dark Power: produced in secret rites to please a sinister patron; its symbols are unsettling even to those who cannot read them.",
-       "Yuan-ti: built for serpent-blooded wielders, scaled and sinuous, smelling faintly of rare incense and cold stone.",
-       "Orc Warlords: brutally straightforward in design and meant for harsh use; old bloodstains cling stubbornly to its surface.",
-       "Mind Flayers: crafted in a distant, horrific enclave for enthralled servants; its smooth, organic lines seem to ripple at the edge of vision.",
-       "Hags: assembled from cursed trinkets, knotted hair, and bent metal; its very touch suggests riddles with cruel answers.",
-       "Vampiric Nobility: forged in secret for undead aristocrats, sleek and elegant with a chill that never fades.",
-       "Demonic Forge-Masters: beaten into shape in hellish furnaces; every edge and surface hints at violence.",
-       "Shadow Cult: woven from midnight-colored materials that drink in light, meant to serve assassins and infiltrators.",
-       "Necromantic Colleges: produced for students studying the boundary between life and death, often without proper restraint.",
-       "Duergar Slave-Masters: built to reinforce control and intimidation, heavy and uncompromising.",
-       "A Tyrant-King’s Smiths: created to project authority and inspire fear, mirroring the harsh lines of the ruler’s throne.",
-       "A Cabal of Warlocks: designed according to instructions whispered by their patron, warped toward that entity’s aesthetic.",
-       "An Order of Inquisitors: crafted as a tool of interrogation and punishment as much as a weapon.",
-       "A Cult of Elemental Ruin: shaped to channel raw, destructive elemental power with little concern for collateral damage.",
-       "Demonic Pirates: hammered out from scavenged iron and cursed chains, meant to terrorize coastlines and trade routes.",
-       "A Gang of Murderers: crudely yet deliberately tailored for those who hunt sapient prey.",
-       "Ghoul-Priests: formed from grave goods and tokens of cannibalistic feasts, designed to inspire both hunger and dread.",
-       "A Fallen Paladin: reforged from a symbol of hope into something sharp and bitter, carrying scars of that transformation.",
-       "A Lich’s Experiment: one of many items tested in the pursuit of immortality, abandoned but still potent.",
-       "A Demonbound City: constructed in workshops overseen by fiendish advisors, every detail hinting at domination and cruelty."
-     ]
-   };
-   const HISTORY = {
-     good: [
-       "Arcane Service: it was created for an ancient fellowship of spellcasters dedicated to defending the innocent, and bears their discreet insignia.",
-       "Heroic Legacy: a celebrated hero once carried it; those who know its tales quietly expect great deeds from any new bearer.",
-       "Ornament of Peace: crafted to commemorate the end of a devastating war, with inlays depicting lowered banners and discarded arms.",
-       "Bright Prophecy: it is woven into an optimistic prophecy, hinting that its bearer will help avert disaster and bring about renewal.",
-       "Relic of Worship: used in ceremonial rites honoring a benevolent deity; holy motifs are carved or stitched into every surface.",
-       "Guardian’s Token: granted to protectors sworn to keep watch over a sacred site; their oaths are subtly etched into its design.",
-       "Rescuer’s Mark: associated with a famous rescue or evacuation; survivors passed down the story of “the one who carried the item.”",
-       "Shield of the Weak: carried by those who stood between danger and the defenseless, earning it a quiet but enduring reverence.",
-       "Saint’s Keepsake: once worn by a holy figure known for mercy; pilgrim tales recall how it glowed softly during acts of kindness.",
-       "Bridge of Truce: exchanged during a rare moment of peace between feuding peoples, becoming a symbol of possible understanding.",
-       "Beacon of the Lost: used to guide refugees or wanderers to safety in a time of chaos.",
-       "Healer’s Companion: present at the bedside of countless sick and wounded, remembered as a sign that help had arrived.",
-       "Oath of Refuge: invoked during rites that promised sanctuary to those pursued by injustice.",
-       "Crown of Reform: tied to a ruler who tried to govern more fairly; reformers still speak of it in hopeful tones.",
-       "Choir’s Instrument: used in rites of forgiveness and absolution, its sound or presence marking the end of grudges.",
-       "Tide-Turner: remembered for the moment a hopeless battle suddenly shifted when it came into play.",
-       "Promise of Return: linked to a vow that no fallen ally would be left behind, and remembered for the times that promise was kept.",
-       "Guiding Relic: used to choose those deemed worthy of guarding others; its selection was seen as a blessing.",
-       "Last Light of a Fallen City: carried by the last defenders who held the gate long enough for civilians to escape.",
-       "Miracle of Famine: associated with the sudden appearance of food or water at desperate times.",
-       "Silent Guardian: often depicted in artwork standing at the edge of important scenes, rarely in the center of attention.",
-       "Heroic Heirloom: passed from mentor to student in a line of defenders, symbolizing the passing of responsibility.",
-       "Ward of the Innocent: used in rituals to beg protection for children or those unable to defend themselves."
-     ],
-     neutral: [
-       "Arcane Tool: constructed as a standardized implement for members of a spellcasting college; each piece bears a mark and serial rune.",
-       "Bane of a Foe: created by enemies of a particular culture or creature type; those who recognize it may assume the bearer shares that enmity.",
-       "Ornate Commemoration: produced to honor a coronation or festival, heavy with gemstones and elaborate filigree.",
-       "Prophetic Cipher: featured in a prophecy whose meaning no one fully agrees upon; scholars argue about whether it heralds rise or ruin.",
-       "Ceremonial Relic: used regularly in rituals to mark seasons, oaths, or treaties; temple records note its presence with little comment.",
-       "Symbol of Rank: once worn as part of the regalia of office; descendants of former holders may claim the bearer as ally or rival.",
-       "Historic Witness: present at multiple turning points in history, always in the background rather than the cause.",
-       "Traded Heirloom: passed through auctions, pawnshops, and private deals; each change of owner added another small, forgotten story.",
-       "Catalogue Entry: mentioned in dusty inventories and ledgers, more as an object of record than a legend.",
-       "Diplomatic Gift: exchanged between distant courts as a token of goodwill, its deeper powers going unnoticed for years.",
-       "Tournament Prize: awarded to the victor of a famed competition, then later lost in quieter times.",
-       "Museum Piece: displayed behind glass for generations, assumed to be merely decorative until someone tested it.",
-       "Estate Dispute: the subject of a long inheritance argument that became infamous in legal circles.",
-       "Renamed Many Times: called different things in different eras, with no single name ever truly sticking.",
-       "Shipboard Relic: sailed across seas as a charm against storms, its story woven into sailors’ superstitions.",
-       "Architect’s Curio: embedded into the design of a building, later pried free during renovations.",
-       "College Demonstration: often used in lectures as an example of “textbook enchantment,” then put back on a shelf.",
-       "Border Marker: at one time fixed atop a post marking the line between two rival territories.",
-       "Civic Badge: used by magistrates or officials as a sign of authority when presiding over disputes.",
-       "Artisan’s Calling Card: signed or stamped conspicuously by its proud maker, whose reputation waxed and waned over the years.",
-       "Explorer’s Companion: carried by several generations of explorers, each adding carved notes along its edges.",
-       "Family Treasure: cherished more for sentimental value than power by a minor noble house.",
-       "Loaned to a Hero, Lost in the Wilds: recorded in city archives as “on extended loan” long after its borrower disappeared."
-     ],
-     evil: [
-       "Sinister Deed: tied to a massacre, assassination, or atrocity; learned folk view both it and its bearer with deep suspicion.",
-       "Bane of a People: forged to harm a specific culture or species; those who know its purpose see it as a hateful relic.",
-       "Dark Prophecy: intertwined with a doom-laden prophecy; some seek to steal or destroy it to avert the foretold calamity.",
-       "Profaned Relic: once used in holy rites, later corrupted in violent rituals dedicated to darker powers.",
-       "Instrument of Betrayal: carried by the traitor at the heart of a famous betrayal; its name appears in bitter songs and laments.",
-       "Regalia of a Tyrant: worn by a brutal ruler or high inquisitor; its silhouette calls to mind cruel decrees and fearful crowds.",
-       "Executioner’s Mark: present at countless executions or show trials, becoming a symbol of terror in the minds of the condemned.",
-       "Scapegoat of History: repeatedly blamed for disasters and misfortune, sometimes fairly, sometimes not, sharpening its grim reputation.",
-       "Curse-Anchor: used as the focus for a sweeping curse that still lingers over a region.",
-       "Despoiler’s Trophy: claimed in battle by an infamous warlord, then carried into further atrocities.",
-       "Grave Robber’s Prize: looted from a sacred tomb, its removal coinciding with a rise in hauntings.",
-       "Cult Icon: held aloft in secret gatherings where oaths of cruelty and obedience were sworn.",
-       "Witch-Hunter’s Tool: employed in ruthless persecutions that left villages abandoned and silent.",
-       "Plague Token: blamed for the spread of an illness, either rightly or wrongly, and destroyed shrines in its wake.",
-       "Blood Oath Focus: central to a pact that demanded regular sacrifice; when that pact was broken, strange phenomena followed.",
-       "Folkloric Villain: associated with a notorious figure in folk tales who always appears when things are about to go terribly wrong.",
-       "Siege Relic: used to break wards and defenses during infamous sieges remembered mostly for their cruelty.",
-       "Memory of a Massacre: depicted in murals or tapestries illustrating a grim event; those images were later vandalized or slashed.",
-       "Poisoned Gift: given to an ally with hidden, ruinous intent, its true nature only revealed too late.",
-       "Omen of Betrayal: rumored to surface whenever trust is about to be broken in the worst possible way.",
-       "War Crime Exhibit: locked behind bars as a reminder of atrocities committed using its power.",
-       "Demon’s Collateral: temporarily held by mortals as part of a binding, later stolen and misused.",
-       "Beacon of Panic: remembered for the way crowds fled when its distinctive shape was spotted in a tyrant’s retinue."
-     ]
-   };
-   const MINOR_PROPERTY = {
-     good: [
-       "Beacon: at a word, it shines with bright, steady light in a small radius and soft glow beyond, then can be dimmed just as easily.",
-       "Conscience: when the bearer considers a cruel or selfish act, the item stirs a sharp pang of guilt that is hard to ignore.",
-       "Guardian’s Warning: it gives a soft whisper or subtle tingle just moments before danger becomes obvious.",
-       "Quick Bond: attuning to the item is unusually swift, requiring only a brief moment of shared focus.",
-       "Gentle Climate: while carried, the bearer is comfortable in intense cold or heat that would bother most other creatures.",
-       "Inspiring Voice: the bearer can make their voice carry clearly across a battlefield or plaza without shouting.",
-       "Shielding Calm: the item radiates a faint, soothing aura that helps steady allies’ nerves nearby.",
-       "Merciful Glow: when it sheds light, wounds and scars appear softer and less harsh to the eye.",
-       "Kindred Sense: it warms faintly when allies are nearby, even through walls or fog.",
-       "Oathkeeper: promises sworn while touching it are easier to remember and harder for the bearer to set aside.",
-       "Guardian’s Anchor: it subtly urges the bearer toward protective positions in battle or arguments.",
-       "Comforting Weight: the item feels perfectly balanced in the hand, easing fear of losing one’s grip.",
-       "Soothing Dream: the bearer’s sleep is freer from nightmares while the item rests nearby.",
-       "Companion’s Echo: it briefly glows when someone performs an act of bravery or kindness within sight.",
-       "Hopeful Pulse: it beats once, like a slow heartbeat, when a desperate situation is about to turn in the bearer’s favor.",
-       "Trail of Light: its light, when summoned, leaves a slowly fading afterglow that can mark paths for others.",
-       "Gentle Barrier: for just an instant, it softens the impact of a fall or blow that would otherwise be minorly worse.",
-       "Clear Sight: it briefly brightens when the bearer looks at a hidden path or safe route.",
-       "Shared Courage: those who stand close to the bearer feel slightly braver when danger looms.",
-       "Warm Presence: its touch remains pleasantly warm even in bitter cold, sharing that warmth with whoever holds it.",
-       "Beacon of Return: the bearer always knows the direction back to the last place they considered “home” while holding it.",
-       "Resonant Prayer: spoken blessings feel more potent when they are accompanied by the item’s quiet hum.",
-       "Gentle Reminder: it tingles faintly when the bearer is about to break a promise they genuinely meant to keep.",
-       "Steady Hand: minor tremors and shakes lessen slightly when the bearer grips the item with intent."
-     ],
-     neutral: [
-       "Compass: the bearer can always tell which direction is north, even in featureless tunnels.",
-       "Delver’s Sense: underground, the bearer knows roughly how deep they are and which way leads upward.",
-       "Gleaming: dust, mud, and blood simply won’t cling; the item always looks recently polished.",
-       "Hidden Script: a hidden message or symbol can be seen only under specific conditions, such as moonlight or a particular location.",
-       "Keyed Focus: it acts as a key or focus for a certain gate, vault, or ward; the item “remembers” how to open that one thing.",
-       "Gift of Tongues: so long as it is carried, the bearer understands and can speak one extra language not their own.",
-       "Sentinel’s Glow: it gives off a faint shimmer, chill, or vibration when a particular kind of foe is nearby.",
-       "Songbound: when struck or used, it produces a recognizable fragment of an old song or chant.",
-       "Odd Substance: it is made from a material strange for its purpose—glass, bone, or stone—yet retains full durability.",
-       "Waterborne: it floats on liquid and makes swimming feel a touch easier for the bearer.",
-       "Illusory Finish: the item’s colors and superficial details can be altered in small ways, though its shape and function stay the same.",
-       "Unyielding: normal blows cannot break it; only unusual, powerful means can truly destroy the item.",
-       "Weatherwise: the bearer can sense approaching storms or major weather shifts a short time before they arrive.",
-       "Time Sense: the bearer has a remarkably accurate internal clock while keeping it on their person.",
-       "Pack-Friendly: objects stowed near it are slightly less likely to jostle loose or spill from containers.",
-       "Quiet Step: the bearer’s footsteps are a little softer while it is worn or held.",
-       "Taste of Magic: the item tingles when brought close to active spells or enchanted objects.",
-       "Memory Echo: once per day, it helps the bearer recall a detail they nearly forgot—names, paths, or bits of lore.",
-       "Trail Latch: it leaves almost unnoticeable marks or whispers that a careful tracker can follow later.",
-       "Light as Needed: when drawn from a container, it automatically adjusts its brightness to match the environment unless willed otherwise.",
-       "Stable Flame: if it influences fire, that fire resists being snuffed by wind or minor disturbances.",
-       "Silent Partner: when stowed deliberately, the item makes almost no clatter or noise.",
-       "Ink-Saver: written notes made while touching it are slightly less prone to smudging or fading.",
-       "Scent Imprint: it can be willed to carry a simple scent (flowers, incense, clean linen) that lingers gently around it.",
-       "Subtle Magnet: small metal objects set near it tend not to roll away or scatter.",
-       "Marks of Passage: faint, harmless scuffs appear beneath where it rests, making it easier to track if dropped.",
-       "Comfort of Routine: daily tasks involving the item (cleaning, stowing, drawing) become almost reflexive and efficient.",
-       "Muted Reflection: reflections of the item in water or polished surfaces sometimes show tiny extra details.",
-       "Ever-Sharp Edges (if applicable): mundane edges on or near it stay sharper slightly longer than they should."
-     ],
-     evil: [
-       "Wicked Urge: when a selfish or spiteful choice is available, the item makes that option feel slightly more tempting.",
-       "Blood Charm: its powers respond more eagerly if it has tasted fresh blood within the last day, though only a drop is needed.",
-       "Harsh Radiance: when it shines, its light is stark and unforgiving, throwing hard-edged shadows.",
-       "Lie’s Echo: it grows faintly warm or cold when someone nearby tells a deliberate, harmful lie.",
-       "Grudge Magnet: it sharpens memory for slights and grudges, making them easier to recall than kindnesses.",
-       "Grim Compass: the item seems to subtly pull toward places associated with sorrow, conflict, or unrest.",
-       "Hollow Warmth: the comfort it offers feels a little too empty, as if it cares more for its own survival than the bearer’s.",
-       "Shadow Anchor: shadows near the item seem a little too dark and a touch too slow to move with the light.",
-       "Predator’s Tingle: the item hums softly when a weaker target is nearby and vulnerable.",
-       "Pain-Savor: it seems marginally brighter or more responsive immediately after its bearer suffers pain.",
-       "Bargain’s Hook: spoken promises of dubious morality feel easier to make while holding it.",
-       "Cruel Clarity: it makes it easier to see how others might be exploited or pressured.",
-       "Fear-Drinker: the item feels more vibrant in the presence of frightened creatures.",
-       "Rotting Aura: food spoils slightly faster when stored too long near it.",
-       "Tarnishing Touch: metal and leather near it age a little faster than they should, developing cracks and discoloration.",
-       "Night Ties: dreams become darker and more intense when the bearer sleeps with it close.",
-       "Echo of Suffering: faint cries or sobs sometimes drift from it when held in silence.",
-       "Goad of Pride: it subtly amplifies the bearer’s desire to prove others wrong, especially in petty matters.",
-       "Mirror of Malice: reflections seen near it occasionally twist into sneers or cruelty before snapping back to normal.",
-       "Blood-Track: the item retains a faint, supernatural memory of blood it has touched, sometimes pointing back to its source.",
-       "Whisper of Vengeance: it hints at ways to repay insults, however small, in disproportionate fashion.",
-       "Creeping Chill: its surface grows colder when the bearer thinks of revenge.",
-       "Sour Reputation: rumors about it seem more likely to drift into ugly exaggeration than kinder interpretations."
-     ]
-   };
-   
-   const MINOR_QUIRK = {
-     good: [
-       "Blissful: while carrying it, the bearer feels unexpectedly fortunate and optimistic; small, harmless creatures sometimes linger nearby for no clear reason.",
-       "Confident: the item bolsters the bearer’s sense of self; they feel more capable, sometimes to the point of mild overconfidence.",
-       "Heartening Dreams: the bearer’s sleep is filled with comforting or encouraging dreams whenever the item is close at hand.",
-       "Quiet Encouragement: in tense moments, the bearer hears faint, reassuring murmurs at the edge of hearing.",
-       "Warm Presence: the item feels pleasantly warm when the bearer performs a kind or selfless act.",
-       "Shared Burden: the bearer has the odd feeling that the item is “helping” carry their worries, lightening their emotional load a bit.",
-       "Guiding Whisper: when the bearer hesitates between a selfish and generous choice, the item softly favors the latter.",
-       "Gentle Humor: now and then it produces a tiny, cheerful sound—like a chuckle or chime—when something genuinely funny happens nearby.",
-       "Soothing Rhythm: the bearer finds themselves tapping a steady, calming rhythm on its surface without realizing it.",
-       "Kind Gaze: people often report feeling slightly more at ease when they notice the bearer holding the item.",
-       "Grateful Echo: when someone thanks the bearer sincerely, the item warms or glows just a little in response.",
-       "Guardian’s Hush: children and animals sometimes fall asleep more easily with the item nearby.",
-       "Steadying Aura: the bearer is less prone to panic, even if they still feel fear.",
-       "Small Blessings: tiny bits of good luck—finding a lost button, avoiding a stubbed toe—seem to cluster around it.",
-       "Bright Footsteps: faint motes of harmless light appear beneath the bearer’s steps in especially dark or fearful places.",
-       "Sincere Mirror: reflections of the bearer while holding it often seem just a touch more confident and kinder.",
-       "Encouraging Itch: the item itches or tingles lightly when the bearer is about to give up on something they could still finish.",
-       "Kindred Memory: it occasionally reminds the bearer of something good they did in the past, boosting morale."
-     ],
-     neutral: [
-       "Metamorphic: the item’s appearance subtly shifts over time—colors drift, carvings rearrange—without changing how it functions.",
-       "Muttering: it occasionally grumbles or whispers; patient listeners sometimes catch a fragment of useful information.",
-       "Frail: it chips, frays, or cracks with use, but these marks never impair its magic or reliability.",
-       "Loud: when activated or used in earnest, it produces a conspicuous sound—clang, shout, humming chord, or sudden chime.",
-       "Echoing Thoughts: now and then, the bearer hears their own inner voice echoed back in a slightly different tone.",
-       "Restless: the item seems unhappy being locked away; containers or hiding places feel subtly unsettled while it is inside.",
-       "Shifting Weight: its balance changes unexpectedly, forcing the bearer to adjust their grip at odd moments.",
-       "Strange Scent: mild scents—ozone, incense, damp stone—briefly surround the item when strong emotions are expressed nearby.",
-       "Absent-Minded: the bearer occasionally finds they’ve been idly toying with the item without remembering picking it up.",
-       "Subtle Vibration: it vibrates very slightly when being watched, even if no obvious watcher is present.",
-       "Color Drift: its colors appear slightly different to each viewer, leading to frequent disagreements about its exact shade.",
-       "Magpie Appeal: the item tends to attract small, shiny objects that end up nearby by coincidence.",
-       "Impulse Spin: when left on a flat surface, it occasionally turns exactly one half or full rotation on its own.",
-       "Temperature Quirk: it feels cool in hot weather and warm in cold weather, without being truly protective.",
-       "Tilt Toward North: it nudges or rolls toward north when set down, as if mildly magnetized.",
-       "Rhythm Echo: it sometimes taps or knocks along with distant music, storms, or footsteps.",
-       "Almost-Voice: once in a while it seems about to say something clearly before lapsing back into unintelligible murmurs.",
-       "Flicker in Reflection: in mirrors or still water, the item occasionally looks slightly older or newer than it currently is.",
-       "Mild Static: the bearer notices small snaps of static when touching certain materials while holding it.",
-       "Pocket Wanderer: when stored with other items, it has a habit of migrating to the top or a more prominent position.",
-       "Odd Appetite: it occasionally “claims” a small, mundane item that vanishes when placed near it, with no ill effect.",
-       "Time Jitter: the bearer occasionally misjudges small spans of time by a few minutes in either direction.",
-       "Sleep Shift: the bearer sometimes wakes up with the item resting in a different place on their person than where they left it."
-     ],
-     evil: [
-       "Covetous: the bearer becomes increasingly preoccupied with gathering and hoarding coins, gems, and curios.",
-       "Hungry: its magic seems more vigorous if it is regularly touched by fresh blood; the bearer may feel compelled to “feed” it.",
-       "Painful: each use triggers a brief flash of pain—sharp, burning, or freezing—though no actual harm is done.",
-       "Possessive: the item resents sharing attention; it grows “sullen” if the bearer attunes to many other magic items.",
-       "Repulsive: touching the item evokes a faint sense of nausea or revulsion that never entirely fades.",
-       "Slothful: the bearer feels unusually drowsy and unmotivated, as if rising from rest always takes a little extra effort.",
-       "Shadow-Tongue: the item’s murmurs grow clearest when secrets, threats, or cruel plans are discussed nearby.",
-       "Bleak Aura: nearby animals and children instinctively avoid the item, skirting around it or refusing to approach.",
-       "Jealous Echo: it warms when the bearer feels envy, as if savoring the emotion.",
-       "Mean Humor: the item seems to react most strongly when something embarrassing or hurtful happens.",
-       "Whispered Insults: faint, cutting remarks drift from it when the bearer hesitates or shows vulnerability.",
-       "Cold Comfort: in fearful moments, its touch grows colder instead of more reassuring.",
-       "Eager for Fights: it vibrates or tugs forward slightly whenever an argument begins to escalate.",
-       "Guilt Twister: it emphasizes the bearer’s past failings in dreams and quiet thoughts, especially when they consider doing good.",
-       "Angry Resonance: its murmurs grow louder around displays of anger, violence, or cruelty.",
-       "Hunter’s Pride: the bearer feels a spike of satisfaction when they dominate or humiliate others, subtly reinforced by the item.",
-       "Vermin’s Friend: unpleasant insects or scavengers seem oddly calm near it, even as more wholesome creatures flee.",
-       "Lost Time: the bearer occasionally cannot clearly recall what they were doing while fixated on the item."
-     ]
-   };
-   const LOCATIONS = {
+(function () {
+  "use strict";
+
+  // ---------------------------
+  //  DATA: CREATORS / COMMISSIONERS
+  // ---------------------------
+
+  const CREATORS_COMMISSIONERS = {
     good: [
-   "Hidden in a warded reliquary beneath a long-abandoned temple of the light.",
-   "Sealed in a stasis-chamber beneath a fortified monastery perched on a cliff.",
-   "Resting in a hero’s tomb maintained by a small but devoted order of caretakers.",
-   "Locked in the vault of a temple-city that only opens its gates once each decade.",
-   "Displayed as a holy relic in a modest shrine far from the main roads.",
-   "Kept in the armory of an order of knights who may not fully understand its history.",
-   "Buried beneath an ancient oak in a glade still watched over by lingering spirits.",
-   "Guarded by a couatl in a hidden sky-temple floating above the clouds.",
-   "Stored with other relics in a library-sanctum that houses mostly benevolent magic.",
-   "Worn by a semi-retired champion who believes the item’s work is nearly done.",
-   "Locked away in a consecrated vault beneath a thriving temple complex.",
-   "Kept under watch in the reliquary of a lawful monastery high in the mountains.",
-   "Hidden in a warded glade, protected by druids who consider it too dangerous to use lightly.",
-   "Stored in a well-guarded royal treasury, its existence known only to a few advisors.",
-   "Enshrined above the altar of a small country chapel, where locals leave offerings.",
-   "Sealed within a hallowed tomb alongside the remains of a beloved hero.",
-   "Guarded by a circle of paladins in a fortress dedicated to safeguarding such relics.",
-   "Resting beneath the roots of an ancient tree, watched over by kindly forest spirits.",
-   "Hung in a hall of honor among banners and relics from long-forgotten campaigns.",
-   "Kept in a library’s restricted collection, where only the most trusted scholars may view it."
-    ],
-    neutral: [
-   "Buried in the collapsed ruins of a once-bustling city now swallowed by wilderness.",
-   "Locked away in a noble’s private collection, surrounded by other curios.",
-   "Misfiled in the deep stacks of a sprawling arcane library that lost track of it centuries ago.",
-   "Sitting in a dusty display case in a minor museum that doesn’t realize what it has.",
-   "Sunken with a lost ship, resting among corroded anchors and barnacle-crusted chests.",
-   "Entombed behind a secret wall in a merchant prince’s long-ruined estate.",
-   "Stored in a forgotten strongroom beneath a guildhall no-one uses anymore.",
-   "Wedged in the roots of a toppled statue, half-buried in loose soil.",
-   "Hidden in a trapped vault whose original owners have no surviving heirs.",
-   "Traded from hand to hand on the black market, never lingering with one owner for long.",
-   "Lost somewhere within a sprawling ruin that has changed hands a dozen times.",
-   "Sold at least once in every major city on the continent, leaving its current location uncertain.",
-   "Buried in a collapsed section of an old mine, reachable only through treacherous tunnels.",
-   "Misfiled deep in the archives of an enormous bureaucratic city, effectively invisible among the records.",
-   "Stashed in a forgotten safety deposit box in a once-prosperous trading house.",
-   "Lying in a locked chest aboard a ship that never returned to port.",
-   "Displayed in a minor noble’s private collection, mistaken for something far less important.",
-   "Wedged behind a cracked statue in an abandoned temple no one remembers dedicating.",
-   "Kept in a secure vault that has changed owners several times through legal disputes.",
-   "Resting on a dusty shelf in a back-alley curiosity shop, badly underpriced."
+      {
+        id: "paladin",
+        type: "class",
+        size: "single",
+        noun: "paladin",
+        isCreator: false,
+        tags: ["celestial", "duty", "courage"]
+      },
+      {
+        id: "deva",
+        type: "npc",
+        size: "single",
+        noun: "deva",
+        isCreator: true,
+        tags: ["celestial", "protection", "wisdom"]
+      },
+      {
+        id: "artisan_guild",
+        type: "npc",
+        size: "group",
+        noun: "artisan guild",
+        isCreator: false,
+        tags: ["commerce", "craft", "travel"]
+      },
+      {
+        id: "wizard_council",
+        type: "class",
+        size: "group",
+        noun: "wizard council",
+        isCreator: true,
+        tags: ["arcane", "knowledge", "wisdom"]
+      }
+      // ADD MORE GOOD-ALIGNED CREATORS/COMMISSIONERS HERE
     ],
     evil: [
-   "Locked in the centerpiece vault of a tyrant’s fortress, surrounded by brutal trophies.",
-   "Chained to an altar in a cult’s underground shrine, still slick with old blood.",
-   "Buried in an unhallowed barrow where restless dead rise on moonless nights.",
-   "Kept in the personal reliquary of a lich who occasionally toys with the idea of using it.",
-   "Sealed in an iron casket at the center of a demon-haunted battlefield.",
-   "Hidden in a trapped reliquary filled with cursed relics best left untouched.",
-   "Half-merged with the stone in a fortress that slipped partially into the Shadowfell.",
-   "Gripped in the skeletal hands of a long-dead king, seated on a crumbling throne.",
-   "Buried beneath the gallows-yard of a city that executed thousands in a single purge.",
-   "Offered as tribute to a fiend who stowed it in a vault somewhere in the Hells.",
-   "Clutched by a lich in its hidden sanctum, surrounded by layers of wards and traps.",
-   "Buried within a desecrated cathedral now serving as a stronghold for cultists.",
-   "Sunk in a drowned city where restless dead patrol the sunken streets.",
-   "Enshrined in an infernal shrine devoted to a fiendish patron.",
-   "Carried by a feared warlord who uses it as both weapon and symbol of dominion.",
-   "Hidden in the lair of a coven of hags that trade in curses and stolen futures.",
-   "Bound by chains in a chamber deep beneath a tyrant’s black fortress.",
-   "Kept within a cursed forest where time and distance fold on themselves.",
-   "Trapped in the hoard of a dragon known more for cruelty than greed.",
-   "Locked inside a sentient prison that feeds on the desperation of its inmates."
+      {
+        id: "fallen_paladin",
+        type: "class",
+        size: "single",
+        noun: "oathbreaker paladin",
+        isCreator: true,
+        tags: ["profane", "war", "fear"]
+      },
+      {
+        id: "hag_coven",
+        type: "npc",
+        size: "group",
+        noun: "hag coven",
+        isCreator: true,
+        tags: ["deceit", "corruption", "eldritch"]
+      },
+      {
+        id: "thieves_guild",
+        type: "npc",
+        size: "group",
+        noun: "thieves' guild",
+        isCreator: false,
+        tags: ["criminal", "corruption", "deception"]
+      },
+      {
+        id: "lich",
+        type: "npc",
+        size: "single",
+        noun: "lich",
+        isCreator: true,
+        tags: ["fear", "corruption", "domination"]
+      }
+      // ADD MORE EVIL-ALIGNED CREATORS/COMMISSIONERS HERE
     ]
-   };
-   const NPC_KNOWERS = {
-    good: [
-   "A kindly but reclusive sage who believes the item should be used for the greater good.",
-   "An aging knight-errant who once swore an oath to see the item wielded responsibly.",
-   "A patient archivist-priest who has quietly tracked references to the item for decades.",
-   "A retired adventurer who lost the item under honorable but tragic circumstances.",
-   "A celestial-touched scholar whose dreams still feature the item from time to time.",
-   "A druid elder who remembers when the item was used to heal rather than harm.",
-   "A bard who keeps the item’s kinder legends alive in song.",
-   "A wandering paladin who suspects the item is needed for an imminent prophecy.",
-   "A descendant of the original crafter, determined to keep the family’s legacy unsullied.",
-   "A monk who has guarded a single scrap of prophecy about the item for their entire life.",
-   "A retired paladin who once bore the item in a righteous campaign and now dwells in quiet seclusion.",
-   "A kindly temple archivist who has pieced together its history from scattered references.",
-   "A silver-haired elven loremaster who remembers watching it change hands centuries ago.",
-   "A dwarven historian whose clan once forged or safeguarded the item.",
-   "A wandering priest who has seen visions of the relic in meditation.",
-   "A bard dedicated to preserving heroic epics, who knows several contradictory songs about it.",
-   "A celestial-blooded hermit who refuses to speak of the item unless a great need is proven.",
-   "A dragon who remembers when it was last used to avert a catastrophe.",
-   "A circle of druids who regard the item as a necessary but dangerous tool.",
-   "A scholar-priest who believes returning the item to its rightful resting place will fulfill a prophecy."
-    ],
-    neutral: [
-   "A harried city sage who treats the item as just one more oddity in an overfull ledger.",
-   "A fence who once handled the item and regrets selling it so cheaply.",
-   "An information broker who trades rumors about the item for a steep price.",
-   "A cartographer who marked the last confirmed sighting in a marginal note.",
-   "A university historian who wrote a little-read thesis mentioning the item in passing.",
-   "An old sailor who remembers a captain prattling about the item over too much rum.",
-   "A dragon who half-remembers the item as part of a rival’s hoard.",
-   "A planar traveler who has seen the item on more than one world.",
-   "A warlock whose patron let slip a single, offhand detail about the item.",
-   "A minor noble collector who is obsessed with finding it but far from competent.",
-   "A jaded sage who collects obscure facts without caring what is done with them.",
-   "A guild factor whose ledgers record multiple sales of the item over decades.",
-   "An information broker who trades in secrets and rare knowledge for a steep price.",
-   "A traveling storyteller who only half believes their own tales.",
-   "A retired adventurer who lost the item in a card game and regretted it ever since.",
-   "A dwarven appraiser who remembers authenticating it for a previous owner.",
-   "A reclusive wizard whose notes on the item are scattered across many notebooks.",
-   "The elderly caretaker of a museum that once borrowed the item for an exhibition.",
-   "A fence who handled stolen goods, including the item, but never asked questions.",
-   "A minor noble whose ancestor commissioned the item and kept painfully detailed diaries."
-    ],
-    evil: [
-   "A cult fanatic who believes the item’s return will herald a glorious and terrible age.",
-   "A lich who keeps the item’s exact properties in a deliberately misleading grimoire.",
-   "An assassin-sage who studies artifacts solely to weaponize them.",
-   "A fiendish emissary who occasionally offers information about the item as bait.",
-   "A vampire aristocrat who used the item in atrocities and fondly remembers its work.",
-   "A hag who traded the item away but still keeps track of where it goes.",
-   "A necromancer who views the item as a necessary key to an ambitious ritual.",
-   "A corrupt high priest who quietly altered scriptures to hide references to it.",
-   "A crazed prophet in chains, muttering fragments of its history between bouts of laughter.",
-   "A demon bound in a circle, amused to speak of the item’s bloodiest chapters.",
-   "A cult leader who believes reclaiming the item will hasten their patron’s arrival.",
-   "A vampire scholar who studies cursed artifacts as a hobby.",
-   "A hag who helped twist the item’s purpose and is eager to see it cause more misery.",
-   "A devil bound by contract to provide information about the item’s whereabouts, for a price.",
-   "A half-mad seer whose visions are full of the item’s blood-soaked history.",
-   "A warlock whose patron whispers of the item every time new bargains are struck.",
-   "A necromancer who has interrogated the dead about its last appearance.",
-   "The spirit of a long-dead guardian, bound to a ruin where the item once rested.",
-   "A crime lord who has quietly arranged multiple failed thefts targeting the item.",
-   "A demon masquerading as a helpful scholar, steering seekers toward ruin."		
-    ]
-   };
-   
-   
-   /* ---------- Core logic ---------- */
-   
-    function rollTraits() {
-    const theme = (document.getElementById("ig-theme-select")?.value) || "";
-   
-    if (!theme) {
-   igSetThemeMessage("Please make a selection from the moral axis options to determine traits.");
-   return;
+  };
+
+  const ALIGNMENT_AXES = ["good", "evil"];
+
+  function pickRandomOriginAxis() {
+    return ALIGNMENT_AXES[Math.floor(Math.random() * ALIGNMENT_AXES.length)];
+  }
+
+  function pickCreatorForAxis(axis) {
+    const pool = CREATORS_COMMISSIONERS[axis];
+    if (!pool || pool.length === 0) return null;
+    return randomFrom(pool);
+  }
+
+  // ---------------------------
+  //  DATA: TAG TONES
+  // ---------------------------
+
+  const TAG_DEFINITIONS = {
+    // good-leaning tags
+    duty:       { tone: "good" },
+    courage:    { tone: "good" },
+    protection: { tone: "good" },
+    wisdom:     { tone: "good" },
+    healing:    { tone: "good" },
+    mercy:      { tone: "good" },
+
+    // evil-leaning tags
+    corruption: { tone: "evil" },
+    fear:       { tone: "evil" },
+    domination: { tone: "evil" },
+    deceit:     { tone: "evil" },
+    profane:    { tone: "evil" },
+    criminal:   { tone: "evil" },
+
+    // neutral tags
+    arcane:     { tone: "neutral" },
+    knowledge:  { tone: "neutral" },
+    craft:      { tone: "neutral" },
+    travel:     { tone: "neutral" },
+    forest:     { tone: "neutral" },
+    trade:      { tone: "neutral" },
+    eldritch:   { tone: "neutral" },
+
+    // example bridge tags
+    celestial:  { tone: "good" },
+    war:        { tone: "evil" }
+
+    // ADD MORE TAG DEFINITIONS HERE
+  };
+
+  function getTagToneStats(tags) {
+    const stats = { good: 0, evil: 0, neutral: 0 };
+    for (let i = 0; i < tags.length; i++) {
+      const t = tags[i];
+      const tone = TAG_DEFINITIONS[t]?.tone || "neutral";
+      stats[tone]++;
     }
-   
-    igSetThemeMessage(""); // clear message on success
-   
-    const creator  = igPickThemed(CREATOR, theme);
-    const history  = igPickThemed(HISTORY, theme);
-    const property = igPickThemed(MINOR_PROPERTY, theme);
-    const quirk    = igPickThemed(MINOR_QUIRK, theme);
-   
-    document.getElementById("ig-creator").textContent  = creator;
-    document.getElementById("ig-history").textContent  = history;
-    document.getElementById("ig-property").textContent = property;
-    document.getElementById("ig-quirk").textContent    = quirk;
-   
-    document.getElementById("ig-lore").textContent =
-   'Roll traits, then click “Generate Lore Paragraph” to stitch everything together.';
-   
-    rollLocation();
-    rollNpc();
-   }
-   
-   
-   function generateLoreParagraph() {
-     const creator   = document.getElementById("ig-creator").textContent || "";
-     const history   = document.getElementById("ig-history").textContent || "";
-     const property  = document.getElementById("ig-property").textContent || "";
-     const quirk     = document.getElementById("ig-quirk").textContent || "";
-     const location  = document.getElementById("ig-location").textContent || "";
-     const npc       = document.getElementById("ig-npc").textContent || "";
-   
-     if (!creator || creator === "—") {
-       document.getElementById("ig-lore").textContent =
-         "Roll traits first, then generate the lore paragraph.";
-       return;
-     }
-   
-     let lore = "";
-   
-     lore += `This magic item was crafted by or for ${creator} `;
-     if (history) {
-       lore += `${history} `;
-     }
-     if (property) {
-       lore += `It bears the minor property: ${property} `;
-     }
-     if (quirk) {
-       lore += `It also exhibits the following quirk: ${quirk} `;
-     }
-     if (location && location !== "—") {
-       lore += `Its last known resting place is said to be ${location} `;
-     }
-     if (npc && npc !== "—") {
-       lore += `At least one being knows more: ${npc}`;
-     }
-   
-     document.getElementById("ig-lore").textContent = lore.trim();
-   }
-   
-   function rollLocation() {
-   const theme = (document.getElementById("ig-theme-select")?.value) || "";
-   
-   if (!theme) {
-     igSetThemeMessage("Select Good, Neutral, or Evil before rolling traits.");
-     document.getElementById("ig-location").textContent = "—";
-     return;
-   }
-   
-   igSetThemeMessage(""); // clear on success
-   const loc = igPickThemed(LOCATIONS, theme);
-   document.getElementById("ig-location").textContent = loc || "—";
-   }
-   
-   
-   function rollNpc() {
-   const theme = (document.getElementById("ig-theme-select")?.value) || "";
-   
-   if (!theme) {
-     igSetThemeMessage("Select Good, Neutral, or Evil before rolling traits.");
-     document.getElementById("ig-npc").textContent = "—";
-     return;
-   }
-   
-   igSetThemeMessage(""); // clear on success
-   const npc = igPickThemed(NPC_KNOWERS, theme);
-   document.getElementById("ig-npc").textContent = npc || "—";
-   }
-   
-   
-   
-   (function igInit() {
-   const rollBtn = document.getElementById("ig-roll");
-   const loreBtn = document.getElementById("ig-lore-btn");
-   const locBtn  = document.getElementById("ig-location-btn");
-   const npcBtn  = document.getElementById("ig-npc-btn");
-   const themeSelect = document.getElementById("ig-theme-select");
-   
-   if (rollBtn) rollBtn.addEventListener("click", rollTraits);
-   if (loreBtn) loreBtn.addEventListener("click", generateLoreParagraph);
-   if (locBtn)  locBtn.addEventListener("click", rollLocation);
-   if (npcBtn)  npcBtn.addEventListener("click", rollNpc);
-   if (themeSelect) themeSelect.addEventListener("change", () => igSetThemeMessage(""));
-   
-   // no auto-roll; DM picks an axis then rolls
-   })();
+    return stats;
+  }
+
+  function inferDominantTagTone(tags) {
+    const stats = getTagToneStats(tags);
+    if (stats.good > stats.evil) return "good";
+    if (stats.evil > stats.good) return "evil";
+    return "neutral";
+  }
+
+  // ---------------------------
+  //  ITEM ALIGNMENT & STATE
+  // ---------------------------
+
+  function determineItemAlignment(originAxis, tags) {
+    const dominantTone = inferDominantTagTone(tags);
+
+    if (dominantTone === "neutral") {
+      return {
+        itemAxis: originAxis,
+        itemState: "aligned"
+      };
+    }
+
+    if (dominantTone === originAxis) {
+      return {
+        itemAxis: originAxis,
+        itemState: "aligned"
+      };
+    }
+
+    if (originAxis === "good" && dominantTone === "evil") {
+      return {
+        itemAxis: "evil",
+        itemState: "corrupted"
+      };
+    }
+
+    if (originAxis === "evil" && dominantTone === "good") {
+      return {
+        itemAxis: "good",
+        itemState: "sanctified"
+      };
+    }
+
+    return {
+      itemAxis: originAxis,
+      itemState: "aligned"
+    };
+  }
+
+  // ---------------------------
+  //  MOTIVATIONS BY TAG & ORIGIN AXIS
+  // ---------------------------
+
+  const TAG_MOTIVATIONS = {
+    good: {
+      duty: [
+        "to honor a sacred oath",
+        "to fulfill a solemn vow"
+      ],
+      courage: [
+        "to arm a champion against the coming darkness",
+        "to give strength to those who stand their ground"
+      ],
+      protection: [
+        "to shield the innocent from harm",
+        "to guard those who could not guard themselves"
+      ],
+      commerce: [
+        "to reward faithful service with more than coin",
+        "as a masterwork commission for a trusted patron"
+      ],
+      craft: [
+        "as a testament to unmatched craftsmanship",
+        "to prove that mortal hands can shape wonders"
+      ],
+      travel: [
+        "to aid long and perilous journeys",
+        "to see its bearer safely through distant roads"
+      ],
+      wisdom: [
+        "to guide the worthy with quiet insight",
+        "to preserve hard-won wisdom in steel and spell"
+      ],
+      // ADD MORE GOOD-AXIS TAG MOTIVATIONS HERE
+      _fallback: [
+        "to aid those who stand against the darkness",
+        "to serve a cause greater than any one bearer"
+      ]
+    },
+    evil: {
+      war: [
+        "to win a bloody and lopsided war",
+        "to crush their enemies on the battlefield"
+      ],
+      fear: [
+        "to spread paralyzing fear wherever it appears",
+        "so that its very name would make the boldest tremble"
+      ],
+      deceit: [
+        "to turn allies against each other",
+        "to ensure that lies would cut as sharply as any blade"
+      ],
+      corruption: [
+        "to taint whatever it touches",
+        "to slowly twist hearts and hopes alike"
+      ],
+      eldritch: [
+        "to anchor a fragment of something that should not exist",
+        "to bind powers no sane mind would willingly call upon"
+      ],
+      domination: [
+        "to bend will and flesh to a single cruel purpose",
+        "to remind the world who held true power"
+      ],
+      criminal: [
+        "to tilt every deal and every heist in their favor",
+        "to make the law itself seem powerless"
+      ],
+      // ADD MORE EVIL-AXIS TAG MOTIVATIONS HERE
+      _fallback: [
+        "to further their own ruthless ambitions",
+        "to remake the world in their own grim image"
+      ]
+    }
+  };
+
+  function buildMotivationClause(originAxis, tags) {
+    const axisTable = TAG_MOTIVATIONS[originAxis] || {};
+    for (let i = 0; i < tags.length; i++) {
+      const tag = tags[i];
+      if (axisTable[tag]) {
+        return randomFrom(axisTable[tag]);
+      }
+    }
+    const fallback = axisTable._fallback || [
+      originAxis === "good"
+        ? "to aid those who stand against the darkness"
+        : "to further their own ruthless ambitions"
+    ];
+    return randomFrom(fallback);
+  }
+
+  // ---------------------------
+  //  TEXT HELPERS
+  // ---------------------------
+
+  function randomFrom(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  function aOrAn(phrase) {
+    const word = phrase.trim().toLowerCase();
+    const first = word[0];
+    return "aeiou".includes(first) ? "an" : "a";
+  }
+
+  const RACE_ADJECTIVES = [
+    "human",
+    "elven",
+    "dwarven",
+    "dragonborn",
+    "tiefling",
+    "halfling"
+    // ADD MORE RACE ADJECTIVES HERE IF DESIRED
+  ];
+
+  function buildSubjectNoun(creator) {
+    let base = creator.noun;
+
+    if (creator.type === "class" && Math.random() < 0.6) {
+      const race = randomFrom(RACE_ADJECTIVES);
+      base = race + " " + creator.noun;
+    }
+
+    const article = aOrAn(base);
+    return article + " " + base;
+  }
+
+  // ---------------------------
+  //  TRANSFORMATION CAUSES
+  // ---------------------------
+
+  const CORRUPTION_CAUSES = [
+    {
+      id: "fallen_bearer",
+      tone: "woe",
+      kind: "corruption",
+      summaryTemplates: [
+        "Its fall began when its last celebrated bearer broke their vows, and the item’s magic darkened in answer to that betrayal.",
+        "A once-honored champion turned traitor while wielding the item, and their fall stained its power.",
+        "The item’s purpose curdled when the hero who bore it chose cruelty over mercy at a pivotal moment."
+      ],
+      hooks: {
+        linkedToNotoriousIndividual: true,
+        linkedToNotoriousGroup: false,
+        eventOfWeal: false,
+        eventOfWoe: true,
+        thoughtLostOrDestroyed: true,
+        activelySoughtByNotorious: true,
+        hasRumors: true,
+        hasProphecy: false
+      }
+    },
+    {
+      id: "bargain_with_darkness",
+      tone: "woe",
+      kind: "corruption",
+      summaryTemplates: [
+        "In a moment of fear and desperation, a keeper of the item bargained with darker powers through it, and the bargain never fully released its grip.",
+        "Someone used the item as the focus of a forbidden pact, and the magic that answered warped it from within.",
+        "The item was offered up as collateral in a blasphemous bargain, and the patron’s influence seeped into it."
+      ],
+      hooks: {
+        linkedToNotoriousIndividual: true,
+        linkedToNotoriousGroup: true,
+        eventOfWeal: false,
+        eventOfWoe: true,
+        thoughtLostOrDestroyed: false,
+        activelySoughtByNotorious: true,
+        hasRumors: true,
+        hasProphecy: true
+      }
+    },
+    {
+      id: "catastrophic_ritual",
+      tone: "woe",
+      kind: "corruption",
+      summaryTemplates: [
+        "A grand ritual meant for protection or healing went catastrophically wrong, and the backlash twisted the item at its heart.",
+        "It served as the anchor of a warding rite that failed, drinking in the unleashed harm instead of turning it aside.",
+        "The item survived a magical disaster that shattered an entire sanctum, absorbing fragments of the unleashed horror."
+      ],
+      hooks: {
+        linkedToNotoriousIndividual: false,
+        linkedToNotoriousGroup: true,
+        eventOfWeal: false,
+        eventOfWoe: true,
+        thoughtLostOrDestroyed: true,
+        activelySoughtByNotorious: false,
+        hasRumors: true,
+        hasProphecy: false
+      }
+    }
+    // ADD MORE CORRUPTION CAUSES HERE
+  ];
+
+  const SANCTIFICATION_CAUSES = [
+    {
+      id: "rite_of_cleansing",
+      tone: "weal",
+      kind: "sanctification",
+      summaryTemplates: [
+        "After its crimes became known, it was subjected to a long and perilous rite of cleansing that burned away much of its original malice.",
+        "A circle of devoted clergy worked a slow purification upon the item, unraveling layer after layer of its corruption.",
+        "In a hidden shrine, patient rites of contrition and renewal gradually redirected the item’s power toward gentler ends."
+      ],
+      hooks: {
+        linkedToNotoriousIndividual: false,
+        linkedToNotoriousGroup: true,
+        eventOfWeal: true,
+        eventOfWoe: false,
+        thoughtLostOrDestroyed: false,
+        activelySoughtByNotorious: true,
+        hasRumors: true,
+        hasProphecy: true
+      }
+    },
+    {
+      id: "martyrs_blood",
+      tone: "weal",
+      kind: "sanctification",
+      summaryTemplates: [
+        "When a martyr fell defending the helpless, their blood soaked into the item and rewrote some part of its purpose.",
+        "A final selfless sacrifice wielding the item against overwhelming odds left a permanent mark of grace upon it.",
+        "The last stand of a defender who refused to use the item for cruelty transformed the way its magic answers the world."
+      ],
+      hooks: {
+        linkedToNotoriousIndividual: true,
+        linkedToNotoriousGroup: false,
+        eventOfWeal: true,
+        eventOfWoe: true,
+        thoughtLostOrDestroyed: true,
+        activelySoughtByNotorious: true,
+        hasRumors: true,
+        hasProphecy: false
+      }
+    },
+    {
+      id: "claimed_by_higher_power",
+      tone: "weal",
+      kind: "sanctification",
+      summaryTemplates: [
+        "A higher power laid quiet claim to the item, slowly overwriting its cruel design with a new, protective bent.",
+        "It was seized and repurposed by a patron of light, who bent its workings toward defense rather than domination.",
+        "The item was taken into the custody of a sacred order, and over generations its nature shifted under their stewardship."
+      ],
+      hooks: {
+        linkedToNotoriousIndividual: false,
+        linkedToNotoriousGroup: true,
+        eventOfWeal: true,
+        eventOfWoe: false,
+        thoughtLostOrDestroyed: false,
+        activelySoughtByNotorious: false,
+        hasRumors: true,
+        hasProphecy: true
+      }
+    }
+    // ADD MORE SANCTIFICATION CAUSES HERE
+  ];
+
+  function pickTransformationDetails(itemState, originAxis, itemAxis, creator) {
+    if (itemState === "corrupted") {
+      const cause = randomFrom(CORRUPTION_CAUSES);
+      const summary = randomFrom(cause.summaryTemplates);
+      return {
+        id: cause.id,
+        kind: cause.kind,
+        tone: cause.tone,
+        summary: summary,
+        hooks: cause.hooks
+      };
+    }
+
+    if (itemState === "sanctified") {
+      const cause = randomFrom(SANCTIFICATION_CAUSES);
+      const summary = randomFrom(cause.summaryTemplates);
+      return {
+        id: cause.id,
+        kind: cause.kind,
+        tone: cause.tone,
+        summary: summary,
+        hooks: cause.hooks
+      };
+    }
+
+    return null;
+  }
+
+  // ---------------------------
+  //  CREATOR SENTENCE GENERATION (Q1)
+  // ---------------------------
+
+  function buildCreatorSentences(originAxis, itemAxis, itemState, creator) {
+    const subject = buildSubjectNoun(creator);
+    const motivation = buildMotivationClause(originAxis, creator.tags);
+
+    let sentence1;
+    if (creator.isCreator) {
+      sentence1 = subject + " crafted this item " + motivation + ".";
+    } else {
+      sentence1 = subject + " commissioned this item " + motivation + ".";
+    }
+
+    const STATE_SENTENCE2 = {
+      aligned: {
+        good: {
+          single: [
+            "Those who know the tale say a trace of their quiet resolve still clings to its magic.",
+            "It is said the creator’s original hope yet lingers within its enchantment.",
+            "The item still answers as it was first intended, faithful to its original cause."
+          ],
+          group: [
+            "Even now, old stories speak of their shared purpose woven into every line and edge of the design.",
+            "Their collective intent is said to linger, bound into the item like a solemn oath.",
+            "The cooperation that forged it is still felt whenever its power is called upon."
+          ]
+        },
+        evil: {
+          single: [
+            "Those who remember the story insist that a fragment of their malice still stirs within it.",
+            "It is whispered that the maker’s cruelty yet murmurs in the depths of its magic.",
+            "The item still bears the unmistakable signature of its creator’s dark will."
+          ],
+          group: [
+            "Whispers claim their cruel intent soaked into the item and never truly faded.",
+            "Their shared malice lingers like a stain that no age has yet washed clean.",
+            "The united wicked purpose that birthed it is said to echo within its power."
+          ]
+        }
+      },
+
+      corrupted: {
+        single: [
+          "Yet over time, its original purpose was bent and darkened, until the magic within no longer served the vows that first shaped it.",
+          "Some calamity warped the item’s original intent, turning a once-noble creation toward darker ends.",
+          "What was meant for good was slowly poisoned by forces the creator never foresaw."
+        ],
+        group: [
+          "In the years that followed, the ideals of its makers were eroded and twisted, until the item answered to darker purposes altogether.",
+          "A shared tragedy or betrayal corrupted the magic they once unified around, reshaping the artifact into something grim.",
+          "The harmony that first empowered it gave way to corruption, and the item remembers that fall more clearly than its birth."
+        ]
+      },
+
+      sanctified: {
+        single: [
+          "In time, however, powers of light claimed it, reshaping its purpose in quiet defiance of the will that first forged it.",
+          "Through trial, prayer, or sacrifice, its dark origin was overwritten by a gentler calling.",
+          "Though born of wicked hands, the item was later turned toward mercy and light."
+        ],
+        group: [
+          "Through long effort and shared sacrifice, its cruel origins were scoured away and replaced with new purpose.",
+          "What the group made for darkness was later unmade and reforged in the image of redemption.",
+          "The united wicked will that shaped it was ultimately overturned by a higher, brighter calling."
+        ]
+      }
+    };
+
+    let sentence2;
+
+    if (itemState === "aligned") {
+      sentence2 = randomFrom(
+        STATE_SENTENCE2.aligned[originAxis][creator.size]
+      );
+    } else if (itemState === "corrupted") {
+      sentence2 = randomFrom(
+        STATE_SENTENCE2.corrupted[creator.size]
+      );
+    } else if (itemState === "sanctified") {
+      sentence2 = randomFrom(
+        STATE_SENTENCE2.sanctified[creator.size]
+      );
+    } else {
+      sentence2 = "Over the years, its true nature has grown tangled in conflicting tales and half-remembered prayers.";
+    }
+
+    return sentence1 + " " + sentence2;
+  }
+
+  // ---------------------------
+  //  Q1: generateCreatorOrigin()
+  // ---------------------------
+
+  function generateCreatorOrigin() {
+    const originAxis = pickRandomOriginAxis();
+    const creator = pickCreatorForAxis(originAxis);
+
+    if (!creator) {
+      return {
+        originAxis: originAxis,
+        itemAxis: originAxis,
+        itemState: "aligned",
+        creator: null,
+        text: "No suitable creator or commissioner could be found.",
+        transformation: null
+      };
+    }
+
+    const alignmentInfo = determineItemAlignment(originAxis, creator.tags);
+    const itemAxis = alignmentInfo.itemAxis;
+    const itemState = alignmentInfo.itemState;
+    const text = buildCreatorSentences(originAxis, itemAxis, itemState, creator);
+
+    const transformation = pickTransformationDetails(
+      itemState,
+      originAxis,
+      itemAxis,
+      creator
+    );
+
+    return {
+      originAxis: originAxis,
+      itemAxis: itemAxis,
+      itemState: itemState,
+      creator: creator,
+      text: text,
+      transformation: transformation
+    };
+  }
+
+  // ---------------------------
+  //  Q2: HISTORY VARIATION TABLES
+  // ---------------------------
+
+  const HISTORY_OPENERS = {
+    goodAligned: [
+      "Over the years, the item passed through worthy hands, appearing at the edges of stories about hard-won victories and narrow escapes.",
+      "In old chronicles, the item appears whenever desperate defenses somehow held just long enough for help to arrive.",
+      "Ballads and battle accounts alike mention the item in passing, often at moments when courage refused to yield."
+    ],
+    evilAligned: [
+      "In most accounts, the item surfaces in the wake of misfortune, its presence marking moments when events took a darker turn.",
+      "Tax records, casualty lists, and hushed confessions alike place the item near calamities no one wishes to revisit.",
+      "Wherever rumors of sudden ruin collect, the item’s name is never far behind, like a stain that will not wash out."
+    ]
+  };
+
+  const EVENT_SENTENCES = {
+    both: [
+      "Chroniclers argue whether it brought more salvation or suffering in the end, for it turned the tide of blessings and disasters in equal measure.",
+      "Debates in lecture halls and taverns alike circle back to the same puzzle: did the item save more lives than it cost?",
+      "Some claim the item merely magnifies what is already present, pointing to a history filled with both miracles and catastrophes."
+    ],
+    weal: [
+      "Those who study old campaigns credit the item with turning the tide of at least one desperate battle in favor of the innocent.",
+      "Records of near-impossible victories often include a curious note about an unnamed relic that shone brighter when hope was fading.",
+      "Local legends attribute an unlikely number of last-minute rescues and reversals of fortune to the item’s quiet influence."
+    ],
+    woe: [
+      "In hushed tones, historians blame it for at least one tragedy that scarred an entire region.",
+      "Discreet reports link the item to disasters that official records prefer to call ‘unavoidable’ or ‘unforeseen’.",
+      "Whenever people mutter about towns that vanished or armies that broke without warning, the item’s name eventually surfaces."
+    ]
+  };
+
+  const FATE_SENTENCES = {
+    lostAndSought: [
+      "For a long span it was believed lost or destroyed, yet powerful factions still quietly search for any trace that the item might have survived.",
+      "Officially the item no longer exists; unofficially, there is a small industry devoted to proving that claim wrong.",
+      "The more confidently scholars declare it gone forever, the more coin changes hands in shadowed corners to find it again."
+    ],
+    lostOnly: [
+      "Most accounts insist the item was lost or destroyed long ago, though doubt lurks between the lines of those reports.",
+      "Archivists mark the item as ‘presumed destroyed’, but the question mark next to the date has never been erased.",
+      "Stories agree on the disaster that supposedly ended the item’s tale, but disagree suspiciously on exactly what became of it."
+    ],
+    soughtOnly: [
+      "Despite the dangers attached to its name, collectors and ambitious powers alike continue to hunt for where it might have gone.",
+      "Maps, coded letters, and half-burned journals all hint that someone, somewhere, is always searching for the item.",
+      "The price offered for credible news of its whereabouts has risen with each generation, drawing in hunters of every stripe."
+    ]
+  };
+
+  const RUMOR_PROPHECY_SENTENCES = {
+    both_corrupted: [
+      "Tavern tales and half-forgotten prophecies alike warn that if it resurfaces in the hands of the wrong bearer, an old disaster may play itself out once more.",
+      "Street whispers and apocalyptic sermons agree on one thing: the item should never again answer a cruel will.",
+      "Some say the next time the item is raised in anger, the world will not be as forgiving as it was the last time."
+    ],
+    both_other: [
+      "Quiet rumors and obscure prophecies both suggest that the item is fated to appear again when the balance of the age wavers.",
+      "Priests and hedge-seers alike hint that the item is tied to some turning point yet to come.",
+      "Scattered visions and cryptic verses point to the item as a hinge on which a future age may quietly turn."
+    ],
+    rumorsOnly: [
+      "Common folk embroider the story with rumors, insisting it brings uncanny fortune or calamity to those who claim it.",
+      "Every region touched by its legend has its own version of the tale, none of them quite agreeing on whether it is a blessing or a curse.",
+      "Children dare each other to repeat the item’s name at night, as if expecting something to answer from the dark."
+    ],
+    prophecyOnly: [
+      "Esoteric texts hint at a prophecy that places the item at the center of some future turning point, though details are frustratingly vague.",
+      "A handful of obscure prophetic fragments seem to describe the item obliquely, as if even the seers were wary of naming it outright.",
+      "Among certain circles, it is quietly accepted that the item has not finished its part in the world’s unfolding story."
+    ]
+  };
+
+  // ---------------------------
+  //  Q2: generateItemHistory()
+  // ---------------------------
+
+  function buildAlignedHooks(originAxis, creator) {
+    const isGroup = creator.size === "group";
+
+    return {
+      linkedToNotoriousIndividual: !isGroup,
+      linkedToNotoriousGroup: isGroup,
+      eventOfWeal: originAxis === "good",
+      eventOfWoe: originAxis === "evil",
+      thoughtLostOrDestroyed: Math.random() < 0.5,
+      activelySoughtByNotorious: true,
+      hasRumors: true,
+      hasProphecy: Math.random() < 0.3
+    };
+  }
+
+  function mergeHooks(a, b) {
+    const result = {};
+    const keys = [
+      "linkedToNotoriousIndividual",
+      "linkedToNotoriousGroup",
+      "eventOfWeal",
+      "eventOfWoe",
+      "thoughtLostOrDestroyed",
+      "activelySoughtByNotorious",
+      "hasRumors",
+      "hasProphecy"
+    ];
+    for (let i = 0; i < keys.length; i++) {
+      const k = keys[i];
+      result[k] = !!(a && a[k]) || !!(b && b[k]);
+    }
+    return result;
+  }
+
+  function buildNotorietySentence(itemAxis, hooks) {
+    if (!hooks.linkedToNotoriousIndividual && !hooks.linkedToNotoriousGroup) {
+      return null;
+    }
+
+    const isGood = itemAxis === "good";
+
+    if (hooks.linkedToNotoriousIndividual && hooks.linkedToNotoriousGroup) {
+      return isGood
+        ? "Legends tie it to a famed champion and the order that once rode beside them, each leaving their mark on the tales told of the item."
+        : "The item’s grim reputation is bound up with a feared warlord and the ruthless company that followed their banner.";
+    }
+
+    if (hooks.linkedToNotoriousIndividual) {
+      return isGood
+        ? "Many stories center on a single renowned bearer whose deeds elevated the item to near-mythic status."
+        : "Whispered accounts speak of a singular villain whose atrocities etched the item’s name into history.";
+    }
+
+    return isGood
+      ? "Its name often appears in chronicles of a storied order, cited whenever their greatest victories are recounted."
+      : "The item is closely associated with a secretive cabal, mentioned in the margins of inquisitorial records and suppressed histories alike.";
+  }
+
+  function buildEventSentence(hooks) {
+    const weal = hooks.eventOfWeal;
+    const woe = hooks.eventOfWoe;
+
+    if (weal && woe) {
+      return randomFrom(EVENT_SENTENCES.both);
+    }
+    if (weal) {
+      return randomFrom(EVENT_SENTENCES.weal);
+    }
+    if (woe) {
+      return randomFrom(EVENT_SENTENCES.woe);
+    }
+    return null;
+  }
+
+  function buildFateSentence(hooks) {
+    const lost = hooks.thoughtLostOrDestroyed;
+    const sought = hooks.activelySoughtByNotorious;
+
+    if (lost && sought) {
+      return randomFrom(FATE_SENTENCES.lostAndSought);
+    }
+    if (lost) {
+      return randomFrom(FATE_SENTENCES.lostOnly);
+    }
+    if (sought) {
+      return randomFrom(FATE_SENTENCES.soughtOnly);
+    }
+    return null;
+  }
+
+  function buildRumorProphecySentence(hooks, itemState) {
+    const hasRumors = hooks.hasRumors;
+    const hasProphecy = hooks.hasProphecy;
+
+    if (!hasRumors && !hasProphecy) return null;
+
+    if (hasRumors && hasProphecy) {
+      if (itemState === "corrupted") {
+        return randomFrom(RUMOR_PROPHECY_SENTENCES.both_corrupted);
+      }
+      return randomFrom(RUMOR_PROPHECY_SENTENCES.both_other);
+    }
+
+    if (hasRumors) {
+      return randomFrom(RUMOR_PROPHECY_SENTENCES.rumorsOnly);
+    }
+
+    // hasProphecy only
+    return randomFrom(RUMOR_PROPHECY_SENTENCES.prophecyOnly);
+  }
+
+  function generateItemHistory(originData) {
+    if (!originData || !originData.creator) {
+      return {
+        text: "Little is known of the item’s history beyond scattered, unreliable tales.",
+        hooks: {}
+      };
+    }
+
+    const originAxis = originData.originAxis;
+    const itemAxis = originData.itemAxis;
+    const itemState = originData.itemState;
+    const creator = originData.creator;
+    const transformation = originData.transformation;
+
+    let baseHooks;
+    if (transformation) {
+      baseHooks = transformation.hooks || {};
+    } else {
+      baseHooks = buildAlignedHooks(originAxis, creator);
+    }
+
+    const finalHooks = mergeHooks(baseHooks, null);
+
+    const sentences = [];
+
+    if (transformation && transformation.summary) {
+      sentences.push(transformation.summary);
+    } else {
+      if (originAxis === "good") {
+        sentences.push(randomFrom(HISTORY_OPENERS.goodAligned));
+      } else {
+        sentences.push(randomFrom(HISTORY_OPENERS.evilAligned));
+      }
+    }
+
+    const notorietySentence = buildNotorietySentence(itemAxis, finalHooks);
+    if (notorietySentence) sentences.push(notorietySentence);
+
+    const eventSentence = buildEventSentence(finalHooks);
+    if (eventSentence) sentences.push(eventSentence);
+
+    const fateSentence = buildFateSentence(finalHooks);
+    if (fateSentence) sentences.push(fateSentence);
+
+    const rpSentence = buildRumorProphecySentence(finalHooks, itemState);
+    if (rpSentence) sentences.push(rpSentence);
+
+    const text = sentences.join(" ");
+
+    return {
+      text: text,
+      hooks: finalHooks
+    };
+  }
+
+  // ---------------------------
+  //  Q3: generateItemLocation()
+  // ---------------------------
+
+  const BASE_LOCATIONS = {
+    goodAligned: [
+      {
+        id: "clifftop_monastery",
+        category: "sacred",
+        templates: [
+          "The last reliable accounts place it in a storm-battered monastery perched on a cliff above the sea.",
+          "It was last known to rest in a remote hillside abbey where the wind never quite falls silent.",
+          "Old records suggest the item lies sealed beneath the altar of a mountain shrine reached only by narrow goat paths."
+        ]
+      },
+      {
+        id: "hero_tomb",
+        category: "tomb",
+        templates: [
+          "Some say it lies entombed with its final heroic bearer in a barrow hidden beneath an overgrown hillside.",
+          "It is rumored to rest in a mausoleum dedicated to forgotten champions, locked behind rusting gates of iron.",
+          "The last mention describes it being interred with honors in a crypt deep under a ruined cathedral."
+        ]
+      }
+      // ADD MORE GOOD-ALIGNED BASE LOCATIONS HERE
+    ],
+    evilAligned: [
+      {
+        id: "cabal_redoubt",
+        category: "lair",
+        templates: [
+          "The last leads point toward a fortified redoubt once used by a secretive cabal in a city’s underbelly.",
+          "Rumor has it the item was locked away in a warded vault beneath a den of criminals and hired blades.",
+          "The trail ends at a cluster of safehouses along a smuggler’s coast, any one of which might conceal it."
+        ]
+      },
+      {
+        id: "cursed_ruins",
+        category: "ruin",
+        templates: [
+          "Most who track the story agree it vanished somewhere within the cursed ruins of a sacked stronghold.",
+          "Its name is now tied to a blighted battlefield where nothing healthy grows and the air tastes like old iron.",
+          "The last expedition to seek it disappeared inside a toppled fortress, leaving only charred camp remains outside the walls."
+        ]
+      }
+      // ADD MORE EVIL-ALIGNED BASE LOCATIONS HERE
+    ],
+    corrupted: [
+      {
+        id: "sealed_sanctum",
+        category: "sealed",
+        templates: [
+          "Scholars suspect it was locked away in a sealed sanctum whose doors were never meant to open again.",
+          "The final references speak of it being chained within a hidden chamber, circles of broken wards etched into the floor.",
+          "One account claims the item was entombed in a vault of black stone, its entrance buried beneath deliberate rubble."
+        ]
+      },
+      {
+        id: "sunken_site",
+        category: "sunken",
+        templates: [
+          "Some insist the site that once held it sank beneath dark waters after a calamity no one now recalls clearly.",
+          "Old maps and half-burned notes suggest its resting place lies under a lake formed by the collapse of a dam.",
+          "A few daring explorers say the ruins that sheltered it were swallowed by a bog that gurgles like a dying thing."
+        ]
+      }
+      // ADD MORE CORRUPTED-ITEM LOCATIONS HERE
+    ],
+    sanctified: [
+      {
+        id: "reliquary",
+        category: "reliquary",
+        templates: [
+          "Most modern accounts place it in a guarded reliquary, its once-dark surface now ringed with votive candles.",
+          "It is said to rest within a sanctified vault lined with offerings from those who claim its touch aided them.",
+          "The item reportedly lies cradled in a crystal case at the heart of a modest shrine, visited by quiet pilgrims."
+        ]
+      },
+      {
+        id: "hidden_hermitage",
+        category: "hermitage",
+        templates: [
+          "Some whisper that a reclusive mystic keeps it hidden in a remote hermitage, far from any altar or banner.",
+          "The trail ends at mention of a half-forgotten retreat in the hills, where a handful of wardens guard something they rarely speak of.",
+          "A few scattered notes hint that a wandering ascetic bears the item in secret, resting only in wayside shrines known to few."
+        ]
+      }
+      // ADD MORE SANCTIFIED-ITEM LOCATIONS HERE
+    ]
+  };
+
+  function pickBaseLocation(itemAxis, itemState) {
+    let key;
+    if (itemState === "corrupted") {
+      key = "corrupted";
+    } else if (itemState === "sanctified") {
+      key = "sanctified";
+    } else {
+      key = itemAxis === "good" ? "goodAligned" : "evilAligned";
+    }
+
+    const choices = BASE_LOCATIONS[key];
+    if (!choices || choices.length === 0) return null;
+    const entry = randomFrom(choices);
+    const template = randomFrom(entry.templates);
+
+    return {
+      id: entry.id,
+      category: entry.category,
+      text: template
+    };
+  }
+
+  function buildLocationFateTail(itemAxis, itemState, hooks) {
+    const lost = hooks.thoughtLostOrDestroyed;
+    const sought = hooks.activelySoughtByNotorious;
+    const byGroup = hooks.linkedToNotoriousGroup;
+    const byIndividual = hooks.linkedToNotoriousIndividual;
+
+    const tails = [];
+
+    if (lost && sought) {
+      tails.push(
+        "Most believe the site itself to be compromised or collapsed, yet determined seekers still comb the region for any remaining way in."
+      );
+    } else if (lost) {
+      tails.push(
+        "If the reports are true, the place that once held it has long since fallen into ruin, and its exact resting spot is now a matter of conjecture."
+      );
+    } else if (sought) {
+      tails.push(
+        "Various factions quietly circulate maps and half-legible notes, hoping to reach it before anyone else does."
+      );
+    }
+
+    if (byGroup && !byIndividual) {
+      tails.push(
+        itemAxis === "good"
+          ? "The order associated with the item claims to have secured the area, but their records are frustratingly incomplete."
+          : "The cabal rumored to have used the item is said to keep eyes on the region, watching for interlopers."
+      );
+    } else if (byIndividual && !byGroup) {
+      tails.push(
+        itemAxis === "good"
+          ? "Stories of its last bearer sometimes point would-be seekers toward the surrounding lands, but never with much detail."
+          : "Those who knew its last notorious wielder hint that clues to the site can be found in the paths they favored."
+      );
+    }
+
+    if (tails.length === 0) return null;
+    return tails.join(" ");
+  }
+
+  function generateItemLocation(originData, historyData) {
+    if (!originData) {
+      return {
+        text: "No reliable accounts mention where the item might be now.",
+        category: "unknown",
+        secrecy: "obscure",
+        baseId: null
+      };
+    }
+
+    const itemAxis = originData.itemAxis;
+    const itemState = originData.itemState;
+    const hooks = (historyData && historyData.hooks) ? historyData.hooks : {};
+
+    const base = pickBaseLocation(itemAxis, itemState);
+    if (!base) {
+      return {
+        text: "No reliable accounts mention where the item might be now.",
+        category: "unknown",
+        secrecy: "obscure",
+        baseId: null
+      };
+    }
+
+    const tail = buildLocationFateTail(itemAxis, itemState, hooks);
+    const text = tail ? base.text + " " + tail : base.text;
+
+    let secrecy = "rumored";
+    if (hooks.thoughtLostOrDestroyed && !hooks.activelySoughtByNotorious) {
+      secrecy = "obscure";
+    } else if (hooks.activelySoughtByNotorious && !hooks.thoughtLostOrDestroyed) {
+      secrecy = "well_known";
+    }
+
+    return {
+      text: text,
+      category: base.category,
+      secrecy: secrecy,
+      baseId: base.id
+    };
+  }
+
+  // ---------------------------
+  //  Q4: generateItemWitness()
+  // ---------------------------
+
+  const WITNESS_BASE = {
+    good: {
+      aligned: [
+        {
+          id: "temple_historian",
+          alignment: "good",
+          role: "temple historian",
+          templates: [
+            "A cautious temple historian knows more than they will put to parchment, keeping the most troubling details locked behind a weary smile.",
+            "An aging chronicler of a local shrine has pieced together an unnerving number of references to the item across old battle reports.",
+            "A soft-spoken archivist in a cloistered library has long suspected the item’s story underlies several supposedly unrelated legends."
+          ]
+        },
+        {
+          id: "order_veteran",
+          alignment: "good",
+          role: "retired knight of the order",
+          templates: [
+            "A retired knight of the order that once bore the item still carries memories they share only with those they judge worthy.",
+            "One weathered veteran of forgotten campaigns can describe the item’s glow on the battlefield as if they saw it yesterday.",
+            "A grizzled guardian in simple clothes watches the shrine’s doorway with the quiet vigilance of someone who has seen what the item can do."
+          ]
+        }
+        // ADD MORE GOOD-ALIGNED, ALIGNED-STATE WITNESSES HERE
+      ],
+      corrupted: [
+        {
+          id: "penitent_scholar",
+          alignment: "good",
+          role: "penitent scholar",
+          templates: [
+            "A penitent scholar in a remote cloister studies the item’s fall as a warning, their notes full of crossed-out names and second thoughts.",
+            "A grey-robed historian who once approved the item’s use now catalogues every sign of its corruption with grim determination.",
+            "An anxious lorekeeper, haunted by the part their order played in its downfall, has sworn to guide any would-be bearer more carefully."
+          ]
+        }
+        // ADD MORE GOOD-ORIGIN, CORRUPTED-STATE WITNESSES HERE
+      ],
+      sanctified: [
+        {
+          id: "radiant_chronicler",
+          alignment: "good",
+          role: "radiant chronicler",
+          templates: [
+            "A radiant chronicler of miracles keeps a thin, well-thumbed volume devoted solely to the item’s unlikely redemption.",
+            "A bright-eyed acolyte can recount, almost word for word, the liturgy that marks the night the item’s nature was changed.",
+            "An elderly priest, more amused than awed, tells how something once feared became a symbol of second chances."
+          ]
+        }
+        // (Normally unused: sanctified requires evil origin; kept for completeness.)
+      ]
+    },
+    evil: {
+      aligned: [
+        {
+          id: "blackmarket_broker",
+          alignment: "neutral",
+          role: "black-market broker",
+          templates: [
+            "A black-market broker with too many rings and too few scruples has quietly collected rumors and buyers’ names attached to the item.",
+            "A fixer who arranges meetings in smoke-filled back rooms knows which coin purses twitch at the mention of the item.",
+            "A smiling information dealer in the worst part of town can list, from memory, every bloody deal the item is said to have sweetened."
+          ]
+        },
+        {
+          id: "cabal_astrologer",
+          alignment: "evil",
+          role: "cabal astrologer",
+          templates: [
+            "An astrologer once in service to a secretive cabal tracks the item’s appearances through cryptic conjunctions and eclipses.",
+            "A hooded seer who reads omens in spilled blood claims the item’s shadow still falls across their visions.",
+            "A reclusive diviner, dismissed from their coven, insists that every major misfortune in the region carries the item’s faint signature."
+          ]
+        }
+        // ADD MORE EVIL-ALIGNED, ALIGNED-STATE WITNESSES HERE
+      ],
+      corrupted: [
+        {
+          id: "grim_inquisitor",
+          alignment: "lawful_good",
+          role: "grim inquisitor",
+          templates: [
+            "A grim inquisitor has built an entire casefile around the item, treating it as both evidence and suspect.",
+            "A hard-eyed investigator for a distant temple considers the item a missing piece in a chain of tragedies they are sworn to end.",
+            "An uncompromising agent of a holy order carries sketches and notes about the item, each marked with warnings in red ink."
+          ]
+        }
+        // (Normally unused: corrupted requires good origin; kept for flexibility.)
+      ],
+      sanctified: [
+        {
+          id: "cleansing_witness",
+          alignment: "good",
+          role: "witness of the cleansing",
+          templates: [
+            "A tired but satisfied exorcist can recount in meticulous detail the rite that stripped the item of much of its original malice.",
+            "One of the officiants who presided over its sanctification still wakes from dreams in which the item resists their prayers.",
+            "A once-shadowed priest now speaks calmly of the night the item’s aura shifted from hunger to hesitant warmth."
+          ]
+        }
+        // ADD MORE EVIL-ORIGIN, SANCTIFIED-STATE WITNESSES HERE
+      ]
+    }
+  };
+
+  function pickWitnessBase(originAxis, itemState, hooks) {
+    const axisGroup = WITNESS_BASE[originAxis];
+    if (!axisGroup) return null;
+
+    const stateKey = axisGroup[itemState] ? itemState : "aligned";
+    const candidates = axisGroup[stateKey];
+    if (!candidates || candidates.length === 0) return null;
+
+    const byGroup = hooks && hooks.linkedToNotoriousGroup;
+    if (byGroup && candidates.length > 1) {
+      const biased = candidates.slice(1);
+      if (biased.length > 0) {
+        return randomFrom(biased);
+      }
+    }
+
+    return randomFrom(candidates);
+  }
+
+  const WITNESS_LOCATION_TAILS = {
+    sacred: [
+      "They seldom leave the sacred grounds, insisting that the story of the item is safest told in hushed tones near consecrated stone.",
+      "They insist any serious discussion take place within the temple’s inner chambers, far from casual ears.",
+      "Their voice lowers whenever the item is mentioned, as though wary of disturbing something that still listens from the walls."
+    ],
+    tomb: [
+      "They warn that disturbing the resting place without proper rites would be an unkindness to both the dead and the living.",
+      "They carry a small key or token said to open only for those who show proper respect at the tomb.",
+      "Their memories of that crypt are precise, but they refuse to say whether they would ever go back there themselves."
+    ],
+    lair: [
+      "They advise that no one go near the site without allies they deeply trust, and even then only with a clear escape plan.",
+      "They describe the lair in clipped, practical terms, as if planning a raid they secretly hope will never happen.",
+      "Their hands shake slightly when recalling the sounds from that place, though they insist the worst of it is over."
+    ],
+    ruin: [
+      "They can sketch the ruins from memory, but admit that the surrounding landscape has shifted more than once since they last saw it.",
+      "They talk about the ruins as if they were a living thing that resents being mapped.",
+      "They caution that the ruin’s layout is never quite the same between visits, as though the stones themselves drift."
+    ],
+    sealed: [
+      "They claim to have seen the seals with their own eyes and are convinced breaking them would be a grave mistake.",
+      "They describe the sealing rites in unsettling detail, as if daring others to test whether they still hold.",
+      "They refuse to say who ordered the chamber sealed, muttering only that some names are safer forgotten."
+    ],
+    sunken: [
+      "They keep a stained chart of the waters locked away, taking it out only when pressed by desperate or foolish seekers.",
+      "They speak of the currents and hidden depths as if they were enemies that once nearly claimed them.",
+      "Their tale always ends with the same advice: if the item truly lies beneath those waters, perhaps it should stay there."
+    ],
+    reliquary: [
+      "They know the rotation of the reliquary’s guardians by heart, though they claim this is merely professional habit.",
+      "They insist the item is well-watched, yet their eyes keep drifting toward the door as if expecting someone to interrupt.",
+      "They hint that even within the reliquary, the item sometimes draws unexpected visitors from far away."
+    ],
+    hermitage: [
+      "They admit that finding the hermitage again would require following half-remembered paths and old instincts.",
+      "They speak fondly of the hermit who watches over the item, but never quite say how long it has been since they last met.",
+      "They suggest that those who truly need the item will be able to find the hermitage—eventually."
+    ],
+    default: [
+      "They know just enough to point you in a direction, though their expression suggests they might sleep better if you never went.",
+      "They admit their knowledge is second-hand, but the consistency of their story suggests deeper experience they will not share.",
+      "They seem torn between relief that someone else is asking and regret that the tale has not yet ended."
+    ]
+    // ADD MORE WITNESS LOCATION-TAIL VARIANTS PER CATEGORY HERE
+  };
+
+  function buildWitnessLocationTail(category, hooks) {
+    const list = WITNESS_LOCATION_TAILS[category] || WITNESS_LOCATION_TAILS.default;
+    if (!list || list.length === 0) return null;
+    return randomFrom(list);
+  }
+
+  function generateItemWitness(originData, historyData, locationData) {
+    if (!originData || !originData.creator) {
+      return {
+        text: "If anyone knows more of the item, their name has not survived in the tales you have found.",
+        role: "unknown",
+        alignment: "unknown",
+        id: null
+      };
+    }
+
+    const originAxis = originData.originAxis;
+    const itemState = originData.itemState;
+    const hooks = (historyData && historyData.hooks) ? historyData.hooks : {};
+    const category = locationData ? locationData.category : "unknown";
+
+    const base = pickWitnessBase(originAxis, itemState, hooks);
+    if (!base) {
+      return {
+        text: "There are hints of a nameless witness who knows more, but no clear description of who or where they might be found.",
+        role: "unknown",
+        alignment: "unknown",
+        id: null
+      };
+    }
+
+    const baseText = randomFrom(base.templates);
+    const tail = buildWitnessLocationTail(category, hooks);
+    const text = tail ? baseText + " " + tail : baseText;
+
+    return {
+      text: text,
+      role: base.role,
+      alignment: base.alignment,
+      id: base.id
+    };
+  }
+
+  // ---------------------------
+  //  UI WIRING
+  // ---------------------------
+
+  let lastOrigin = null;
+  let lastHistory = null;
+  let lastLocation = null;
+  let lastWitness = null;
+
+  function rollTraits() {
+    lastOrigin = generateCreatorOrigin();
+    lastHistory = generateItemHistory(lastOrigin);
+    lastLocation = generateItemLocation(lastOrigin, lastHistory);
+    lastWitness = generateItemWitness(lastOrigin, lastHistory, lastLocation);
+
+    const originEl = document.getElementById("originOutput");
+    const historyEl = document.getElementById("historyOutput");
+    const locationEl = document.getElementById("locationOutput");
+    const witnessEl = document.getElementById("witnessOutput");
+    const metaEl = document.getElementById("metaOutput");
+
+    originEl.textContent = lastOrigin.text || "";
+    historyEl.textContent = lastHistory.text || "";
+    locationEl.textContent = lastLocation.text || "";
+    witnessEl.textContent = lastWitness.text || "";
+
+    if (lastOrigin.creator) {
+      metaEl.textContent =
+        "Tone: " +
+        lastOrigin.originAxis +
+        "-aligned origin, item is " +
+        lastOrigin.itemAxis +
+        "-aligned (" +
+        lastOrigin.itemState +
+        ").";
+    } else {
+      metaEl.textContent = "";
+    }
+  }
+
+  function generateLoreParagraph() {
+    if (!lastOrigin) {
+      rollTraits();
+    }
+
+    const loreEl = document.getElementById("loreOutput");
+
+    const parts = [];
+    if (lastOrigin && lastOrigin.text) parts.push(lastOrigin.text);
+    if (lastHistory && lastHistory.text) parts.push(lastHistory.text);
+    if (lastLocation && lastLocation.text) parts.push(lastLocation.text);
+    if (lastWitness && lastWitness.text) parts.push(lastWitness.text);
+
+    loreEl.textContent = parts.join(" ");
+  }
+
+  document.getElementById("rollTraitsBtn").addEventListener("click", rollTraits);
+  document.getElementById("generateLoreBtn").addEventListener("click", generateLoreParagraph);
+
+})();
 </script>
+</body>
+</html>
