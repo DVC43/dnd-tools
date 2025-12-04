@@ -51,13 +51,6 @@
     margin-bottom:0.25rem;
   }
 
-  #item-lore-generator .lg-subtitle {
-    font-weight:bold;
-    margin-top:0.65rem;
-    margin-bottom:0.15rem;
-    font-size:0.95rem;
-  }
-
   /* Buttons – cloned from .rg-button style */
   #item-lore-generator .lg-button {
     display:block;
@@ -104,12 +97,6 @@
     line-height:1.45;
   }
 
-  #item-lore-generator .lg-card hr {
-    border:none;
-    border-top:1px solid #c0c0c0;
-    margin:0.5rem 0 0.55rem;
-  }
-
   #item-lore-generator .lg-output {
     margin:0.25rem 0;
     min-height:2.2em;
@@ -144,6 +131,7 @@
   <button id="rollTraitsBtn" class="lg-button">Roll Traits</button>
   <button id="generateLoreBtn" class="lg-button">Generate Lore Paragraph</button>
 
+  <!-- Q1: Creator / Intended User -->
   <div class="lg-panel">
     <div class="lg-section-title">Who Created It or Was Intended to Use It?</div>
     <div class="lg-card">
@@ -152,23 +140,31 @@
     </div>
   </div>
 
+  <!-- Q2: History -->
   <div class="lg-panel">
     <div class="lg-section-title">What are some details from the item's history?</div>
     <div class="lg-card">
       <div id="historyOutput" class="lg-output"></div>
+    </div>
+  </div>
 
-      <hr />
-
-      <div class="lg-subtitle">Last Known Location:</div>
+  <!-- Q3: Location -->
+  <div class="lg-panel">
+    <div class="lg-section-title">Last Known Location</div>
+    <div class="lg-card">
       <div id="locationOutput" class="lg-output"></div>
+    </div>
+  </div>
 
-      <hr />
-
-      <div class="lg-subtitle">NPC Who Knows About It:</div>
+  <!-- Q4: NPC -->
+  <div class="lg-panel">
+    <div class="lg-section-title">NPC Who Knows About It</div>
+    <div class="lg-card">
       <div id="witnessOutput" class="lg-output"></div>
     </div>
   </div>
 
+  <!-- Combined Lore -->
   <div class="lg-panel">
     <div class="lg-section-title">Item Lore</div>
     <div class="lg-card">
@@ -179,7 +175,7 @@
     </div>
   </div>
 </div>
-
+  
 <script>
 (function () {
   "use strict";
