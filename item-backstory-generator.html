@@ -305,6 +305,7 @@
     wisdom:     { tone: "good" },
     healing:    { tone: "good" },
     mercy:      { tone: "good" },
+    celestial:  { tone: "good" },
 
     // evil-leaning tags
     corruption: { tone: "evil" },
@@ -313,6 +314,7 @@
     deceit:     { tone: "evil" },
     profane:    { tone: "evil" },
     criminal:   { tone: "evil" },
+    war:        { tone: "evil" },
 
     // neutral tags
     arcane:     { tone: "neutral" },
@@ -321,11 +323,7 @@
     travel:     { tone: "neutral" },
     forest:     { tone: "neutral" },
     trade:      { tone: "neutral" },
-    eldritch:   { tone: "neutral" },
-
-    // example bridge tags
-    celestial:  { tone: "good" },
-    war:        { tone: "evil" }
+    eldritch:   { tone: "neutral" }    
 
     // ADD MORE TAG DEFINITIONS HERE
   };
@@ -422,6 +420,10 @@
         "to guide the worthy with quiet insight",
         "to preserve hard-won wisdom in steel and spell"
       ],
+      celestial: [
+        "to mete out divine justice",
+        "to fulfill divine prophecy",
+      ],
       // ADD MORE GOOD-AXIS TAG MOTIVATIONS HERE
       _fallback: [
         "to aid those who stand against the darkness",
@@ -462,24 +464,77 @@
         "to further their own ruthless ambitions",
         "to remake the world in their own grim image"
       ]
-    }
+    },
+    neutral: {
+    arcane: [
+      "to explore the boundaries of practical spellcraft",
+      "to test theories that could not be proven on parchment alone",
+      "to serve as a stable vessel for volatile magical forces"
+    ],
+    knowledge: [
+      "to preserve discoveries too dangerous to forget",
+      "to act as a living record of hard-won insight",
+      "to anchor secrets that would otherwise be lost to time"
+    ],
+    craft: [
+      "to demonstrate a new technique or material",
+      "to push the limits of mortal workmanship",
+      "as the culmination of a master artisan’s life work"
+    ],
+    travel: [
+      "to survive roads no ordinary tool could endure",
+      "to chart passages thought unreachable",
+      "to accompany expeditions beyond the edges of reliable maps"
+    ],
+    trade: [
+      "to secure favorable exchanges across hostile borders",
+      "to stabilize commerce in regions where coin alone is not trusted",
+      "to act as a guarantor in dealings too large for promises alone"
+    ],
+    forest: [
+      "to harmonize mortal industry with untamed land",
+      "to observe how crafted magic ages in wild places",
+      "to bridge the work of civilization and the patience of nature"
+    ],
+    eldritch: [
+      "to study forces that resist ordinary classification",
+      "to anchor phenomena that cannot safely exist unaided",
+      "to observe what happens when reason is bent, but not quite broken"
+    ],
+    _fallback: [
+      "to serve a purpose best left unnamed in formal records",
+      "to fulfill a design understood only by its original makers",
+      "to test a theory whose consequences were deliberately left uncertain"
+    ]
+   }
   };
 
   function buildMotivationClause(originAxis, tags) {
-    const axisTable = TAG_MOTIVATIONS[originAxis] || {};
-    for (let i = 0; i < tags.length; i++) {
-      const tag = tags[i];
-      if (axisTable[tag]) {
-        return randomFrom(axisTable[tag]);
-      }
-    }
-    const fallback = axisTable._fallback || [
+
+  // 1. Try origin-aligned moral motivations first
+  const axisTable = TAG_MOTIVATIONS[originAxis] || {};
+  for (let tag of tags) {
+    if (axisTable[tag]) return randomFrom(axisTable[tag]);
+  }
+
+  // 2. Try neutral motivations second
+  const neutralTable = TAG_MOTIVATIONS.neutral || {};
+  for (let tag of tags) {
+    if (neutralTable[tag]) return randomFrom(neutralTable[tag]);
+  }
+
+  // 3. Fallback
+  const fallback =
+    axisTable._fallback ||
+    neutralTable._fallback || [
       originAxis === "good"
         ? "to aid those who stand against the darkness"
         : "to further their own ruthless ambitions"
     ];
+
     return randomFrom(fallback);
   }
+
 
   // ---------------------------
   //  TEXT HELPERS
