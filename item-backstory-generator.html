@@ -153,7 +153,7 @@
 
   <!-- Public Reputation -->
   <div class="lg-panel">
-    <div class="lg-section-title">Common Reputation</div>
+    <div class="lg-section-title">Common Reputation?</div>
     <div class="lg-card">
       <div id="reputationOutput" class="lg-output"></div>
     </div>
@@ -161,7 +161,7 @@
 
   <!-- Current Power State -->
   <div class="lg-panel">
-    <div class="lg-section-title">Current Power State</div>
+    <div class="lg-section-title">Current Item State?</div>
     <div class="lg-card">
       <div id="powerStateOutput" class="lg-output"></div>
     </div>
@@ -1937,12 +1937,12 @@
     const parts = [];
     if (lastOrigin && lastOrigin.text) parts.push(lastOrigin.text);
     if (lastHistory && lastHistory.text) parts.push(lastHistory.text);
-    if (lastLocation && lastLocation.text) parts.push(lastLocation.text);
     if (lastReputation && lastReputation.text) parts.push(lastReputation.text);
+    if (lastPowerState && lastPowerState.text) parts.push(lastPowerState.text);
+    if (lastLocation && lastLocation.text) parts.push(lastLocation.text);
     if (lastWitness && lastWitness.text) parts.push(lastWitness.text);
     if (lastDestroyer && lastDestroyer.text)   parts.push(lastDestroyer.text);
-    if (lastPowerState && lastPowerState.text) parts.push(lastPowerState.text);
-
+    
     parts.forEach(text => {
       const p = document.createElement("p");
       p.textContent = text;
