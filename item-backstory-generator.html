@@ -1932,6 +1932,7 @@
     }
 
     const loreEl = document.getElementById("loreOutput");
+    loreEl.innerHTML = ""; // clear previous output
 
     const parts = [];
     if (lastOrigin && lastOrigin.text) parts.push(lastOrigin.text);
@@ -1942,7 +1943,11 @@
     if (lastDestroyer && lastDestroyer.text)   parts.push(lastDestroyer.text);
     if (lastPowerState && lastPowerState.text) parts.push(lastPowerState.text);
 
-    loreEl.textContent = parts.join(" ");
+    parts.forEach(text => {
+      const p = document.createElement("p");
+      p.textContent = text;
+      loreEl.appendChild(p);
+    });
   }
 
   document.getElementById("rollTraitsBtn").addEventListener("click", rollTraits);
