@@ -123,9 +123,12 @@
 </head>
 <body>
 <div id="item-lore-generator" class="parchment-table">
-  <h2>Magic Item Trait Generator</h2>
+  <h2>Magic Item Background Generator</h2>
   <p class="note">
     Discover details about an odd trinket, magical item, or dusty curio.
+    <br>
+    <br>
+    Details provided are suggestions, and can be used in part or in whole.  Always adjust to fit your table’s tone and tier of play.
   </p>
 
   <button id="rollTraitsBtn" class="lg-button">Roll Traits</button>
@@ -155,6 +158,14 @@
       <div id="reputationOutput" class="lg-output"></div>
     </div>
   </div>
+
+  <!-- Current Power State -->
+  <div class="lg-panel">
+    <div class="lg-section-title">Current Power State</div>
+    <div class="lg-card">
+      <div id="powerStateOutput" class="lg-output"></div>
+    </div>
+  </div>
   
   <!-- Q3: Location -->
   <div class="lg-panel">
@@ -172,6 +183,14 @@
     </div>
   </div>
 
+  <!-- Who Wants It Destroyed -->
+  <div class="lg-panel">
+    <div class="lg-section-title">Who Wants It Destroyed?</div>
+    <div class="lg-card">
+      <div id="destroyerOutput" class="lg-output"></div>
+    </div>
+  </div>
+  
   <!-- Combined Lore -->
   <div class="lg-panel">
     <div class="lg-section-title">Item Lore</div>
@@ -1153,6 +1172,290 @@
     };
   }
 
+  // ---------------------------
+  //  WHO WANTS IT DESTROYED?
+  // ---------------------------
+  // Profiles keyed by itemAxis + itemState:
+  //   "good_aligned", "good_sanctified", "evil_aligned", "evil_corrupted"
+  // plus a "fallback".
+  //
+  // Each entry is a small faction / group that would prefer the item be
+  // unmade, sealed forever, or erased from history.
+
+  const DESTROY_FACTIONS = {
+    good_aligned: [
+      {
+        id: "cautious_synod",
+        alignment: "good",
+        role: "cautious synod of priests",
+        templates: [
+          "A cautious synod of priests quietly argues that no relic should wield so much unaccountable influence, and they press for the item to be dismantled or sealed away for good.",
+          "Within the faith, a conservative council insists the item’s power encourages reckless reliance on miracles and should be ritually unmade before it teaches the wrong lessons.",
+          "A circle of theologians advocates for locking the item in a lightless vault, claiming that even benevolent relics distort mortal responsibility."
+        ]
+      },
+      {
+        id: "jealous_order",
+        alignment: "good",
+        role: "jealous knightly order",
+        templates: [
+          "A jealous knightly order that never received the item’s blessing campaigns to have it 'safely retired', by which they mean destroyed under their supervision.",
+          "An order of sanctified champions resents how legends center on the item instead of their vows, and some among them call for its destruction to refocus devotion on people, not tools."
+        ]
+      }
+      // ADD MORE good_aligned DESTRUCTION FACTIONS HERE
+    ],
+
+    good_sanctified: [
+      {
+        id: "purist_inquisition",
+        alignment: "lawful_good",
+        role: "purist inquisition",
+        templates: [
+          "A purist inquisition rejects the very idea of redeeming a wicked relic and pushes for the item to be shattered so thoroughly that no trace of its original stain survives.",
+          "Hardline inquisitors maintain that the item’s sanctification was a mistake and campaign to see it cast into consecrated fire until nothing but harmless ash remains.",
+          "Among the most severe clergy, there is a faction that regards the item as a ticking blasphemy and seeks to erase both it and the story of its redemption."
+        ]
+      },
+      {
+        id: "ashkeep_order",
+        alignment: "neutral_good",
+        role: "Order of the Ashkeep",
+        templates: [
+          "The Order of the Ashkeep, a sect devoted to burning away cursed things, quietly includes the item on a short list of relics they believe 'did not burn long enough'.",
+          "Ashkeeps—wandering purifiers who specialize in unmaking dangerous magic—have long whispered that the item’s story should end in smoke, not incense."
+        ]
+      }
+      // ADD MORE good_sanctified DESTRUCTION FACTIONS HERE
+    ],
+
+    evil_aligned: [
+      {
+        id: "radiant_crusade",
+        alignment: "good",
+        role: "radiant crusade",
+        templates: [
+          "A radiant crusade has standing orders to unmake the item wherever it appears, treating its destruction as a holy victory equal to felling a demon or burning a nest of cultists.",
+          "An alliance of temples maintains a sealed writ authorizing any agent to risk life and limb to see the item destroyed, no questions asked afterward.",
+          "A band of relic-breakers sponsored by several good-aligned churches has marked the item as a priority target, hoping to end a long line of tragedies at its source."
+        ]
+      },
+      {
+        id: "pragmatic_cabal",
+        alignment: "neutral",
+        role: "pragmatic cabal",
+        templates: [
+          "A pragmatic cabal of mages wants the item destroyed not out of morality, but because its unpredictable influence interferes with their own carefully balanced schemes.",
+          "Certain crime lords would rather see the item erased from the board entirely than risk it falling into a rival’s hands, and they have quietly funded efforts to locate and destroy it."
+        ]
+      }
+      // ADD MORE evil_aligned DESTRUCTION FACTIONS HERE
+    ],
+
+    evil_corrupted: [
+      {
+        id: "remorseful_order",
+        alignment: "good",
+        role: "remorseful order",
+        templates: [
+          "The very order that once hailed the item as a blessing now treats it as a shameful mistake and dispatches small, desperate bands to find and destroy it wherever rumor places it.",
+          "A fellowship of repentant veterans, haunted by what the corrupted relic did in their hands, has sworn to track it down and end its story at any cost.",
+          "Those who survived its last catastrophe meet in secret, sharing information and quietly funding anyone who promises to break the item beyond repair."
+        ]
+      },
+      {
+        id: "void_scholars",
+        alignment: "neutral",
+        role: "order of void-scholars",
+        templates: [
+          "An order of void-scholars insists the item has become a metaphysical hazard and advocates casting it into places where even magic cannot easily retrieve it.",
+          "Morticians of magic—specialists in ending dangerous workings—consider the item an overdue case and petition for its final annihilation."
+        ]
+      }
+      // ADD MORE evil_corrupted DESTRUCTION FACTIONS HERE
+    ],
+
+    fallback: [
+      {
+        id: "lonely_scholar",
+        alignment: "neutral",
+        role: "lonely scholar",
+        templates: [
+          "Only a lonely scholar or two seem to care enough to argue that the item ought to be dismantled before it causes trouble again.",
+          "So far, the notion of destroying the item is little more than a footnote in a scholar’s marginalia, but it is a footnote written in increasingly urgent ink."
+        ]
+      }
+      // ADD MORE FALLBACK DESTRUCTION FACTIONS HERE
+    ]
+  };
+
+   function generateDestructionFaction(originData, historyData, locationData, reputationData) {
+    if (!originData) {
+      return {
+        text: "If anyone has sworn to see the item destroyed, their efforts have left little trace in the records you’ve found.",
+        id: null,
+        alignment: "unknown",
+        role: "unknown"
+      };
+    }
+
+    const itemAxis  = originData.itemAxis;   // "good" or "evil"
+    const itemState = originData.itemState;  // "aligned" | "corrupted" | "sanctified"
+    const hooks     = (historyData && historyData.hooks) ? historyData.hooks : {};
+
+    // Decide which profile to draw from
+    let profileKey;
+    if (itemAxis === "good") {
+      profileKey = (itemState === "sanctified") ? "good_sanctified" : "good_aligned";
+    } else if (itemAxis === "evil") {
+      profileKey = (itemState === "corrupted") ? "evil_corrupted" : "evil_aligned";
+    } else {
+      profileKey = "fallback";
+    }
+
+    let pool = DESTROY_FACTIONS[profileKey];
+    if (!pool || pool.length === 0) {
+      pool = DESTROY_FACTIONS.fallback || [];
+    }
+    if (!pool || pool.length === 0) {
+      return {
+        text: "Few seem interested in destroying the item outright; for now, its fate is left to chance and circumstance.",
+        id: null,
+        alignment: "unknown",
+        role: "unknown"
+      };
+    }
+
+    const base = randomFrom(pool);
+    let text   = randomFrom(base.templates);
+
+    // Light tailoring based on how loud/dangerous its story is
+    const highImpact = !!(
+      hooks.eventOfWoe ||
+      hooks.eventOfWeal ||
+      hooks.thoughtLostOrDestroyed ||
+      hooks.activelySoughtByNotorious
+    );
+
+    if (highImpact) {
+      text += " Their petitions gain weight each time the item’s name surfaces in connection with fresh trouble.";
+    } else if (hooks.hasRumors || hooks.hasProphecy) {
+      text += " For now their cause is fueled more by ominous rumors and whispered prophecies than by hard evidence.";
+    } else {
+      text += " At present, theirs is a minority view, but one that could spread quickly if the item ever draws the wrong kind of attention.";
+    }
+
+    return {
+      text: text,
+      id: base.id,
+      alignment: base.alignment,
+      role: base.role
+    };
+  }
+
+  // ---------------------------
+  //  DORMANT vs AWAKENED POWER STATE
+  // ---------------------------
+  // powerStage: "dormant" | "awakened"
+  // keyed by itemAxis so flavor shifts with good/evil
+
+  const POWER_STATE_SENTENCES = {
+    good: {
+      dormant: [
+        "For now, its magic lies mostly dormant, surfacing only in small, easily overlooked moments of grace.",
+        "Those few who have handled it recently describe its power as a quiet weight, present but not eager.",
+        "It behaves like a relic half asleep, answering only when moved by genuine need rather than spectacle."
+      ],
+      awakened: [
+        "Lately, its power seems unusually responsive, flaring at the slightest echo of the causes it once served.",
+        "Reports speak of the item ‘waking up’ in the presence of danger, its magic acting almost before the bearer can think.",
+        "By all accounts, the item is wide awake again, eager to shape the next story told in its name."
+      ]
+    },
+    evil: {
+      dormant: [
+        "If the item still stirs at all, it does so in slow, subtle ways that most would miss until too late.",
+        "Its power clings like a lingering stain—faint enough to ignore, strong enough to twist the unwary over time.",
+        "It broods rather than blazes, its malice felt more in uneasy dreams and small misfortunes than in open displays."
+      ],
+      awakened: [
+        "Its power is said to be wide awake once more, answering eagerly to any hint of cruelty or ambition.",
+        "Witnesses speak of an oppressive presence when it is near, as though the item itself is watching for an opportunity.",
+        "Wherever it appears, events escalate quickly, as if the item is hungry to finish patterns it began long ago."
+      ]
+    },
+    neutralFallback: {
+      dormant: [
+        "Most signs suggest the item’s deeper magic is sleeping, its presence felt more as potential than as action.",
+        "It seems content to slumber in the background of events, waiting for the right conjunction of will and circumstance.",
+        "Those attuned to such things describe it as ‘resting with one eye open’, neither eager nor entirely inert."
+      ],
+      awakened: [
+        "Something in the item feels newly alert, as if it has decided the world is interesting again.",
+        "Its magic sits near the surface now, ready to surge at the slightest nudge from fate or folly.",
+        "By subtle or sudden signs, it has clearly shaken off whatever long quiet once bound it."
+      ]
+    }
+  };
+
+    function generatePowerState(originData, historyData, locationData, reputationData) {
+    if (!originData) {
+      return {
+        powerStage: "dormant",
+        score: 0,
+        text: "If the item has any remaining power, it slumbers unnoticed and unremarked."
+      };
+    }
+
+    const itemAxis = originData.itemAxis;    // "good" | "evil"
+    const hooks    = (historyData && historyData.hooks) ? historyData.hooks : {};
+    const secrecy  = locationData ? locationData.secrecy : "rumored";     // "obscure" | "rumored" | "well_known"
+    const repProm  = reputationData ? reputationData.prominence : "obscure"; // "prominent" | "obscure"
+
+    // Simple activity score:
+    // positive = more "awake", negative = more "dormant"
+    let score = 0;
+
+    if (hooks.eventOfWeal) score += 2;
+    if (hooks.eventOfWoe)  score += 2;
+    if (hooks.activelySoughtByNotorious) score += 2;
+    if (hooks.hasRumors)   score += 1;
+    if (hooks.hasProphecy) score += 1;
+
+    if (hooks.thoughtLostOrDestroyed) score -= 2;
+    if (secrecy === "obscure")        score -= 1;
+    if (secrecy === "well_known")     score += 1;
+    if (repProm === "prominent")      score += 1;
+
+    // A tiny random wobble so it's not completely deterministic
+    score += (Math.random() < 0.5 ? 0 : 1);
+
+    const powerStage = score >= 2 ? "awakened" : "dormant";
+
+    // Pick the right flavor block
+    let axisKey;
+    if (itemAxis === "good" || itemAxis === "evil") {
+      axisKey = itemAxis;
+    } else {
+      axisKey = "neutralFallback";
+    }
+
+    const axisBlock = POWER_STATE_SENTENCES[axisKey] || POWER_STATE_SENTENCES.neutralFallback;
+    const pool      = axisBlock[powerStage] || POWER_STATE_SENTENCES.neutralFallback[powerStage];
+
+    const text = pool && pool.length > 0
+      ? randomFrom(pool)
+      : (powerStage === "awakened"
+          ? "Whatever else can be said of it, the item is no longer content to sleep."
+          : "For the moment, the item’s power seems content to rest in the background of events.");
+
+    return {
+      powerStage,  // "dormant" or "awakened"
+      score,
+      text
+    };
+  }
+
   
   // ---------------------------
   //  Q3: LOCATION
@@ -1578,6 +1881,9 @@
   let lastLocation = null;
   let lastWitness = null;
   let lastReputation = null;
+  let lastDestroyer = null;
+  let lastPowerState = null;
+  
 
   function rollTraits() {
     lastOrigin = generateCreatorOrigin();
@@ -1585,6 +1891,8 @@
     lastLocation = generateItemLocation(lastOrigin, lastHistory);
     lastWitness = generateItemWitness(lastOrigin, lastHistory, lastLocation);
     lastReputation = generateItemReputation(lastOrigin, lastHistory);
+    lastDestroyer  = generateDestructionFaction(lastOrigin, lastHistory, lastLocation, lastReputation);
+    lastPowerState = generatePowerState(lastOrigin, lastHistory, lastLocation, lastReputation);
 
 
     const originEl = document.getElementById("originOutput");
@@ -1592,6 +1900,8 @@
     const locationEl = document.getElementById("locationOutput");
     const witnessEl = document.getElementById("witnessOutput");
     const reputationEl  = document.getElementById("reputationOutput");
+    const destroyerEl  = document.getElementById("destroyerOutput");
+    const powerEl      = document.getElementById("powerStateOutput");
     const metaEl = document.getElementById("metaOutput");
 
     originEl.textContent = lastOrigin.text || "";
@@ -1599,6 +1909,8 @@
     locationEl.textContent = lastLocation.text || "";
     witnessEl.textContent = lastWitness.text || "";
     reputationEl.textContent = lastReputation && lastReputation.text ? lastReputation.text : "";
+    destroyerEl.textContent  = lastDestroyer && lastDestroyer.text ? lastDestroyer.text : "";
+    powerEl.textContent = lastPowerState && lastPowerState.text ? lastPowerState.text : "";
 
     if (lastOrigin.creator) {
       metaEl.textContent =
@@ -1627,6 +1939,8 @@
     if (lastLocation && lastLocation.text) parts.push(lastLocation.text);
     if (lastReputation && lastReputation.text) parts.push(lastReputation.text);
     if (lastWitness && lastWitness.text) parts.push(lastWitness.text);
+    if (lastDestroyer && lastDestroyer.text)   parts.push(lastDestroyer.text);
+    if (lastPowerState && lastPowerState.text) parts.push(lastPowerState.text);
 
     loreEl.textContent = parts.join(" ");
   }
