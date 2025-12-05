@@ -129,7 +129,7 @@
   </p>
 
   <button id="rollTraitsBtn" class="lg-button">Roll Traits</button>
-  <!-- <button id="generateLoreBtn" class="lg-button">Generate Lore Paragraph</button> -->
+  <button id="generateLoreBtn" class="lg-button">Generate Lore Paragraph</button>
 
   <!-- Q1: Creator / Intended User -->
   <div class="lg-panel">
@@ -148,6 +148,14 @@
     </div>
   </div>
 
+  <!-- Public Reputation -->
+  <div class="lg-panel">
+    <div class="lg-section-title">Common Reputation</div>
+    <div class="lg-card">
+      <div id="reputationOutput" class="lg-output"></div>
+    </div>
+  </div>
+  
   <!-- Q3: Location -->
   <div class="lg-panel">
     <div class="lg-section-title">Last Known Location?</div>
@@ -1025,6 +1033,128 @@
   }
 
   // ---------------------------
+  //  PUBLIC REPUTATION
+  // ---------------------------
+  // How "most people" talk about the item.
+  // Keys:
+  //   itemAxis: "good" | "evil"
+  //   stateKey: "aligned" | "sanctified" | "corrupted"
+  //   prominence: "prominent" | "obscure"
+  const REPUTATION_SENTENCES = {
+    good: {
+      aligned: {
+        prominent: [
+          "Most folk know it as a lucky relic, the sort of thing minstrels mention when heroes pull off impossible rescues.",
+          "In taverns, it’s described as a charm of last chances, turning certain defeat into narrow victories.",
+          "Among the devout, its name is invoked like a minor saint’s, credited with quiet little miracles."
+        ],
+        obscure: [
+          "Outside a few dusty chapels, hardly anyone recognizes its name, though older villagers sometimes nod at mention of 'that old blessing'.",
+          "Scholars insist it was once a cherished relic, but most people treat the story as just another fireside comfort.",
+          "For most, it is one more half-believed tale, a relic that might exist somewhere but rarely matters in daily life."
+        ]
+      },
+      sanctified: {
+        prominent: [
+          "What most people know is the simple version: a wicked thing tamed by courage and prayer.",
+          "Children learn the story as a parable, the 'dark relic that learned to do better', whether or not the details are accurate.",
+          "Preachers point to it as proof that even the foulest tools can be turned to better ends."
+        ],
+        obscure: [
+          "A few religious texts allude to a 'cleansed relic', but the common telling leaves out just how dark its origin truly was.",
+          "In some regions, people speak of it only in hints, as if unsure whether to call it a miracle or a lingering warning.",
+          "Those who have heard the story tend to remember only the redemption, not the long shadow that came before."
+        ]
+      }
+      // ADD MORE GOOD-ALIGNED REPUTATION PHRASES HERE
+    },
+
+    evil: {
+      aligned: {
+        prominent: [
+          "Among common folk, its name is used like a curse, invoked when something goes badly wrong for no obvious reason.",
+          "Parents whisper its story to frighten children from wandering where they shouldn’t.",
+          "Smugglers and mercenaries swap tall tales about the item over cheap ale, each insisting they know someone who saw it and barely survived."
+        ],
+        obscure: [
+          "Most people have never heard of it, but a handful of old-timers flinch at its description as if recalling something they hoped to forget.",
+          "In isolated villages, it appears in one or two local ghost stories, never quite the same twice.",
+          "To most, the item is just a nameless 'cursed thing' mentioned in the margins of other, louder legends."
+        ]
+      },
+      corrupted: {
+        prominent: [
+          "Bards sing of it as a cautionary tale, the 'hero’s relic that turned on its bearer' whenever pride or despair took hold.",
+          "Some stories insist you can tell when it’s near because good luck twists into its opposite without warning.",
+          "Temple sermons invoke it as a warning about trusting power that has tasted too much blood."
+        ],
+        obscure: [
+          "In old soldiers’ circles, there are muttered references to a once-trusted relic that brought only grief in the end.",
+          "Only specialists and survivors tend to recognize its sigil; everyone else mistakes it for some forgotten badge.",
+          "Those who know a little of its history avoid saying its former name aloud, content to call it 'the Turned Relic'."
+        ]
+      }
+      // ADD MORE EVIL-ALIGNED REPUTATION PHRASES HERE
+    }
+  };
+
+    function generateItemReputation(originData, historyData) {
+    if (!originData) {
+      return {
+        text: "Most people have never heard anything reliable about the item.",
+        prominence: "obscure"
+      };
+    }
+
+    const itemAxis = originData.itemAxis;        // "good" or "evil"
+    const itemState = originData.itemState;      // "aligned" | "corrupted" | "sanctified"
+    const hooks = (historyData && historyData.hooks) ? historyData.hooks : {};
+
+    // Decide how widely known it is
+    const highProfile = !!(
+      hooks.hasRumors ||
+      hooks.hasProphecy ||
+      hooks.activelySoughtByNotorious ||
+      hooks.eventOfWeal ||
+      hooks.eventOfWoe
+    );
+    const prominence = highProfile ? "prominent" : "obscure";
+
+    const axisBlock = REPUTATION_SENTENCES[itemAxis];
+    if (!axisBlock) {
+      return {
+        text: "Most people speak of it only in vague, second-hand stories.",
+        prominence: prominence
+      };
+    }
+
+    // Collapse states: corrupted/sanctified get their own entries; all others use "aligned"
+    let stateKey = "aligned";
+    if (itemState === "corrupted" || itemState === "sanctified") {
+      stateKey = itemState;
+    }
+
+    const stateBlock = axisBlock[stateKey] || axisBlock.aligned;
+    const pool =
+      (stateBlock && stateBlock[prominence]) ||
+      (stateBlock && stateBlock.prominent) ||
+      (stateBlock && stateBlock.obscure);
+
+    if (!pool || pool.length === 0) {
+      return {
+        text: "Most people speak of it only in vague, second-hand stories.",
+        prominence: prominence
+      };
+    }
+
+    return {
+      text: randomFrom(pool),
+      prominence: prominence
+    };
+  }
+
+  
+  // ---------------------------
   //  Q3: LOCATION
   // ---------------------------
 
@@ -1447,23 +1577,28 @@
   let lastHistory = null;
   let lastLocation = null;
   let lastWitness = null;
+  let lastReputation = null;
 
   function rollTraits() {
     lastOrigin = generateCreatorOrigin();
     lastHistory = generateItemHistory(lastOrigin);
     lastLocation = generateItemLocation(lastOrigin, lastHistory);
     lastWitness = generateItemWitness(lastOrigin, lastHistory, lastLocation);
+    lastReputation = generateItemReputation(lastOrigin, lastHistory);
+
 
     const originEl = document.getElementById("originOutput");
     const historyEl = document.getElementById("historyOutput");
     const locationEl = document.getElementById("locationOutput");
     const witnessEl = document.getElementById("witnessOutput");
+    const reputationEl  = document.getElementById("reputationOutput");
     const metaEl = document.getElementById("metaOutput");
 
     originEl.textContent = lastOrigin.text || "";
     historyEl.textContent = lastHistory.text || "";
     locationEl.textContent = lastLocation.text || "";
     witnessEl.textContent = lastWitness.text || "";
+    reputationEl.textContent = lastReputation && lastReputation.text ? lastReputation.text : "";
 
     if (lastOrigin.creator) {
       metaEl.textContent =
@@ -1490,6 +1625,7 @@
     if (lastOrigin && lastOrigin.text) parts.push(lastOrigin.text);
     if (lastHistory && lastHistory.text) parts.push(lastHistory.text);
     if (lastLocation && lastLocation.text) parts.push(lastLocation.text);
+    if (lastReputation && lastReputation.text) parts.push(lastReputation.text);
     if (lastWitness && lastWitness.text) parts.push(lastWitness.text);
 
     loreEl.textContent = parts.join(" ");
