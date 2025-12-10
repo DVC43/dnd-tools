@@ -241,7 +241,7 @@
                         },
                         {
                             // Good wizard council creator, good / neutral tone mix
-                            id: "wizard_council",
+                            id: "wizard_conclavel_arcane_study",
                             type: "class",
                             size: "group",
                             noun: "wizard council",
@@ -272,7 +272,7 @@
                               type: "npc",
                               size: "group",
                               noun: "artisan guild",
-                              isCreator: false,
+                              isCreator: true,
                               tags: ["craft", "trade", "travel"],
                         },
                         {
@@ -282,7 +282,15 @@
                               size: "single",
                               noun: "paladin",
                               isCreator: true,
-                              tags: ["duty", "fear", "corruption"] 
+                              tags: ["duty", "fear", "corruption"],
+                        },
+                        {
+                            id: pious_healing_cleric,
+                            type: "class",
+                            size: "single",
+                            noun: "traveling healer",
+                            isCreator: true,
+                            tags: [healing, mercy, travel],
                         },
                       
                         // ADD MORE GOOD-ALIGNED CREATORS/COMMISSIONERS HERE
@@ -313,7 +321,7 @@
                             size: "group",
                             noun: "thieves' guild",
                             isCreator: false,
-                            tags: ["criminal", "corruption", "deception"],
+                            tags: ["criminal", "corruption", "deceit"],
                         },
                         {
                             // Strong evil creator, all tags evil tone
@@ -326,10 +334,10 @@
                         },
                         {
                             // Evil creator of a neutral tool, all neutral tags
-                            id: "secretive_cabal_archive",
+                            id: "vile_cabal_archive",
                             type: "npc",
                             size: "group",
-                            noun: "clandestine cabal",
+                            noun: "vile cabal",
                             isCreator: true,
                             tags: ["arcane", "knowledge", "trade"]
                         },
@@ -492,44 +500,16 @@
                             "to mete out divine justice", 
                             "to fulfill divine prophecy"
                         ],
+                        healing: [
+                            "to heal the infirmed",
+                            "to restore they body and soul"
+                        ],
                         
                       // ADD MORE GOOD-AXIS TAG MOTIVATIONS HERE
                       
                       _fallback: [
                             "to aid those who stand against tyranny",
                             "to serve a cause greater than any one bearer",
-                        ],
-                    },
-                    evil: {
-                        war: [
-                            "to win a bloody and lopsided war", 
-                            "to crush their enemies on the battlefield"
-                        ],
-                        fear: [
-                            "to spread paralyzing fear wherever it appears",
-                            "so that its very name would make the boldest tremble",
-                        ],
-                        deceit: [
-                            "to turn allies against each other",
-                            "to ensure that lies would cut as sharply as any blade",
-                        ],
-                        corruption: [
-                            "to taint whatever it touches", 
-                            "to slowly twist hearts and hopes alike"
-                        ],
-                        domination: [
-                            "to bend will and flesh to a single cruel purpose",
-                            "to remind the world who held true power",
-                        ],
-                        criminal: [
-                            "to tilt every deal and every heist in their favor",
-                            "to make the law itself seem powerless",
-                        ],
-                        
-                      // ADD MORE EVIL-AXIS TAG MOTIVATIONS HERE
-                        _fallback: [
-                            "to further their own ruthless ambitions",
-                            "to remake the world in their own grim image",
                         ],
                     },
                     neutral: {
@@ -540,7 +520,7 @@
                         ],
                         knowledge: [
                             "to preserve discoveries too dangerous to forget",
-                            "to act as a living record of hard-won insight",
+                            "to serve as a record of hard-won insight",
                             "to anchor secrets that would otherwise be lost to time",
                         ],
                         craft: [
@@ -566,6 +546,7 @@
                             "to harmonize mortal industry with untamed land",
                             "to observe how crafted magic ages in wild places",
                             "to bridge the work of civilization and the patience of nature",
+                            "to act as an aide for those who preserve the natural balance",
                         ],
                         eldritch: [
                             "to study forces that resist ordinary classification",
@@ -581,6 +562,38 @@
                             "to serve a purpose best left unnamed in formal records",
                             "to fulfill a design understood only by its original makers",
                             "to test a theory whose consequences were deliberately left uncertain",
+                        ],
+                    },
+                  evil: {
+                        war: [
+                            "to crush the defiant in a bloody, brutal war", 
+                            "to butcher every foe on the field of battle"
+                        ],
+                        fear: [
+                            "to spread paralyzing terror wherever it appears",
+                            "so that its very name would make the boldest tremble",
+                        ],
+                        deceit: [
+                            "to turn allies against each other",
+                            "to ensure that lies would cut as sharply as any blade",
+                        ],
+                        corruption: [
+                            "to taint whatever it touches", 
+                            "to slowly twist hearts and hopes alike"
+                        ],
+                        domination: [
+                            "to bend will and flesh to a single cruel purpose",
+                            "to remind the world who wields true power",
+                        ],
+                        criminal: [
+                            "to tilt every deal and every heist in their favor",
+                            "to confound and frustrate every lawful obstacle",
+                        ],
+                        
+                      // ADD MORE EVIL-AXIS TAG MOTIVATIONS HERE
+                        _fallback: [
+                            "to further their own ruthless ambitions",
+                            "to remake the world in their own grim image",
                         ],
                     },
                 };
