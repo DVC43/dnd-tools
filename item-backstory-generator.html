@@ -206,6 +206,18 @@
             (function () {
                 "use strict";
 
+                // Pipeline overview:
+                //  1) Creator + origin axis selection
+                //  2) Tag tone → itemAxis + itemState
+                //  3) Q1: Origin paragraph
+                //  4) Q2: History + hooks
+                //  5) Public reputation
+                //  6) Q3: Location
+                //  7) Q4: NPC witness
+                //  8) Destroyer faction
+                //  9) Power state (dormant vs awakened)
+                // 10) UI wiring (rollTraits + lore assembly)
+
                 // ---------------------------
                 //  DATA: CREATORS / COMMISSIONERS
                 // ---------------------------
