@@ -1180,11 +1180,10 @@
 
                 // Each row is something the item is "known for" in history.
                 // You can later generate this table from your Google Sheet.
-                // segment: opener | event | rumor | prophecy | fate
                 // axisBias: good | evil | neutral | any
                 const HISTORY_BASE = [
                     {
-                        id: "good_opener_village_guardian",
+                        id: "village_guardian",
                         kind: "base",
                         axisBias: "good",
                         impactWeight: 2,
@@ -1231,7 +1230,7 @@
 
                     // EXAMPLE: very generic "shows up in big stories"
                     {
-                        id: "generic_battle_mention",
+                        id: "battle_mention",
                         kind: "base",
                         impactWeight: 1,
                         linkedToNotoriousIndividual: false,
@@ -1283,22 +1282,48 @@
                     // ADD MORE HISTORY_BASE ROWS HERE
                 ];
 
-                /**
-                 * Compute a simple “match score” between a HISTORY_BASE row and the final hooks.
-                 * For now this is deliberately simple and easy to tune.
-                 */
-                function scoreHistoryRow(row, hooks) {
-                    let score = 0;
-                    if (hooks.linkedToNotoriousIndividual && row.linkedToNotoriousIndividual) score++;
-                    if (hooks.linkedToNotoriousGroup && row.linkedToNotoriousGroup) score++;
-                    if (hooks.eventOfWeal && row.eventOfWeal) score++;
-                    if (hooks.eventOfWoe && row.eventOfWoe) score++;
-                    if (hooks.thoughtLostOrDestroyed && row.thoughtLostOrDestroyed) score++;
-                    if (hooks.activelySoughtByNotorious && row.activelySoughtByNotorious) score++;
-                    if (hooks.hasRumors && row.hasRumors) score++;
-                    if (hooks.hasProphecy && row.hasProphecy) score++;
-                    return score;
+                function scoreHistoryRow(row, hooks, originAxis, itemAxis) {
+                  let score = 0;
+                
+                  // 1) Hook matches (same as before)
+                  if (hooks.linkedToNotoriousIndividual && row.linkedToNotoriousIndividual) score++;
+                  if (hooks.linkedToNotoriousGroup && row.linkedToNotoriousGroup) score++;
+                  if (hooks.eventOfWeal && row.eventOfWeal) score++;
+                  if (hooks.eventOfWoe && row.eventOfWoe) score++;
+                  if (hooks.thoughtLostOrDestroyed && row.thoughtLostOrDestroyed) score++;
+                  if (hooks.activelySoughtByNotorious && row.activelySoughtByNotorious) score++;
+                  if (hooks.hasRumors && row.hasRumors) score++;
+                  if (hooks.hasProphecy && row.hasProphecy) score++;
+                
+                  // 2) Axis bias: rows can prefer good/evil/aligned items
+                  const bias = (row.axisBias || "").toString().toLowerCase();
+                
+                  if (bias && bias !== "any") {
+                    // Strong bonus if it matches the item's alignment,
+                    // smaller bonus if it matches the origin's alignment.
+                    if (bias === itemAxis) {
+                      score += 2;
+                    } else if (bias === originAxis) {
+                      score += 1;
+                    } else {
+                      // Soft penalty if it's clearly biased the other way
+                      score -= 1;
+                    }
+                  }
+                
+                  // 3) Impact weight: 1–3, treated as "how defining is this history posture?"
+                  const impact = Number(row.impactWeight || 1);
+                  if (impact > 1) {
+                    // impact 1 => +0, 2 => +1, 3 => +2
+                    score += (impact - 1);
+                  }
+                
+                  // Don't go below zero – this avoids negative weights in pickHistoryRow
+                  if (score < 0) score = 0;
+                
+                  return score;
                 }
+
 
                 /**
                  * Simple weighted pick from an array of { score, row } objects.
@@ -1365,8 +1390,8 @@
 
                     // 4) New part: choose one row from HISTORY_BASE that matches finalHooks
                     const candidates = HISTORY_BASE.map((row) => ({
-                        row,
-                        score: scoreHistoryRow(row, finalHooks),
+                      row,
+                      score: scoreHistoryRow(row, finalHooks, originAxis, itemAxis),
                     }));
                     const bestRow = pickHistoryRow(candidates);
                     if (bestRow && bestRow.text) {
