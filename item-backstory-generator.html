@@ -1180,60 +1180,53 @@
 
                 // Each row is something the item is "known for" in history.
                 // You can later generate this table from your Google Sheet.
+                // segment: opener | event | rumor | prophecy | fate
+                // axisBias: good | evil | neutral | any
                 const HISTORY_BASE = [
                     {
                         id: "good_opener_village_guardian",
                         kind: "base",
-                        segment: "opener", // opener | event | rumor | prophecy | fate
-                        axisBias: "good", // good | evil | neutral | any
+                        axisBias: "good",
                         impactWeight: 2,
+                        eventOfWeal: true,
+                        eventOfWoe: false,
+                        thoughtLostOrDestroyed: false,
+                        activelySoughtByNotorious: false,
+                        hasRumors: true,
+                        hasProphecy: false,
+                        linkedToNotoriousIndividual: false,
+                        linkedToNotoriousGroup: false,
                         text: "Old stories say the item first appeared in defense of a frightened village.",
-                        hooks: {
-                            eventOfWeal: true,
-                            eventOfWoe: false,
-                            thoughtLostOrDestroyed: false,
-                            activelySoughtByNotorious: false,
-                            hasRumors: true,
-                            hasProphecy: false,
-                            linkedToNotoriousIndividual: false,
-                            linkedToNotoriousGroup: false,
-                        },
                     },
                     {
                         id: "evil_event_massacre",
                         kind: "base",
-                        segment: "event",
                         axisBias: "evil",
                         impactWeight: 3,
+                        eventOfWeal: false,
+                        eventOfWoe: true,
+                        thoughtLostOrDestroyed: false,
+                        activelySoughtByNotorious: true,
+                        hasRumors: true,
+                        hasProphecy: false,
+                        linkedToNotoriousIndividual: false,
+                        linkedToNotoriousGroup: true,
                         text: "It is blamed for a massacre that emptied a border fortress before dawn.",
-                        hooks: {
-                            eventOfWeal: false,
-                            eventOfWoe: true,
-                            thoughtLostOrDestroyed: false,
-                            activelySoughtByNotorious: true,
-                            hasRumors: true,
-                            hasProphecy: false,
-                            linkedToNotoriousIndividual: false,
-                            linkedToNotoriousGroup: true,
-                        },
                     },
                     {
                         id: "neutral_rumor_wandering",
                         kind: "base",
-                        segment: "rumor",
                         axisBias: "any",
                         impactWeight: 1,
+                        eventOfWeal: false,
+                        eventOfWoe: false,
+                        thoughtLostOrDestroyed: false,
+                        activelySoughtByNotorious: false,
+                        hasRumors: true,
+                        hasProphecy: false,
+                        linkedToNotoriousIndividual: false,
+                        linkedToNotoriousGroup: false,
                         text: "Some say it simply wanders from hand to hand, bringing change but never staying long.",
-                        hooks: {
-                            eventOfWeal: false,
-                            eventOfWoe: false,
-                            thoughtLostOrDestroyed: false,
-                            activelySoughtByNotorious: false,
-                            hasRumors: true,
-                            hasProphecy: false,
-                            linkedToNotoriousIndividual: false,
-                            linkedToNotoriousGroup: false,
-                        },
                     },
 
                     // EXAMPLE: very generic "shows up in big stories"
@@ -1249,7 +1242,7 @@
                         activelySoughtByNotorious: false,
                         hasRumors: false,
                         hasProphecy: false,
-                        axisHint: "any",
+                        axisBias: "any",
                         text: "In scattered accounts of old conflicts, the item appears briefly whenever fortunes abruptly turned.",
                     },
 
@@ -1266,7 +1259,7 @@
                         activelySoughtByNotorious: true,
                         hasRumors: true,
                         hasProphecy: false,
-                        axisHint: "good",
+                        axisBias: "good",
                         text: "One famed last stand credits the item with holding a breach just long enough for reinforcements to arrive.",
                     },
 
@@ -1283,7 +1276,7 @@
                         activelySoughtByNotorious: false,
                         hasRumors: true,
                         hasProphecy: false,
-                        axisHint: "evil",
+                        axisBias: "evil",
                         text: "Wherever records speak of sudden, region-shaking disasters, the item’s name lurks in marginal notes and suppressed reports.",
                     },
 
@@ -1340,13 +1333,13 @@
                         };
                     }
 
-                    const originAxis = originData.originAxis; // "good" | "evil"
-                    const itemAxis = originData.itemAxis; // "good" | "evil"
-                    const itemState = originData.itemState; // "aligned" | "corrupted" | "sanctified"
+                    const originAxis = originData.originAxis;
+                    const itemAxis = originData.itemAxis;
+                    const itemState = originData.itemState;
                     const creator = originData.creator;
                     const transformation = originData.transformation;
 
-                    // 1) Establish base hooks
+                    // 1) Establish base hooks (aligned vs transformed)
                     let baseHooks;
                     if (transformation) {
                         baseHooks = transformation.hooks || {};
@@ -1354,16 +1347,15 @@
                         baseHooks = buildAlignedHooks(originAxis, creator);
                     }
 
-                    // 2) Merge hooks (if you later have downstream overrides, this is where they go)
+                    // 2) Final hooks (for now, just baseHooks; you can merge in per-item tweaks later)
                     const finalHooks = mergeHooks(baseHooks, null);
 
                     const sentences = [];
 
-                    // 3) If there was a corruption / sanctification cause, let that summary lead
+                    // 3) Lead-in: transformation summary OR “aligned” openers
                     if (transformation && transformation.summary) {
                         sentences.push(transformation.summary);
                     } else {
-                        // Otherwise fall back to a simple overall “opener” keyed to originAxis
                         if (originAxis === "good") {
                             sentences.push(randomFrom(HISTORY_OPENERS.goodAligned));
                         } else {
@@ -1371,19 +1363,17 @@
                         }
                     }
 
-                    // 4) Use HISTORY_BASE as the primary “what it’s famous for” line
-                    if (HISTORY_BASE && HISTORY_BASE.length > 0) {
-                        const scored = HISTORY_BASE.map((row) => ({
-                            row,
-                            score: scoreHistoryRow(row, finalHooks),
-                        }));
-                        const pickedRow = pickHistoryRow(scored);
-                        if (pickedRow && pickedRow.text) {
-                            sentences.push(pickedRow.text);
-                        }
+                    // 4) New part: choose one row from HISTORY_BASE that matches finalHooks
+                    const candidates = HISTORY_BASE.map((row) => ({
+                        row,
+                        score: scoreHistoryRow(row, finalHooks),
+                    }));
+                    const bestRow = pickHistoryRow(candidates);
+                    if (bestRow && bestRow.text) {
+                        sentences.push(bestRow.text);
                     }
 
-                    // 5) Layer in derived sentences from existing helpers (notoriety, events, fate, rumors / prophecy)
+                    // 5) Existing “derived” sentences
                     const notorietySentence = buildNotorietySentence(itemAxis, finalHooks);
                     if (notorietySentence) sentences.push(notorietySentence);
 
