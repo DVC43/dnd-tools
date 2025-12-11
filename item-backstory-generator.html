@@ -261,40 +261,40 @@
                             tags: ["arcane", "knowledge", "wisdom"],
                         },
                         {
-                              // Academic wizard council creator, all tags neutral tone
-                              id: "wizard_council_arcane_research",
-                              type: "class",
-                              size: "group",
-                              noun: "wizard council",
-                              isCreator: true,
-                              tags: ["arcane", "knowledge", "craft"],
+                            // Academic wizard council creator, all tags neutral tone
+                            id: "wizard_council_arcane_research",
+                            type: "class",
+                            size: "group",
+                            noun: "wizard council",
+                            isCreator: true,
+                            tags: ["arcane", "knowledge", "craft"],
                         },
                         {
-                              // Esoteric wizard cabal creator, all tags neutral tone
-                              id: "wizard_council_eldritch_studies",
-                              type: "class",
-                              size: "group",
-                              noun: "wizard cabal",
-                              isCreator: true,
-                              tags: ["arcane", "knowledge", "eldritch"],
+                            // Esoteric wizard cabal creator, all tags neutral tone
+                            id: "wizard_council_eldritch_studies",
+                            type: "class",
+                            size: "group",
+                            noun: "wizard cabal",
+                            isCreator: true,
+                            tags: ["arcane", "knowledge", "eldritch"],
                         },
                         {
-                              // Artisan guild commissioner, all tags neutral tone
-                              id: "artisan_guild_masterwork",
-                              type: "npc",
-                              size: "group",
-                              noun: "artisan guild",
-                              isCreator: true,
-                              tags: ["craft", "trade", "travel"],
+                            // Artisan guild commissioner, all tags neutral tone
+                            id: "artisan_guild_masterwork",
+                            type: "npc",
+                            size: "group",
+                            noun: "artisan guild",
+                            isCreator: true,
+                            tags: ["craft", "trade", "travel"],
                         },
                         {
-                              // Good creator fallen relic, (good tags < evil tags) item corrupted
-                              id: "oathbound_paladin_fallen_relic",
-                              type: "class",
-                              size: "single",
-                              noun: "paladin",
-                              isCreator: true,
-                              tags: ["duty", "fear", "corruption"],
+                            // Good creator fallen relic, (good tags < evil tags) item corrupted
+                            id: "oathbound_paladin_fallen_relic",
+                            type: "class",
+                            size: "single",
+                            noun: "paladin",
+                            isCreator: true,
+                            tags: ["duty", "fear", "corruption"],
                         },
                         {
                             id: "pious_healing_cleric",
@@ -304,7 +304,7 @@
                             isCreator: true,
                             tags: ["healing", "mercy", "travel"],
                         },
-                      
+
                         // ADD MORE GOOD-ALIGNED CREATORS/COMMISSIONERS HERE
                     ],
                     evil: [
@@ -351,7 +351,7 @@
                             size: "group",
                             noun: "vile cabal",
                             isCreator: true,
-                            tags: ["arcane", "knowledge", "trade"]
+                            tags: ["arcane", "knowledge", "trade"],
                         },
                         {
                             // Evil creator of neutral tool, all neutral tags
@@ -360,7 +360,7 @@
                             size: "group",
                             noun: "thieves’ consortium",
                             isCreator: false,
-                            tags: ["trade", "craft", "arcane"]
+                            tags: ["trade", "craft", "arcane"],
                         },
                         {
                             // Evil creator of sanctified item, ( evil tags < good tags) item sanctified
@@ -369,9 +369,9 @@
                             size: "single",
                             noun: "warlock",
                             isCreator: true,
-                            tags: ["war", "protection", "duty"]
-                        }
-                      
+                            tags: ["war", "protection", "duty"],
+                        },
+
                         // ADD MORE EVIL-ALIGNED CREATORS/COMMISSIONERS HERE
                     ],
                 };
@@ -411,7 +411,7 @@
                     forest: { tone: "neutral" },
                     trade: { tone: "neutral" },
                     eldritch: { tone: "neutral" },
-                  
+
                     // evil-leaning tags
                     corruption: { tone: "evil" },
                     fear: { tone: "evil" },
@@ -488,10 +488,7 @@
 
                 const TAG_MOTIVATIONS = {
                     good: {
-                        duty: [
-                            "to honor a sacred oath", 
-                            "to fulfill a solemn vow",
-                        ],
+                        duty: ["to honor a sacred oath", "to fulfill a solemn vow"],
                         courage: [
                             "to arm a champion against the coming darkness",
                             "to give strength to those who stand their ground",
@@ -508,18 +505,12 @@
                             "to guide the worthy with quiet insight",
                             "to preserve hard-won wisdom in steel and spell",
                         ],
-                        celestial: [
-                            "to mete out divine justice", 
-                            "to fulfill divine prophecy"
-                        ],
-                        healing: [
-                            "to heal the infirmed",
-                            "to restore they body and soul"
-                        ],
-                        
-                      // ADD MORE GOOD-AXIS TAG MOTIVATIONS HERE
-                      
-                      _fallback: [
+                        celestial: ["to mete out divine justice", "to fulfill divine prophecy"],
+                        healing: ["to heal the infirmed", "to restore they body and soul"],
+
+                        // ADD MORE GOOD-AXIS TAG MOTIVATIONS HERE
+
+                        _fallback: [
                             "to aid those who stand against tyranny",
                             "to serve a cause greater than any one bearer",
                         ],
@@ -569,17 +560,17 @@
                         ],
 
                         // ADD MORE NEUTRAL TAG MOTIVATIONS HERE
-                      
+
                         _fallback: [
                             "to serve a purpose best left unnamed in formal records",
                             "to fulfill a design understood only by its original makers",
                             "to test a theory whose consequences were deliberately left uncertain",
                         ],
                     },
-                  evil: {
+                    evil: {
                         war: [
-                            "to crush the defiant in a bloody, brutal war", 
-                            "to butcher every foe on the field of battle"
+                            "to crush the defiant in a bloody, brutal war",
+                            "to butcher every foe on the field of battle",
                         ],
                         fear: [
                             "to spread paralyzing terror wherever it appears",
@@ -589,10 +580,7 @@
                             "to turn allies against each other",
                             "to ensure that lies would cut as sharply as any blade",
                         ],
-                        corruption: [
-                            "to taint whatever it touches", 
-                            "to slowly twist hearts and hopes alike"
-                        ],
+                        corruption: ["to taint whatever it touches", "to slowly twist hearts and hopes alike"],
                         domination: [
                             "to bend will and flesh to a single cruel purpose",
                             "to remind the world who wields true power",
@@ -601,8 +589,8 @@
                             "to tilt every deal and every heist in their favor",
                             "to confound and frustrate every lawful obstacle",
                         ],
-                        
-                      // ADD MORE EVIL-AXIS TAG MOTIVATIONS HERE
+
+                        // ADD MORE EVIL-AXIS TAG MOTIVATIONS HERE
                         _fallback: [
                             "to further their own ruthless ambitions",
                             "to remake the world in their own grim image",
@@ -657,7 +645,7 @@
                     "tiefling",
                     "halfling",
                     "gnome",
-                    "half-orc"
+                    "half-orc",
                     // ADD MORE RACE ADJECTIVES HERE IF DESIRED
                 ];
 
@@ -1186,6 +1174,164 @@
                     return randomFrom(RUMOR_PROPHECY_SENTENCES.prophecyOnly);
                 }
 
+                // ---------------------------
+                //  Q2: Unified HISTORY_BASE (scaffolding)
+                // ---------------------------
+
+                // Each row is something the item is "known for" in history.
+                // You can later generate this table from your Google Sheet.
+                const HISTORY_BASE = [
+                    {
+                        id: "good_opener_village_guardian",
+                        kind: "base",
+                        segment: "opener", // opener | event | rumor | prophecy | fate
+                        axisBias: "good", // good | evil | neutral | any
+                        impactWeight: 2,
+                        text: "Old stories say the item first appeared in defense of a frightened village.",
+                        hooks: {
+                            eventOfWeal: true,
+                            eventOfWoe: false,
+                            thoughtLostOrDestroyed: false,
+                            activelySoughtByNotorious: false,
+                            hasRumors: true,
+                            hasProphecy: false,
+                            linkedToNotoriousIndividual: false,
+                            linkedToNotoriousGroup: false,
+                        },
+                    },
+                    {
+                        id: "evil_event_massacre",
+                        kind: "base",
+                        segment: "event",
+                        axisBias: "evil",
+                        impactWeight: 3,
+                        text: "It is blamed for a massacre that emptied a border fortress before dawn.",
+                        hooks: {
+                            eventOfWeal: false,
+                            eventOfWoe: true,
+                            thoughtLostOrDestroyed: false,
+                            activelySoughtByNotorious: true,
+                            hasRumors: true,
+                            hasProphecy: false,
+                            linkedToNotoriousIndividual: false,
+                            linkedToNotoriousGroup: true,
+                        },
+                    },
+                    {
+                        id: "neutral_rumor_wandering",
+                        kind: "base",
+                        segment: "rumor",
+                        axisBias: "any",
+                        impactWeight: 1,
+                        text: "Some say it simply wanders from hand to hand, bringing change but never staying long.",
+                        hooks: {
+                            eventOfWeal: false,
+                            eventOfWoe: false,
+                            thoughtLostOrDestroyed: false,
+                            activelySoughtByNotorious: false,
+                            hasRumors: true,
+                            hasProphecy: false,
+                            linkedToNotoriousIndividual: false,
+                            linkedToNotoriousGroup: false,
+                        },
+                    },
+
+                    // EXAMPLE: very generic "shows up in big stories"
+                    {
+                        id: "generic_battle_mention",
+                        kind: "base",
+                        impactWeight: 1,
+                        linkedToNotoriousIndividual: false,
+                        linkedToNotoriousGroup: false,
+                        eventOfWeal: true,
+                        eventOfWoe: true,
+                        thoughtLostOrDestroyed: false,
+                        activelySoughtByNotorious: false,
+                        hasRumors: false,
+                        hasProphecy: false,
+                        axisHint: "any",
+                        text: "In scattered accounts of old conflicts, the item appears briefly whenever fortunes abruptly turned.",
+                    },
+
+                    // EXAMPLE: mostly “weal”–leaning, good-ish
+                    {
+                        id: "defensive_last_stand",
+                        kind: "base",
+                        impactWeight: 1,
+                        linkedToNotoriousIndividual: true,
+                        linkedToNotoriousGroup: false,
+                        eventOfWeal: true,
+                        eventOfWoe: false,
+                        thoughtLostOrDestroyed: false,
+                        activelySoughtByNotorious: true,
+                        hasRumors: true,
+                        hasProphecy: false,
+                        axisHint: "good",
+                        text: "One famed last stand credits the item with holding a breach just long enough for reinforcements to arrive.",
+                    },
+
+                    // EXAMPLE: mostly “woe”–leaning, evil-ish
+                    {
+                        id: "disaster_associated",
+                        kind: "base",
+                        impactWeight: 1,
+                        linkedToNotoriousIndividual: false,
+                        linkedToNotoriousGroup: true,
+                        eventOfWeal: false,
+                        eventOfWoe: true,
+                        thoughtLostOrDestroyed: true,
+                        activelySoughtByNotorious: false,
+                        hasRumors: true,
+                        hasProphecy: false,
+                        axisHint: "evil",
+                        text: "Wherever records speak of sudden, region-shaking disasters, the item’s name lurks in marginal notes and suppressed reports.",
+                    },
+
+                    // ADD MORE HISTORY_BASE ROWS HERE
+                ];
+
+                /**
+                 * Compute a simple “match score” between a HISTORY_BASE row and the final hooks.
+                 * For now this is deliberately simple and easy to tune.
+                 */
+                function scoreHistoryRow(row, hooks) {
+                    let score = 0;
+                    if (hooks.linkedToNotoriousIndividual && row.linkedToNotoriousIndividual) score++;
+                    if (hooks.linkedToNotoriousGroup && row.linkedToNotoriousGroup) score++;
+                    if (hooks.eventOfWeal && row.eventOfWeal) score++;
+                    if (hooks.eventOfWoe && row.eventOfWoe) score++;
+                    if (hooks.thoughtLostOrDestroyed && row.thoughtLostOrDestroyed) score++;
+                    if (hooks.activelySoughtByNotorious && row.activelySoughtByNotorious) score++;
+                    if (hooks.hasRumors && row.hasRumors) score++;
+                    if (hooks.hasProphecy && row.hasProphecy) score++;
+                    return score;
+                }
+
+                /**
+                 * Simple weighted pick from an array of { score, row } objects.
+                 * If everything is 0, falls back to a plain random row.
+                 */
+                function pickHistoryRow(candidates) {
+                    if (!candidates || candidates.length === 0) return null;
+
+                    const totalScore = candidates.reduce((sum, c) => sum + c.score, 0);
+
+                    if (totalScore <= 0) {
+                        // No meaningful scoring → just pick any base row
+                        return randomFrom(candidates).row;
+                    }
+
+                    const roll = Math.random() * totalScore;
+                    let running = 0;
+                    for (const c of candidates) {
+                        running += c.score;
+                        if (roll <= running) return c.row;
+                    }
+
+                    // Fallback, should not really hit
+                    return candidates[candidates.length - 1].row;
+                }
+
                 function generateItemHistory(originData) {
                     if (!originData || !originData.creator) {
                         return {
@@ -1194,12 +1340,13 @@
                         };
                     }
 
-                    const originAxis = originData.originAxis;
-                    const itemAxis = originData.itemAxis;
-                    const itemState = originData.itemState;
+                    const originAxis = originData.originAxis; // "good" | "evil"
+                    const itemAxis = originData.itemAxis; // "good" | "evil"
+                    const itemState = originData.itemState; // "aligned" | "corrupted" | "sanctified"
                     const creator = originData.creator;
                     const transformation = originData.transformation;
 
+                    // 1) Establish base hooks
                     let baseHooks;
                     if (transformation) {
                         baseHooks = transformation.hooks || {};
@@ -1207,13 +1354,16 @@
                         baseHooks = buildAlignedHooks(originAxis, creator);
                     }
 
+                    // 2) Merge hooks (if you later have downstream overrides, this is where they go)
                     const finalHooks = mergeHooks(baseHooks, null);
 
                     const sentences = [];
 
+                    // 3) If there was a corruption / sanctification cause, let that summary lead
                     if (transformation && transformation.summary) {
                         sentences.push(transformation.summary);
                     } else {
+                        // Otherwise fall back to a simple overall “opener” keyed to originAxis
                         if (originAxis === "good") {
                             sentences.push(randomFrom(HISTORY_OPENERS.goodAligned));
                         } else {
@@ -1221,6 +1371,19 @@
                         }
                     }
 
+                    // 4) Use HISTORY_BASE as the primary “what it’s famous for” line
+                    if (HISTORY_BASE && HISTORY_BASE.length > 0) {
+                        const scored = HISTORY_BASE.map((row) => ({
+                            row,
+                            score: scoreHistoryRow(row, finalHooks),
+                        }));
+                        const pickedRow = pickHistoryRow(scored);
+                        if (pickedRow && pickedRow.text) {
+                            sentences.push(pickedRow.text);
+                        }
+                    }
+
+                    // 5) Layer in derived sentences from existing helpers (notoriety, events, fate, rumors / prophecy)
                     const notorietySentence = buildNotorietySentence(itemAxis, finalHooks);
                     if (notorietySentence) sentences.push(notorietySentence);
 
@@ -1230,13 +1393,11 @@
                     const fateSentence = buildFateSentence(finalHooks);
                     if (fateSentence) sentences.push(fateSentence);
 
-                    const rpSentence = buildRumorProphecySentence(finalHooks, itemState);
-                    if (rpSentence) sentences.push(rpSentence);
-
-                    const text = sentences.join(" ");
+                    const rumorProphecySentence = buildRumorProphecySentence(finalHooks, itemState);
+                    if (rumorProphecySentence) sentences.push(rumorProphecySentence);
 
                     return {
-                        text: text,
+                        text: sentences.join(" "),
                         hooks: finalHooks,
                     };
                 }
