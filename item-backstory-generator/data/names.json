@@ -1,0 +1,99 @@
+{
+  "templates": [
+    {
+      "id": "t1",
+      "text": "{Noun} of the {Adj} {PlaceThing}",
+      "weight": 3
+    },
+    {
+      "id": "t2",
+      "text": "The {Adj} {Noun}",
+      "weight": 3
+    },
+    {
+      "id": "t3",
+      "text": "{Noun} of {Place}",
+      "weight": 2
+    },
+    {
+      "id": "t4",
+      "text": "{Maker}'s {Noun}",
+      "weight": 2
+    },
+    {
+      "id": "t5",
+      "text": "{Noun} That {Verb}s",
+      "weight": 1
+    }
+  ],
+  "parts": {
+    "Adj": [
+      "Ashen",
+      "Gleaming",
+      "Sable",
+      "Verdant",
+      "Hollow",
+      "Radiant",
+      "Umbral",
+      "Starwrought",
+      "Salt-Kissed",
+      "Oathbound",
+      "Thorned",
+      "Gilded",
+      "Storm-Signed",
+      "Nightglass",
+      "Cinder",
+      "Merciful",
+      "Quiet",
+      "Graven",
+      "Moonlit",
+      "Wayfarer's"
+    ],
+    "Noun": [
+      "Aegis",
+      "Vow",
+      "Lantern",
+      "Crown",
+      "Edge",
+      "Chalice",
+      "Key",
+      "Mantle",
+      "Sigil",
+      "Needle",
+      "Anchor",
+      "Bell",
+      "Mirror",
+      "Rosary",
+      "Gauntlet",
+      "Compass",
+      "Mask",
+      "Censer",
+      "Spindle",
+      "Skein"
+    ],
+    "Verb": [
+      "Remembers",
+      "Hungers",
+      "Listens",
+      "Returns",
+      "Whispers",
+      "Endures",
+      "Unmakes",
+      "Guides",
+      "Binds",
+      "Shivers"
+    ],
+    "PlaceThing": [
+      "Gate",
+      "Sanctum",
+      "Cairn",
+      "Reliquary",
+      "Thicket",
+      "Battlement",
+      "Tide",
+      "Archive",
+      "Forge",
+      "Crossroads"
+    ]
+  }
+}

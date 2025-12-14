@@ -1,0 +1,89 @@
+{
+  "boon": [
+    {
+      "id": "bn_steadfast",
+      "text": "It lends its bearer a steadier hand when fear would make them flinch.",
+      "tags": [
+        "courage",
+        "protection"
+      ],
+      "tone": [
+        "heroic"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "bn_mercy",
+      "text": "Wounds seem to close a little cleaner around it, as if the body remembers how to forgive.",
+      "tags": [
+        "healing",
+        "divine"
+      ],
+      "tone": [
+        "heroic"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "bn_true_north",
+      "text": "When you hesitate at a crossroads, it offers a subtle pull toward the road you need—not the one you want.",
+      "tags": [
+        "travel",
+        "luck"
+      ],
+      "tone": [
+        "mysterious"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "bn_listen",
+      "text": "It makes lies sound slightly off-key, like a song with a missing note.",
+      "tags": [
+        "justice",
+        "knowledge",
+        "vigilance"
+      ],
+      "tone": [
+        "mysterious"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "bn_silent_step",
+      "text": "It encourages quieter movement when discretion matters most.",
+      "tags": [
+        "stealth",
+        "urban"
+      ],
+      "tone": [
+        "mysterious"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "bn_stormsense",
+      "text": "It pricks with faint static before danger breaks like thunder.",
+      "tags": [
+        "storm",
+        "vigilance"
+      ],
+      "tone": [
+        "mysterious"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "bn_grave_calm",
+      "text": "In grave places, it dampens the worst of dread, like a candle behind the ribs.",
+      "tags": [
+        "undead",
+        "protection"
+      ],
+      "tone": [
+        "grim"
+      ],
+      "weight": 3
+    }
+  ]
+}

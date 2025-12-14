@@ -1,0 +1,82 @@
+{
+  "history_event": [
+    {
+      "id": "he_saint_saved",
+      "text": "It earned its name when it kept a lone sentinel standing at {place} through {event}.",
+      "tags": [
+        "vigilance",
+        "protection"
+      ],
+      "tone": [
+        "heroic",
+        "grim"
+      ],
+      "weight": 4
+    },
+    {
+      "id": "he_betrayal",
+      "text": "It changed hands after a betrayal in {place}; the original owner was never found, only their footprints.",
+      "tags": [
+        "stealth",
+        "urban"
+      ],
+      "tone": [
+        "mysterious",
+        "grim"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "he_fey_court",
+      "text": "It was briefly displayed in a fey court, where every compliment was a contract.",
+      "tags": [
+        "fey",
+        "luck"
+      ],
+      "tone": [
+        "whimsical",
+        "mysterious"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "he_storm_wreck",
+      "text": "It survived a shipwreck near {place}, washing ashore with a map no one remembers drawing.",
+      "tags": [
+        "sea",
+        "storm",
+        "travel"
+      ],
+      "tone": [
+        "mysterious"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "he_archive_fire",
+      "text": "It was recovered after a fire in the halls of {faction}, still warm to the touch days later.",
+      "tags": [
+        "knowledge",
+        "fire"
+      ],
+      "tone": [
+        "grim",
+        "mysterious"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "he_grave_bargain",
+      "text": "It was traded to settle a debt with the dead beneath {place}. The price was paid, but never itemized.",
+      "tags": [
+        "undead",
+        "eldritch"
+      ],
+      "tone": [
+        "grim",
+        "cosmic"
+      ],
+      "weight": 3
+    }
+  ]
+}

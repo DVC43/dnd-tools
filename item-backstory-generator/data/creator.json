@@ -1,0 +1,94 @@
+{
+  "creator": [
+    {
+      "id": "cr_relic_smith",
+      "text": "Its maker was {maker}, a relic-smith sworn to {faction}, shaping it to answer a single desperate need.",
+      "tags": [
+        "divine",
+        "duty"
+      ],
+      "tone": [
+        "heroic",
+        "grim"
+      ],
+      "weight": 4
+    },
+    {
+      "id": "cr_war_captain",
+      "text": "It was devised by {maker}, a battlefield pragmatist who trusted steel over speeches.",
+      "tags": [
+        "war"
+      ],
+      "tone": [
+        "grim",
+        "heroic"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "cr_fey_artisan",
+      "text": "It was fashioned by {maker}, who learned their craft from laughter in leaves and debt in honeyed words.",
+      "tags": [
+        "fey",
+        "craft"
+      ],
+      "tone": [
+        "whimsical",
+        "mysterious"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "cr_urban_fix",
+      "text": "It was modified by {maker} in a cramped room above a shuttered shop, where discretion was the true currency.",
+      "tags": [
+        "urban",
+        "stealth",
+        "trade"
+      ],
+      "tone": [
+        "mysterious"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "cr_necromancer",
+      "text": "It bears the handiwork of {maker}, who never feared the quiet that follows a heartbeat.",
+      "tags": [
+        "undead",
+        "eldritch"
+      ],
+      "tone": [
+        "grim",
+        "cosmic"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "cr_storm_seer",
+      "text": "It was completed by {maker} on a roofline in driving rain, counting thunder as if it were scripture.",
+      "tags": [
+        "storm",
+        "vigilance"
+      ],
+      "tone": [
+        "mysterious",
+        "cosmic"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "cr_healer_order",
+      "text": "It was crafted at the insistence of {faction}, under the watch of {maker}, to make mercy easier to carry.",
+      "tags": [
+        "healing",
+        "protection",
+        "divine"
+      ],
+      "tone": [
+        "heroic"
+      ],
+      "weight": 3
+    }
+  ]
+}

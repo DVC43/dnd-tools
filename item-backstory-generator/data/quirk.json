@@ -1,0 +1,56 @@
+{
+  "quirk": [
+    {
+      "id": "qk_cold",
+      "text": "It is always cool to the touch, like stone kept in shade.",
+      "tags": [
+        "mysterious"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "qk_salt",
+      "text": "A faint scent of sea-salt clings to it no matter how often it’s cleaned.",
+      "tags": [
+        "sea"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "qk_whisper",
+      "text": "In quiet rooms it seems to whisper a single word—never the same word twice.",
+      "tags": [
+        "eldritch",
+        "arcane"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "qk_leaf",
+      "text": "Tiny leaf-motifs shift slightly when no one is watching.",
+      "tags": [
+        "fey",
+        "nature",
+        "forest"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "qk_glow",
+      "text": "It catches light strangely, as if remembering a different sun.",
+      "tags": [
+        "divine"
+      ],
+      "weight": 2
+    },
+    {
+      "id": "qk_soot",
+      "text": "Soot gathers along its edges after arguments, even if no fire is near.",
+      "tags": [
+        "urban",
+        "fire"
+      ],
+      "weight": 2
+    }
+  ]
+}

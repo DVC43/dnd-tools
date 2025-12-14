@@ -1,0 +1,123 @@
+{
+  "origin": [
+    {
+      "id": "org_temple_vigil",
+      "text": "Forged in {place} during {event}, under sleepless prayers and a vow that no bell would ring in surrender.",
+      "tags": [
+        "divine",
+        "vigilance",
+        "protection"
+      ],
+      "tone": [
+        "heroic",
+        "grim"
+      ],
+      "weight": 4
+    },
+    {
+      "id": "org_battlefield_quench",
+      "text": "Quenched in mud and blood at {place} when the lines broke and oaths became the only shelter left.",
+      "tags": [
+        "war",
+        "courage"
+      ],
+      "tone": [
+        "grim"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "org_fey_bargain",
+      "text": "Woven from a promise traded at a moonlit crossroads near {place}, where the air tastes of lilies and lies.",
+      "tags": [
+        "fey",
+        "luck",
+        "travel"
+      ],
+      "tone": [
+        "mysterious",
+        "whimsical"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "org_archive_ink",
+      "text": "Bound in the vaults of {place} with ink that refuses to dry, meant to outlast every honest forgetfulness.",
+      "tags": [
+        "knowledge",
+        "arcane"
+      ],
+      "tone": [
+        "mysterious",
+        "cosmic"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "org_sea_salt",
+      "text": "Raised from a salt-sunk reliquary off {place}, crusted in sea-silver and old prayers.",
+      "tags": [
+        "sea",
+        "divine",
+        "travel"
+      ],
+      "tone": [
+        "mysterious"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "org_undead_gravefire",
+      "text": "Kindled in gravefire beneath {place}, where the dead keep careful accounts and no debt stays buried.",
+      "tags": [
+        "undead",
+        "eldritch"
+      ],
+      "tone": [
+        "grim",
+        "cosmic"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "org_craft_guild",
+      "text": "Commissioned by {faction} in {place}, built to endure hard hands, harder weather, and harder choices.",
+      "tags": [
+        "craft",
+        "duty",
+        "trade"
+      ],
+      "tone": [
+        "heroic"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "org_storm_forge",
+      "text": "Struck to shape during a storm that never moved on from {place}, each thunderclap leaving a hidden signature.",
+      "tags": [
+        "storm",
+        "arcane"
+      ],
+      "tone": [
+        "mysterious",
+        "cosmic"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "org_urban_alley",
+      "text": "Passed hand to hand through the backstreets of {place}, gathering stories like soot gathers on glass.",
+      "tags": [
+        "urban",
+        "stealth",
+        "trade"
+      ],
+      "tone": [
+        "mysterious",
+        "grim"
+      ],
+      "weight": 3
+    }
+  ]
+}

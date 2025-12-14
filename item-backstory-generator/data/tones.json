@@ -1,0 +1,24 @@
+{
+  "tones": [
+    {
+      "id": "heroic",
+      "label": "Heroic"
+    },
+    {
+      "id": "grim",
+      "label": "Grim"
+    },
+    {
+      "id": "mysterious",
+      "label": "Mysterious"
+    },
+    {
+      "id": "whimsical",
+      "label": "Whimsical"
+    },
+    {
+      "id": "cosmic",
+      "label": "Cosmic"
+    }
+  ]
+}

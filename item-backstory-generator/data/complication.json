@@ -1,0 +1,65 @@
+{
+  "complication": [
+    {
+      "id": "cp_debt",
+      "text": "It keeps a quiet tally of favors taken. Sometimes it demands repayment at the worst possible moment.",
+      "tags": [
+        "eldritch",
+        "undead"
+      ],
+      "tone": [
+        "grim"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "cp_oath",
+      "text": "It dislikes broken promises; when one is made nearby, it grows uncomfortably heavy.",
+      "tags": [
+        "duty",
+        "justice"
+      ],
+      "tone": [
+        "grim"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "cp_fey_interest",
+      "text": "A fey patron occasionally calls in ‘minor courtesies’ that never feel minor.",
+      "tags": [
+        "fey",
+        "luck"
+      ],
+      "tone": [
+        "whimsical",
+        "mysterious"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "cp_storm",
+      "text": "It attracts trouble the way metal attracts lightning—rarely, but never conveniently.",
+      "tags": [
+        "storm"
+      ],
+      "tone": [
+        "grim"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "cp_hunger",
+      "text": "It works best after being ‘fed’ a secret. The more valuable the secret, the more satisfied it seems.",
+      "tags": [
+        "eldritch",
+        "knowledge"
+      ],
+      "tone": [
+        "cosmic",
+        "mysterious"
+      ],
+      "weight": 3
+    }
+  ]
+}

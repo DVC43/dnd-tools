@@ -1,0 +1,78 @@
+{
+  "hook": [
+    {
+      "id": "hk_wanted",
+      "text": "Someone in {faction} is quietly buying any rumor of it—paying too much, asking too little.",
+      "tags": [
+        "trade",
+        "urban"
+      ],
+      "tone": [
+        "mysterious"
+      ],
+      "weight": 4
+    },
+    {
+      "id": "hk_bell_dreams",
+      "text": "Those who sleep near it hear distant bells and wake with a destination in mind.",
+      "tags": [
+        "divine",
+        "travel"
+      ],
+      "tone": [
+        "mysterious"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "hk_storm_draw",
+      "text": "Storms linger when it’s nearby, as if the sky is waiting for an answer.",
+      "tags": [
+        "storm",
+        "arcane"
+      ],
+      "tone": [
+        "cosmic",
+        "mysterious"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "hk_fey_claim",
+      "text": "A smiling stranger insists it was borrowed, not stolen—and offers a trade that feels unfair.",
+      "tags": [
+        "fey",
+        "luck"
+      ],
+      "tone": [
+        "whimsical",
+        "mysterious"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "hk_dead_notice",
+      "text": "The dead seem to notice it. Tomb-candles gutter as it passes, and graves settle restlessly.",
+      "tags": [
+        "undead",
+        "eldritch"
+      ],
+      "tone": [
+        "grim"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "hk_healers",
+      "text": "A healer’s network wants it delivered to {place} before an approaching crisis.",
+      "tags": [
+        "healing",
+        "duty"
+      ],
+      "tone": [
+        "heroic"
+      ],
+      "weight": 3
+    }
+  ]
+}

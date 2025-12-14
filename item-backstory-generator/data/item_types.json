@@ -1,0 +1,44 @@
+{
+  "item_types": [
+    {
+      "id": "weapon",
+      "label": "Weapon"
+    },
+    {
+      "id": "armor",
+      "label": "Armor"
+    },
+    {
+      "id": "shield",
+      "label": "Shield"
+    },
+    {
+      "id": "ring",
+      "label": "Ring"
+    },
+    {
+      "id": "amulet",
+      "label": "Amulet"
+    },
+    {
+      "id": "wondrous",
+      "label": "Wondrous Item"
+    },
+    {
+      "id": "staff",
+      "label": "Staff / Wand"
+    },
+    {
+      "id": "cloak",
+      "label": "Cloak / Garment"
+    },
+    {
+      "id": "tool",
+      "label": "Tool / Implement"
+    },
+    {
+      "id": "tome",
+      "label": "Tome / Scrollcase"
+    }
+  ]
+}

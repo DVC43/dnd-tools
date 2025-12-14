@@ -1,0 +1,90 @@
+{
+  "purpose": [
+    {
+      "id": "pu_guard",
+      "text": "It was meant to stand between the helpless and the moment that breaks them.",
+      "tags": [
+        "protection",
+        "duty"
+      ],
+      "tone": [
+        "heroic"
+      ],
+      "weight": 4
+    },
+    {
+      "id": "pu_break_siege",
+      "text": "It was built to end a siege quickly—one decisive act, one spared winter.",
+      "tags": [
+        "war"
+      ],
+      "tone": [
+        "grim",
+        "heroic"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "pu_seek_truth",
+      "text": "It was designed to notice what everyone else politely ignores.",
+      "tags": [
+        "knowledge",
+        "vigilance"
+      ],
+      "tone": [
+        "mysterious"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "pu_open_way",
+      "text": "It was made to find roads where none should exist, and to close them just as easily.",
+      "tags": [
+        "travel",
+        "luck"
+      ],
+      "tone": [
+        "mysterious",
+        "cosmic"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "pu_hide_hand",
+      "text": "It was intended for the subtle work—doors that open, voices that soften, footsteps that vanish.",
+      "tags": [
+        "stealth",
+        "urban"
+      ],
+      "tone": [
+        "mysterious"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "pu_heal_cost",
+      "text": "It was shaped to ease pain, though its mercy was never promised to be free.",
+      "tags": [
+        "healing",
+        "divine"
+      ],
+      "tone": [
+        "heroic",
+        "grim"
+      ],
+      "weight": 3
+    },
+    {
+      "id": "pu_bind_unquiet",
+      "text": "It was created to bargain with the unquiet dead from a position of strength.",
+      "tags": [
+        "undead",
+        "eldritch"
+      ],
+      "tone": [
+        "grim"
+      ],
+      "weight": 3
+    }
+  ]
+}
