@@ -1,123 +1,416 @@
 {
-  "origin": [
-    {
-      "id": "org_temple_vigil",
-      "text": "Forged in {place} during {event}, under sleepless prayers and a vow that no bell would ring in surrender.",
-      "tags": [
-        "divine",
-        "vigilance",
-        "protection"
-      ],
-      "tone": [
-        "heroic",
-        "grim"
-      ],
-      "weight": 4
-    },
-    {
-      "id": "org_battlefield_quench",
-      "text": "Quenched in mud and blood at {place} when the lines broke and oaths became the only shelter left.",
-      "tags": [
-        "war",
-        "courage"
-      ],
-      "tone": [
-        "grim"
-      ],
-      "weight": 3
-    },
-    {
-      "id": "org_fey_bargain",
-      "text": "Woven from a promise traded at a moonlit crossroads near {place}, where the air tastes of lilies and lies.",
-      "tags": [
-        "fey",
-        "luck",
-        "travel"
-      ],
-      "tone": [
-        "mysterious",
-        "whimsical"
-      ],
-      "weight": 3
-    },
-    {
-      "id": "org_archive_ink",
-      "text": "Bound in the vaults of {place} with ink that refuses to dry, meant to outlast every honest forgetfulness.",
-      "tags": [
-        "knowledge",
-        "arcane"
-      ],
-      "tone": [
-        "mysterious",
-        "cosmic"
-      ],
-      "weight": 3
-    },
-    {
-      "id": "org_sea_salt",
-      "text": "Raised from a salt-sunk reliquary off {place}, crusted in sea-silver and old prayers.",
-      "tags": [
-        "sea",
-        "divine",
-        "travel"
-      ],
-      "tone": [
-        "mysterious"
-      ],
-      "weight": 3
-    },
-    {
-      "id": "org_undead_gravefire",
-      "text": "Kindled in gravefire beneath {place}, where the dead keep careful accounts and no debt stays buried.",
-      "tags": [
-        "undead",
-        "eldritch"
-      ],
-      "tone": [
-        "grim",
-        "cosmic"
-      ],
-      "weight": 3
-    },
-    {
-      "id": "org_craft_guild",
-      "text": "Commissioned by {faction} in {place}, built to endure hard hands, harder weather, and harder choices.",
-      "tags": [
-        "craft",
-        "duty",
-        "trade"
-      ],
-      "tone": [
-        "heroic"
-      ],
-      "weight": 3
-    },
-    {
-      "id": "org_storm_forge",
-      "text": "Struck to shape during a storm that never moved on from {place}, each thunderclap leaving a hidden signature.",
-      "tags": [
-        "storm",
-        "arcane"
-      ],
-      "tone": [
-        "mysterious",
-        "cosmic"
-      ],
-      "weight": 3
-    },
-    {
-      "id": "org_urban_alley",
-      "text": "Passed hand to hand through the backstreets of {place}, gathering stories like soot gathers on glass.",
-      "tags": [
-        "urban",
-        "stealth",
-        "trade"
-      ],
-      "tone": [
-        "mysterious",
-        "grim"
-      ],
-      "weight": 3
-    }
-  ]
+    "origin": [
+        {
+            "id": "org_temple_vigil",
+            "text": "Forged in {place} during {event}, under sleepless prayers and a vow that no bell would ring in surrender.",
+            "tags": [
+                "divine",
+                "vigilance",
+                "protection"
+            ],
+            "tone": [
+                "heroic",
+                "grim"
+            ],
+            "weight": 4
+        },
+        {
+            "id": "org_battlefield_quench",
+            "text": "Quenched in sweat and blood at {place} when the lines broke and oaths became the only shelter left.",
+            "tags": [
+                "war",
+                "courage"
+            ],
+            "tone": [
+                "grim"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "org_fey_bargain",
+            "text": "Woven from a promise traded at a moonlit crossroads near {place}, where the air tastes of lilies and lies.",
+            "tags": [
+                "fey",
+                "luck",
+                "travel"
+            ],
+            "tone": [
+                "mysterious",
+                "whimsical"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "org_archive_ink",
+            "text": "Bound in the vaults of {place} with ink that refuses to dry, meant to outlast every honest forgetfulness.",
+            "tags": [
+                "knowledge",
+                "arcane"
+            ],
+            "tone": [
+                "mysterious",
+                "cosmic"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "org_sea_salt",
+            "text": "Raised from a salt-sunk reliquary off {place}, crusted in sea-silver and old prayers.",
+            "tags": [
+                "sea",
+                "divine",
+                "travel"
+            ],
+            "tone": [
+                "mysterious"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "org_undead_gravefire",
+            "text": "Kindled in gravefire beneath {place}, where the dead keep careful accounts and no debt stays buried.",
+            "tags": [
+                "undead",
+                "eldritch"
+            ],
+            "tone": [
+                "grim",
+                "cosmic"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "org_craft_guild",
+            "text": "Commissioned by {faction} in {place}, built to endure hard hands, harder weather, and harder choices.",
+            "tags": [
+                "craft",
+                "duty",
+                "trade"
+            ],
+            "tone": [
+                "heroic"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "org_storm_forge",
+            "text": "Struck to shape during a storm that never moved on from {place}, each thunderclap leaving a hidden signature.",
+            "tags": [
+                "storm",
+                "arcane"
+            ],
+            "tone": [
+                "mysterious",
+                "cosmic"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "org_urban_alley",
+            "text": "Passed hand to hand through the backstreets of {place}, gathering stories like soot gathers on glass.",
+            "tags": [
+                "urban",
+                "stealth",
+                "trade"
+            ],
+            "tone": [
+                "mysterious",
+                "grim"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "org_dwarven_hold",
+            "text": "Forged in a dwarven hold beneath {place}, where every hammerblow is recorded like a prayer in stone.",
+            "tags": [
+                "craft"
+            ],
+            "tone": [
+                "heroic"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "org_elven_ruin",
+            "text": "Recovered from an elven ruin near {place}, still carrying the calm of moonlit halls and patient years.",
+            "tags": [
+                "fey",
+                "knowledge"
+            ],
+            "tone": [
+                "mysterious"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "org_wizard_college",
+            "text": "Commissioned at a wizard’s college in {place}, tested in secret duels where pride mattered more than safety.",
+            "tags": [
+                "arcane",
+                "knowledge"
+            ],
+            "tone": [
+                "mysterious"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "org_paladin_oath",
+            "text": "Consecrated in {place} when a knight swore an oath that outlived them—and demanded an heir.",
+            "tags": [
+                "divine",
+                "duty"
+            ],
+            "tone": [
+                "heroic"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "org_ranger_cairn",
+            "text": "Laid beneath a cairn outside {place} for a generation, meant to be claimed only when the forest grew restless.",
+            "tags": [
+                "nature",
+                "forest"
+            ],
+            "tone": [
+                "mysterious"
+            ],
+            "weight": 2
+        },
+        {
+            "id": "org_dragon_hoard",
+            "text": "Once part of a dragon’s hoard near {place}, it still seems to prefer the company of coins and bold liars.",
+            "tags": [
+                "luck",
+                "trade"
+            ],
+            "tone": [
+                "mysterious"
+            ],
+            "weight": 2
+        },
+        {
+            "id": "org_temple_reliquary",
+            "text": "Kept in a reliquary at {place} until {event} scattered the faithful and left the relic unguarded.",
+            "tags": [
+                "divine",
+                "protection"
+            ],
+            "tone": [
+                "heroic",
+                "mysterious"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "org_bandit_cache",
+            "text": "Found in a bandit cache outside {place}, wrapped in oilcloth with a map that doesn’t match any road.",
+            "tags": [
+                "stealth",
+                "travel"
+            ],
+            "tone": [
+                "mysterious"
+            ],
+            "weight": 2
+        },
+        {
+            "id": "org_guild_auction",
+            "text": "Sold at a quiet guild auction in {place}, where bids were whispered and the ledger never lied.",
+            "tags": [
+                "trade",
+                "urban"
+            ],
+            "tone": [
+                "mysterious"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "org_crusade_field",
+            "text": "Carried through a crusade that touched {place}, its edges worn smooth by desperate hands and harsh mercy.",
+            "tags": [
+                "war",
+                "divine"
+            ],
+            "tone": [
+                "grim",
+                "heroic"
+            ],
+            "weight": 2
+        },
+        {
+            "id": "org_barbarian_totem",
+            "text": "Bound to a clan totem near {place}, made to be passed down only to those who can bear the story.",
+            "tags": [
+                "courage",
+                "duty"
+            ],
+            "tone": [
+                "heroic"
+            ],
+            "weight": 2
+        },
+        {
+            "id": "org_monk_monastery",
+            "text": "Fashioned at a monastery in {place}, where silence was treated as a material no less real than iron.",
+            "tags": [
+                "discipline",
+                "vigilance"
+            ],
+            "tone": [
+                "mysterious"
+            ],
+            "weight": 2
+        },
+        {
+            "id": "org_sewer_saint",
+            "text": "Venerated in the underways of {place}, where a street-saint’s miracles were measured in small mercies.",
+            "tags": [
+                "urban",
+                "healing"
+            ],
+            "tone": [
+                "mysterious"
+            ],
+            "weight": 2
+        },
+        {
+            "id": "org_fey_festival",
+            "text": "Won during a festival that appears once a decade near {place}, where prizes always come with a story attached.",
+            "tags": [
+                "fey",
+                "luck"
+            ],
+            "tone": [
+                "whimsical",
+                "mysterious"
+            ],
+            "weight": 2
+        },
+        {
+            "id": "org_shadowfell_echo",
+            "text": "Touched by a thin place near {place}; for a heartbeat, it belonged to somewhere colder than night.",
+            "tags": [
+                "undead"
+            ],
+            "tone": [
+                "grim",
+                "mysterious"
+            ],
+            "weight": 1
+        },
+        {
+            "id": "org_ancient_empire",
+            "text": "Stamped with the mark of an ancient empire whose roads once reached {place}, when law was sharper than steel.",
+            "tags": [
+                "justice",
+                "duty"
+            ],
+            "tone": [
+                "heroic"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "org_battle_standard",
+            "text": "Once a symbol carried at {event}, it was reforged after the battle so the victory wouldn’t be forgotten.",
+            "tags": [
+                "war",
+                "courage"
+            ],
+            "tone": [
+                "heroic"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "org_healer_satchel",
+            "text": "Made for a traveling healer who served {place}; it still seems to favor steady hands over brave speeches.",
+            "tags": [
+                "healing",
+                "travel"
+            ],
+            "tone": [
+                "heroic"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "org_wild_druid_circle",
+            "text": "Gifted by a druid circle near {place}, shaped to keep balance when mortals insist on choosing sides.",
+            "tags": [
+                "nature",
+                "forest"
+            ],
+            "tone": [
+                "mysterious"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "org_sky_conjunction",
+            "text": "Completed during a rare conjunction above {place}; even now it feels subtly aligned with distant lights.",
+            "tags": [
+                "arcane"
+            ],
+            "tone": [
+                "cosmic",
+                "mysterious"
+            ],
+            "weight": 1
+        },
+        {
+            "id": "org_cult_repurposed",
+            "text": "Taken from a cult cell in {place} and repurposed by {faction}, its old symbols scratched away but not fully silenced.",
+            "tags": [
+                "eldritch",
+                "justice"
+            ],
+            "tone": [
+                "grim",
+                "mysterious"
+            ],
+            "weight": 2
+        },
+        {
+            "id": "org_coastal_watchtower",
+            "text": "Kept in a coastal watchtower near {place}, meant to be used only when the sea delivered bad news.",
+            "tags": [
+                "sea",
+                "vigilance"
+            ],
+            "tone": [
+                "heroic",
+                "mysterious"
+            ],
+            "weight": 2
+        },
+        {
+            "id": "org_mercenary_vow",
+            "text": "Commissioned by {faction} after {event}, built for someone who needed a vow they could hold in their hands.",
+            "tags": [
+                "duty",
+                "war"
+            ],
+            "tone": [
+                "heroic",
+                "grim"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "org_travelers_shrine",
+            "text": "Left at a roadside shrine outside {place}, taken up again only when a traveler’s prayer finally came due.",
+            "tags": [
+                "travel",
+                "divine"
+            ],
+            "tone": [
+                "mysterious"
+            ],
+            "weight": 3
+        }
+    ]
 }

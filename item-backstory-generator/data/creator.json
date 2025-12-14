@@ -1,94 +1,358 @@
 {
-  "creator": [
-    {
-      "id": "cr_relic_smith",
-      "text": "Its maker was {maker}, a relic-smith sworn to {faction}, shaping it to answer a single desperate need.",
-      "tags": [
-        "divine",
-        "duty"
-      ],
-      "tone": [
-        "heroic",
-        "grim"
-      ],
-      "weight": 4
-    },
-    {
-      "id": "cr_war_captain",
-      "text": "It was devised by {maker}, a battlefield pragmatist who trusted steel over speeches.",
-      "tags": [
-        "war"
-      ],
-      "tone": [
-        "grim",
-        "heroic"
-      ],
-      "weight": 3
-    },
-    {
-      "id": "cr_fey_artisan",
-      "text": "It was fashioned by {maker}, who learned their craft from laughter in leaves and debt in honeyed words.",
-      "tags": [
-        "fey",
-        "craft"
-      ],
-      "tone": [
-        "whimsical",
-        "mysterious"
-      ],
-      "weight": 3
-    },
-    {
-      "id": "cr_urban_fix",
-      "text": "It was modified by {maker} in a cramped room above a shuttered shop, where discretion was the true currency.",
-      "tags": [
-        "urban",
-        "stealth",
-        "trade"
-      ],
-      "tone": [
-        "mysterious"
-      ],
-      "weight": 3
-    },
-    {
-      "id": "cr_necromancer",
-      "text": "It bears the handiwork of {maker}, who never feared the quiet that follows a heartbeat.",
-      "tags": [
-        "undead",
-        "eldritch"
-      ],
-      "tone": [
-        "grim",
-        "cosmic"
-      ],
-      "weight": 3
-    },
-    {
-      "id": "cr_storm_seer",
-      "text": "It was completed by {maker} on a roofline in driving rain, counting thunder as if it were scripture.",
-      "tags": [
-        "storm",
-        "vigilance"
-      ],
-      "tone": [
-        "mysterious",
-        "cosmic"
-      ],
-      "weight": 3
-    },
-    {
-      "id": "cr_healer_order",
-      "text": "It was crafted at the insistence of {faction}, under the watch of {maker}, to make mercy easier to carry.",
-      "tags": [
-        "healing",
-        "protection",
-        "divine"
-      ],
-      "tone": [
-        "heroic"
-      ],
-      "weight": 3
-    }
-  ]
+    "creator": [
+        {
+            "id": "cr_relic_smith",
+            "text": "Its maker was {maker}, a relic-smith sworn to {faction}, shaping it to answer a single desperate need.",
+            "tags": [
+                "divine",
+                "duty"
+            ],
+            "tone": [
+                "heroic",
+                "grim"
+            ],
+            "weight": 4
+        },
+        {
+            "id": "cr_war_captain",
+            "text": "It was devised by {maker}, a battlefield pragmatist who trusted steel over speeches.",
+            "tags": [
+                "war"
+            ],
+            "tone": [
+                "grim",
+                "heroic"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "cr_fey_artisan",
+            "text": "It was fashioned by {maker}, who learned their craft from laughter in leaves and debt in honeyed words.",
+            "tags": [
+                "fey",
+                "craft"
+            ],
+            "tone": [
+                "whimsical",
+                "mysterious"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "cr_urban_fix",
+            "text": "It was modified by {maker} in a cramped room above a shuttered shop, where discretion was the true currency.",
+            "tags": [
+                "urban",
+                "stealth",
+                "trade"
+            ],
+            "tone": [
+                "mysterious"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "cr_necromancer",
+            "text": "It bears the handiwork of {maker}, who never feared the quiet that follows a heartbeat.",
+            "tags": [
+                "undead",
+                "eldritch"
+            ],
+            "tone": [
+                "grim",
+                "cosmic"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "cr_storm_seer",
+            "text": "It was completed by {maker} on a roofline in driving rain, counting thunder as if it were scripture.",
+            "tags": [
+                "storm",
+                "vigilance"
+            ],
+            "tone": [
+                "mysterious",
+                "cosmic"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "cr_healer_order",
+            "text": "It was crafted at the insistence of {faction}, under the watch of {maker}, to make mercy easier to carry.",
+            "tags": [
+                "healing",
+                "protection",
+                "divine"
+            ],
+            "tone": [
+                "heroic"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "cr_dwarven_runesmith",
+            "text": "It was forged by {maker}, a dwarven runesmith whose work was meant to outlast kingdoms, not kings.",
+            "tags": [
+                "craft"
+            ],
+            "tone": [
+                "heroic"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "cr_elven_artificer",
+            "text": "It was shaped by {maker}, an elven artificer who measured time in centuries and mistakes in millennia.",
+            "tags": [
+                "fey",
+                "knowledge"
+            ],
+            "tone": [
+                "mysterious"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "cr_retired_adventurer",
+            "text": "It was made by {maker}, a retired adventurer who knew exactly which problem they were preparing for.",
+            "tags": [
+                "courage",
+                "duty"
+            ],
+            "tone": [
+                "heroic"
+            ],
+            "weight": 4
+        },
+        {
+            "id": "cr_paladin_order",
+            "text": "It was commissioned by {faction} and overseen by {maker}, to serve as both symbol and safeguard.",
+            "tags": [
+                "divine",
+                "justice"
+            ],
+            "tone": [
+                "heroic"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "cr_arcane_professor",
+            "text": "It was created by {maker}, a scholar whose lectures were legendary and whose footnotes were feared.",
+            "tags": [
+                "arcane",
+                "knowledge"
+            ],
+            "tone": [
+                "mysterious"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "cr_druid_circle",
+            "text": "It was grown and guided into shape by {maker} of a druid circle near {place}, rather than forged.",
+            "tags": [
+                "nature",
+                "forest"
+            ],
+            "tone": [
+                "mysterious"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "cr_ranger_warden",
+            "text": "It was fashioned by {maker}, a warden who trusted preparation more than heroics.",
+            "tags": [
+                "vigilance",
+                "travel"
+            ],
+            "tone": [
+                "heroic"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "cr_monastery_master",
+            "text": "It was crafted under the supervision of {maker} at a secluded monastery, where discipline was the true material.",
+            "tags": [
+                "discipline",
+                "vigilance"
+            ],
+            "tone": [
+                "mysterious"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "cr_bardic_college",
+            "text": "It was composed—rather than built—by {maker}, then made solid by a bardic college that took the song seriously.",
+            "tags": [
+                "knowledge",
+                "luck"
+            ],
+            "tone": [
+                "whimsical"
+            ],
+            "weight": 2
+        },
+        {
+            "id": "cr_dragonblood_sorcerer",
+            "text": "It was shaped by {maker}, whose blood remembered an older and more dangerous age.",
+            "tags": [
+                "arcane"
+            ],
+            "tone": [
+                "mysterious"
+            ],
+            "weight": 2
+        },
+        {
+            "id": "cr_knightly_armorer",
+            "text": "It was produced by {maker}, an armorer who served three knightly orders and buried two of them.",
+            "tags": [
+                "war",
+                "duty"
+            ],
+            "tone": [
+                "grim",
+                "heroic"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "cr_gnome_tinkerer",
+            "text": "It was assembled by {maker}, a gnome tinkerer whose best work always included one unnecessary improvement.",
+            "tags": [
+                "craft",
+                "luck"
+            ],
+            "tone": [
+                "whimsical"
+            ],
+            "weight": 2
+        },
+        {
+            "id": "cr_temple_artisan",
+            "text": "It was fashioned by {maker}, a temple artisan whose hands were steadier than their faith.",
+            "tags": [
+                "divine",
+                "craft"
+            ],
+            "tone": [
+                "heroic"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "cr_city_enchanter",
+            "text": "It was enchanted by {maker} in the heart of {place}, where magic learned to survive scrutiny and taxes.",
+            "tags": [
+                "urban",
+                "arcane"
+            ],
+            "tone": [
+                "mysterious"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "cr_mercenary_engineer",
+            "text": "It was designed by {maker}, a mercenary engineer paid to solve problems that commanders wouldn’t discuss.",
+            "tags": [
+                "war",
+                "trade"
+            ],
+            "tone": [
+                "grim"
+            ],
+            "weight": 2
+        },
+        {
+            "id": "cr_saintly_disciple",
+            "text": "It was completed by {maker}, a disciple of a minor saint whose teachings never spread—but endured.",
+            "tags": [
+                "divine",
+                "healing"
+            ],
+            "tone": [
+                "heroic"
+            ],
+            "weight": 2
+        },
+        {
+            "id": "cr_ancient_lineage",
+            "text": "It was created by {maker}, last of a lineage sworn to make exactly one thing—and make it well.",
+            "tags": [
+                "duty",
+                "craft"
+            ],
+            "tone": [
+                "heroic"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "cr_planar_scholar",
+            "text": "It was refined by {maker}, a planar scholar who insisted the risks were purely theoretical.",
+            "tags": [
+                "arcane",
+                "eldritch"
+            ],
+            "tone": [
+                "cosmic",
+                "mysterious"
+            ],
+            "weight": 1
+        },
+        {
+            "id": "cr_hearth_witch",
+            "text": "It was quietly made by {maker}, a hedge-witch whose magic worked best when no one was watching.",
+            "tags": [
+                "nature",
+                "healing"
+            ],
+            "tone": [
+                "mysterious"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "cr_watch_captain",
+            "text": "It was commissioned by {faction} and overseen by {maker}, intended to keep order when laws proved thin.",
+            "tags": [
+                "justice",
+                "urban"
+            ],
+            "tone": [
+                "heroic"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "cr_siege_architect",
+            "text": "It was drafted by {maker}, a siege architect who believed every wall eventually explained itself.",
+            "tags": [
+                "war",
+                "knowledge"
+            ],
+            "tone": [
+                "grim"
+            ],
+            "weight": 2
+        },
+        {
+            "id": "cr_wayfarer_smith",
+            "text": "It was forged by {maker}, a traveling smith who believed tools should earn their stories.",
+            "tags": [
+                "travel",
+                "craft"
+            ],
+            "tone": [
+                "heroic"
+            ],
+            "weight": 3
+        }
+    ]
 }

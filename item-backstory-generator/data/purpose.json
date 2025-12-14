@@ -1,90 +1,385 @@
 {
-  "purpose": [
-    {
-      "id": "pu_guard",
-      "text": "It was meant to stand between the helpless and the moment that breaks them.",
-      "tags": [
-        "protection",
-        "duty"
-      ],
-      "tone": [
-        "heroic"
-      ],
-      "weight": 4
-    },
-    {
-      "id": "pu_break_siege",
-      "text": "It was built to end a siege quickly—one decisive act, one spared winter.",
-      "tags": [
-        "war"
-      ],
-      "tone": [
-        "grim",
-        "heroic"
-      ],
-      "weight": 3
-    },
-    {
-      "id": "pu_seek_truth",
-      "text": "It was designed to notice what everyone else politely ignores.",
-      "tags": [
-        "knowledge",
-        "vigilance"
-      ],
-      "tone": [
-        "mysterious"
-      ],
-      "weight": 3
-    },
-    {
-      "id": "pu_open_way",
-      "text": "It was made to find roads where none should exist, and to close them just as easily.",
-      "tags": [
-        "travel",
-        "luck"
-      ],
-      "tone": [
-        "mysterious",
-        "cosmic"
-      ],
-      "weight": 3
-    },
-    {
-      "id": "pu_hide_hand",
-      "text": "It was intended for the subtle work—doors that open, voices that soften, footsteps that vanish.",
-      "tags": [
-        "stealth",
-        "urban"
-      ],
-      "tone": [
-        "mysterious"
-      ],
-      "weight": 3
-    },
-    {
-      "id": "pu_heal_cost",
-      "text": "It was shaped to ease pain, though its mercy was never promised to be free.",
-      "tags": [
-        "healing",
-        "divine"
-      ],
-      "tone": [
-        "heroic",
-        "grim"
-      ],
-      "weight": 3
-    },
-    {
-      "id": "pu_bind_unquiet",
-      "text": "It was created to bargain with the unquiet dead from a position of strength.",
-      "tags": [
-        "undead",
-        "eldritch"
-      ],
-      "tone": [
-        "grim"
-      ],
-      "weight": 3
-    }
-  ]
+    "purpose": [
+        {
+            "id": "pu_guard",
+            "text": "It was meant to stand between the helpless and the moment that breaks them.",
+            "tags": [
+                "protection",
+                "duty"
+            ],
+            "tone": [
+                "heroic"
+            ],
+            "weight": 4
+        },
+        {
+            "id": "pu_break_siege",
+            "text": "It was built to end a siege quickly—one decisive act, one spared winter.",
+            "tags": [
+                "war"
+            ],
+            "tone": [
+                "grim",
+                "heroic"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "pu_seek_truth",
+            "text": "It was designed to notice what everyone else politely ignores.",
+            "tags": [
+                "knowledge",
+                "vigilance"
+            ],
+            "tone": [
+                "mysterious"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "pu_open_way",
+            "text": "It was made to find roads where none should exist, and to close them just as easily.",
+            "tags": [
+                "travel",
+                "luck"
+            ],
+            "tone": [
+                "mysterious",
+                "cosmic"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "pu_hide_hand",
+            "text": "It was intended for the subtle work—doors that open, voices that soften, footsteps that vanish.",
+            "tags": [
+                "stealth",
+                "urban"
+            ],
+            "tone": [
+                "mysterious"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "pu_heal_cost",
+            "text": "It was shaped to ease pain, though its mercy was never promised to be free.",
+            "tags": [
+                "healing",
+                "divine"
+            ],
+            "tone": [
+                "heroic",
+                "grim"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "pu_bind_unquiet",
+            "text": "It was created to bargain with the unquiet dead from a position of strength.",
+            "tags": [
+                "undead",
+                "eldritch"
+            ],
+            "tone": [
+                "grim"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "pu_hold_line",
+            "text": "It was meant to help one person hold a line when retreat would doom others.",
+            "tags": [
+                "protection",
+                "courage"
+            ],
+            "tone": [
+                "heroic"
+            ],
+            "weight": 4
+        },
+        {
+            "id": "pu_guard_relic",
+            "text": "It was created to guard something too dangerous, sacred, or inconvenient to destroy.",
+            "tags": [
+                "duty",
+                "vigilance"
+            ],
+            "tone": [
+                "mysterious"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "pu_end_curse",
+            "text": "It was designed to end a curse cleanly—or at least contain it long enough to matter.",
+            "tags": [
+                "divine",
+                "knowledge"
+            ],
+            "tone": [
+                "heroic",
+                "mysterious"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "pu_survive_wilds",
+            "text": "It was meant to keep its bearer alive in places where maps lie and paths argue back.",
+            "tags": [
+                "travel",
+                "nature"
+            ],
+            "tone": [
+                "mysterious"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "pu_anchor_oath",
+            "text": "It was made to anchor an oath when memory, witnesses, and courage all failed.",
+            "tags": [
+                "duty",
+                "justice"
+            ],
+            "tone": [
+                "heroic"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "pu_warn_danger",
+            "text": "It was intended to give warning before danger fully understood itself.",
+            "tags": [
+                "vigilance",
+                "storm"
+            ],
+            "tone": [
+                "mysterious"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "pu_restore_balance",
+            "text": "It was shaped to restore balance after mortals pushed too far in one direction.",
+            "tags": [
+                "nature",
+                "divine"
+            ],
+            "tone": [
+                "mysterious"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "pu_secure_passage",
+            "text": "It was meant to secure safe passage through a place no one wanted to claim.",
+            "tags": [
+                "travel",
+                "protection"
+            ],
+            "tone": [
+                "heroic"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "pu_reveal_hidden",
+            "text": "It was created to reveal what hides behind manners, walls, and polite silence.",
+            "tags": [
+                "knowledge",
+                "urban"
+            ],
+            "tone": [
+                "mysterious"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "pu_sanctify_ground",
+            "text": "It was used to sanctify ground that refused to stay peaceful on its own.",
+            "tags": [
+                "divine",
+                "undead"
+            ],
+            "tone": [
+                "grim",
+                "heroic"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "pu_end_feud",
+            "text": "It was intended to end a feud decisively, before the next generation inherited it.",
+            "tags": [
+                "justice",
+                "war"
+            ],
+            "tone": [
+                "heroic",
+                "grim"
+            ],
+            "weight": 2
+        },
+        {
+            "id": "pu_test_worthy",
+            "text": "It was designed to test whether someone was worthy—without explaining the criteria.",
+            "tags": [
+                "knowledge",
+                "luck"
+            ],
+            "tone": [
+                "mysterious"
+            ],
+            "weight": 2
+        },
+        {
+            "id": "pu_keep_secret",
+            "text": "It was made to keep a secret intact even after everyone who knew it was gone.",
+            "tags": [
+                "stealth",
+                "knowledge"
+            ],
+            "tone": [
+                "mysterious"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "pu_heal_aftermath",
+            "text": "It was created to tend the wounded after the battle, when urgency had already passed.",
+            "tags": [
+                "healing",
+                "duty"
+            ],
+            "tone": [
+                "heroic",
+                "grim"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "pu_mark_path",
+            "text": "It was meant to mark a safe path through territory that refused to stay the same.",
+            "tags": [
+                "travel",
+                "vigilance"
+            ],
+            "tone": [
+                "mysterious"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "pu_bind_pact",
+            "text": "It was used to bind a pact so neither side could pretend to misunderstand the terms.",
+            "tags": [
+                "eldritch",
+                "justice"
+            ],
+            "tone": [
+                "grim",
+                "mysterious"
+            ],
+            "weight": 2
+        },
+        {
+            "id": "pu_defy_fear",
+            "text": "It was shaped to help its bearer act while afraid, not to remove fear entirely.",
+            "tags": [
+                "courage",
+                "protection"
+            ],
+            "tone": [
+                "heroic"
+            ],
+            "weight": 4
+        },
+        {
+            "id": "pu_hold_gate",
+            "text": "It was meant to hold a gate—literal or otherwise—until help could arrive or hope ran out.",
+            "tags": [
+                "war",
+                "vigilance"
+            ],
+            "tone": [
+                "grim",
+                "heroic"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "pu_wild_bargain",
+            "text": "It was crafted to survive negotiations with forces that consider time optional.",
+            "tags": [
+                "fey",
+                "luck"
+            ],
+            "tone": [
+                "mysterious"
+            ],
+            "weight": 2
+        },
+        {
+            "id": "pu_preserve_knowledge",
+            "text": "It was intended to preserve knowledge during events that history prefers to forget.",
+            "tags": [
+                "knowledge",
+                "duty"
+            ],
+            "tone": [
+                "heroic"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "pu_quiet_unrest",
+            "text": "It was made to quiet unrest before it became open rebellion or open war.",
+            "tags": [
+                "urban",
+                "justice"
+            ],
+            "tone": [
+                "grim",
+                "mysterious"
+            ],
+            "weight": 2
+        },
+        {
+            "id": "pu_survive_ruin",
+            "text": "It was designed to help someone survive the fall of a place they believed would never fall.",
+            "tags": [
+                "protection",
+                "travel"
+            ],
+            "tone": [
+                "grim"
+            ],
+            "weight": 2
+        },
+        {
+            "id": "pu_watch_long",
+            "text": "It was created for long watches, when nothing happens until everything does.",
+            "tags": [
+                "vigilance",
+                "duty"
+            ],
+            "tone": [
+                "mysterious"
+            ],
+            "weight": 3
+        },
+        {
+            "id": "pu_answer_call",
+            "text": "It was meant to answer a call for aid that could not be ignored forever.",
+            "tags": [
+                "divine",
+                "duty"
+            ],
+            "tone": [
+                "heroic"
+            ],
+            "weight": 3
+        }
+    ]
 }
