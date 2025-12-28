@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>High Fantasy NPC Generator</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1>High Fantasy NPC Generator</h1>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="panel">
+
+      <div class="grid">
+        <div class="field">
+          <label for="npcTypeSelect">NPC type</label>
+          <select id="npcTypeSelect">
+              <option value="race_class">Race + Class</option>
+              <option value="race_profession">Race + Profession</option>
+              <option value="monstrous">Monstrous</option>
+            </select>
+            </div>
+<div class="field" id="monsterRoleModeField" style="display:none;">
+          <label for="monsterRoleMode">Monstrous role type</label>
+          <select id="monsterRoleMode">
+            <option value="class">Class</option>
+            <option value="profession">Profession</option>
+          </select>
+          <div class="hint">Optional role for <b>Monstrous</b> NPCs. Choose Class or Profession, then set that dropdown to <b>Never</b> to generate a monster with no role.</div>
+        </div>
+
+
+        <div class="field" id="raceField">
+          <label for="raceSelect">Race</label>
+          <select id="raceSelect"></select>
+        </div>
+
+        <div class="field" id="classField">
+          <label for="classSelect">Class</label>
+          <select id="classSelect"></select>
+          <div class="hint">Used for <b>Race + Class</b>. In <b>Monstrous</b> mode, choose <b>Never</b> to forbid adding a class role.</div>
+        </div>
+
+        <div class="field" id="professionField" style="display:none;">
+          <label>Profession</label>
+
+          <div class="stack">
+            <div class="field-inline">
+              <!-- <label class="small" for="professionCategorySelect">Profession category</label> -->
+              <select id="professionCategorySelect"></select>
+            </div>
+
+            <div class="field-inline" id="professionSelectWrap" style="display:none;">
+              <!-- <label class="small" for="professionSelect">Profession</label> -->
+              <select id="professionSelect"></select>
+            </div>
+
+            <div id="professionDetails" class="details" style="display:none;"></div>
+          </div>
+
+          <div class="hint">
+            Choose a category to browse professions. If you leave the profession as “Random”, the generator will pick a random profession from that category (or from any category if you selected “Any category”).
+            In <b>Monstrous</b> mode, choose <b>Never</b> to forbid adding a profession role.
+          </div>
+        </div>
+
+        <div class="field" id="alignmentField">
+          <label for="alignmentSelect">Alignment</label>
+          <select id="alignmentSelect"></select>
+          <div class="hint">Alignment frames the generated motivations and tells.</div>
+        </div>
+
+        <div class="field" id="intelligenceField">
+          <label for="intelligenceSelect">Intelligence band</label>
+          <select id="intelligenceSelect"></select>
+          <div class="hint">Affects the NPC’s “voice” (how rationalized their alignment feels).</div>
+        </div>
+
+        <div class="field" id="monsterField" style="display:none;">
+          <label for="monsterSelect">Monstrous creature</label>
+          <select id="monsterSelect"></select>
+          <div class="hint">Monstrous NPCs keep their standard alignment and intelligence.</div>
+        </div>
+
+        <div class="field">
+          <label for="epithetMode">Epithet</label>
+          <select id="epithetMode">
+            <option value="auto" selected>Auto (35% chance)</option>
+            <option value="always">Always</option>
+            <option value="never">Never</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="generateBtn" class="primary" type="button">Generate NPC</button>
+        <button id="clearBtn" type="button">Clear output</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <h2>NPC Details</h2>
+        <div class="panel-actions">
+          <button id="copyLatestBtn" type="button">Copy latest (rich)</button>
+          <button id="copyLatestTextBtn" type="button">Copy latest (text)</button>
+        </div>
+      </div>
+
+      <div id="output" class="output">
+        <div class="empty">Generate an NPC to see output here.</div>
+      </div>
+      <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    </section>
+
+    <footer class="footer">
+      <p>
+        <i>Always adjust to fit your table’s tone and tier of play.</i>
+      </p>
+    </footer>
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

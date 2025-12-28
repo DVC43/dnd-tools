@@ -1,0 +1,102 @@
+[
+  {
+    "id": "human",
+    "label": "Human",
+    "namePool": "human"
+  },
+  {
+    "id": "elf",
+    "label": "Elf",
+    "namePool": "elf"
+  },
+  {
+    "id": "dwarf",
+    "label": "Dwarf",
+    "namePool": "dwarf"
+  },
+  {
+    "id": "halfling",
+    "label": "Halfling",
+    "namePool": "halfling"
+  },
+  {
+    "id": "gnome",
+    "label": "Gnome",
+    "namePool": "gnome"
+  },
+  {
+    "id": "half-elf",
+    "label": "Half-Elf",
+    "namePool": "human"
+  },
+  {
+    "id": "half-orc",
+    "label": "Half-Orc",
+    "namePool": "orc"
+  },
+  {
+    "id": "tiefling",
+    "label": "Tiefling",
+    "namePool": "tiefling"
+  },
+  {
+    "id": "dragonborn",
+    "label": "Dragonborn",
+    "namePool": "dragonborn"
+  },
+  {
+    "id": "aasimar",
+    "label": "Aasimar",
+    "namePool": "aasimar"
+  },
+  {
+    "id": "goblin",
+    "label": "Goblin",
+    "namePool": "goblin"
+  },
+  {
+    "id": "kobold",
+    "label": "Kobold",
+    "namePool": "kobold"
+  },
+  {
+    "id": "tabaxi",
+    "label": "Tabaxi",
+    "namePool": "tabaxi"
+  },
+  {
+    "id": "lizardfolk",
+    "label": "Lizardfolk",
+    "namePool": "lizardfolk"
+  },
+  {
+    "id": "triton",
+    "label": "Triton",
+    "namePool": "triton"
+  },
+  {
+    "id": "genasi",
+    "label": "Genasi",
+    "namePool": "genasi"
+  },
+  {
+    "id": "goliath",
+    "label": "Goliath",
+    "namePool": "goliath"
+  },
+  {
+    "id": "firbolg",
+    "label": "Firbolg",
+    "namePool": "firbolg"
+  },
+  {
+    "id": "kenku",
+    "label": "Kenku",
+    "namePool": "kenku"
+  },
+  {
+    "id": "yuan-ti",
+    "label": "Yuan-ti Pureblood",
+    "namePool": "yuanti"
+  }
+]

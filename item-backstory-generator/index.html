@@ -3,117 +3,49 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Fantasy Item Backstory Generator</title>
-  <link rel="stylesheet" href="./style.css" />
+  <title>D&D Item Backstory Generator</title>
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-  <header class="site-header">
-    <div class="wrap">
-      <h1>Fantasy Item Backstory Generator</h1>
-      <p class="subtle">Static, GitHub Pages–friendly. Seedable. Tag-aware. Lock & reroll sections.</p>
+  <h1>Item Backstory Generator</h1>
+
+  <div class="row">
+    <div>
+      <label for="rarity">Item rarity (required)</label>
+      <select id="rarity" required>
+        <option value="" selected disabled>Choose rarity…</option>
+        <option>common</option>
+        <option>uncommon</option>
+        <option>rare</option>
+        <option>very rare</option>
+        <option>legendary</option>
+      </select>
     </div>
-  </header>
 
-  <main class="wrap grid">
-    <section class="panel controls" aria-label="Generator controls">
-      <h2>Controls</h2>
-
-      <div class="row">
-        <label for="itemType"><strong>Item Type</strong></label>
-        <select id="itemType"></select>
-      </div>
-
-      <div class="row">
-        <label for="tone"><strong>Tone</strong></label>
-        <select id="tone"></select>
-      </div>
-
-      <div class="row">
-        <label><strong>Themes / Tags</strong></label>
-        <div id="tagList" class="tag-list" role="group" aria-label="Tag list"></div>
-        <div class="hint">Tip: tags boost matching phrases. You can select multiple.</div>
-      </div>
-
-      <div class="row">
-        <label for="length"><strong>Length</strong></label>
-        <select id="length">
-          <option value="short">Short</option>
-          <option value="medium" selected>Medium</option>
-          <option value="long">Long</option>
-        </select>
-      </div>
-
-      <div class="row">
-        <label for="seed"><strong>Seed</strong> <span class="subtle">(optional)</span></label>
-        <input id="seed" type="text" placeholder="e.g. ash-winter-17" autocomplete="off" />
-        <div class="hint">Leave blank for random. Same seed + same settings = same result.</div>
-      </div>
-
-      <fieldset class="toggles">
-        <legend><strong>Include</strong></legend>
-        <label class="check"><input id="incHook" type="checkbox" checked /> Plot hook / rumor</label>
-        <label class="check"><input id="incMakerDetails" type="checkbox" checked /> Maker details</label>
-        <label class="check"><input id="incBoon" type="checkbox" checked /> Minor boon text (rules-light)</label>
-        <label class="check"><input id="incComplication" type="checkbox" /> Curse / complication</label>
-      </fieldset>
-
-      <div class="buttons">
-        <button id="btnGenerate" class="primary">Generate</button>
-        <button id="btnRerollUnlocked">Reroll unlocked</button>
-        <button id="btnRerollSameSeed" title="Rebuild output deterministically from the current seed/settings">Reroll (same seed)</button>
-      </div>
-
-      <div class="buttons">
-        <button id="btnCopy">Copy</button>
-        <button id="btnExportMd">Export Markdown</button>
-        <button id="btnExportJson">Export JSON</button>
-      </div>
-
-      <details class="notes">
-        <summary>How it works</summary>
-        <ul>
-          <li>Each section is selected from weighted tables in <code>/data</code>.</li>
-          <li>Selected tags/tone boost matching entries and softly downweight mismatches.</li>
-          <li>“Locked” sections won’t change when you reroll unlocked sections.</li>
-          <li>Tokens (place/faction/event/NPC) are generated first and then referenced for coherence.</li>
-        </ul>
-      </details>
-    </section>
-
-    <section class="panel output" aria-label="Generated item output">
-      <div class="output-header">
-        <h2>Generated Item</h2>
-        <div class="pill-row" id="pillRow" aria-label="Quick metadata pills"></div>
-      </div>
-
-      <article class="card" id="itemCard" aria-live="polite">
-        <div class="card-head">
-          <h3 id="outName">—</h3>
-          <div class="meta">
-            <span id="outType">—</span>
-            <span class="dot">•</span>
-            <span id="outTone">—</span>
-          </div>
-        </div>
-
-        <div class="sections" id="sections"></div>
-
-        <details class="raw">
-          <summary>Raw JSON</summary>
-          <pre id="rawJson" class="code"></pre>
-        </details>
-      </article>
-
-      <p class="subtle small">Built for quick DM inspiration. Add your own content in <code>/data</code>.</p>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="wrap">
-      <span class="subtle">Tip: Use a seed to reproduce a favorite result and share it with your players.</span>
+    <div>
+      <label for="tone">Alignment tone (optional)</label>
+      <select id="tone">
+        <option value="" selected>Random</option>
+        <option value="LG">Lawful Good</option>
+        <option value="NG">Neutral Good</option>
+        <option value="CG">Chaotic Good</option>
+        <option value="LN">Lawful Neutral</option>
+        <option value="N">True Neutral</option>
+        <option value="CN">Chaotic Neutral</option>
+        <option value="LE">Lawful Evil</option>
+        <option value="NE">Neutral Evil</option>
+        <option value="CE">Chaotic Evil</option>
+      </select>
     </div>
-  </footer>
+  </div>
 
-  <script type="module" src="./app.js"></script>
+  <button id="generate">Generate backstory</button>
+
+  <label for="output">Backstory</label>
+  <textarea id="output" readonly placeholder="Your generated backstory will appear here…"></textarea>
+
+  <!-- Load data first, then logic -->
+  <script src="js/data.js"></script>
+  <script src="js/logic.js"></script>
 </body>
 </html>

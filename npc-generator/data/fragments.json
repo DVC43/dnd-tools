@@ -1,0 +1,184 @@
+{
+  "cities": [
+    "Greyharbor",
+    "Sableford",
+    "Crownspire",
+    "Rivergate",
+    "Dunmorrow",
+    "Brightwater",
+    "Kestrelwatch",
+    "Emberfall",
+    "Hollowcrest",
+    "Starlingport"
+  ],
+  "regions": [
+    "the Shattered Coast",
+    "the Ashen Marches",
+    "the Sapphire Vale",
+    "the Thornwood",
+    "the Frostbound Peaks",
+    "the Sunken Fens",
+    "the Golden Steppe",
+    "the Gloamwild",
+    "the Stormbreak Isles",
+    "the Dawnward Plains"
+  ],
+  "factions": [
+    "the Lantern Guild",
+    "the Iron Covenant",
+    "the Sapphire Collegium",
+    "the Verdant Circle",
+    "the Ashen Hand",
+    "the Crown’s Inquest",
+    "the Red Sails",
+    "the Silent Choir",
+    "the Glass Court",
+    "the Wayfarers’ Compact"
+  ],
+  "orders": [
+    "the Dawn Oath",
+    "the Black Ledger",
+    "the Grey Cloister",
+    "the Argent Vigil",
+    "the Thornbound Pact",
+    "the Ember Sigil"
+  ],
+  "LG_deity": [
+	"Ilmater",
+	"Torm",
+    "Tyr",
+    "Bahamut",
+    "Garl Glittergold",
+    "Moradin",
+    "Yondalla"
+  ],
+  "NG_deity": [
+	"Chauntea",
+	"Deneir",
+	"Eldath",
+	"Lathander",
+	"Mielikki",
+	"Milil",
+	"Mystra"
+  ],
+  "CG_deity": [
+	"Lliira",
+	"Selune",
+	"Sune",
+	"Tymora",
+	"Corellon Larethian",
+	"Deep Sashelas",
+	"Rillifane Rallathil",
+	"Sehanine Moonbow"
+  ],
+  "LN_deity": [
+	"Azuth",
+	"Helm",
+	"Kelemvor",
+	"Savras"
+  ],
+  "N_deity": [
+	"Gond",
+	"Oghma",
+	"Silvanus",
+	"Tempus",
+	"Waukeen"
+  ],
+  "CN_deity": [
+	"Leira",
+	"Mask"
+  ],
+  "LE_deity": [
+	"Bane",
+	"Asmodeus",
+	"Tiamat",
+	"Vecna"
+  ],
+  "NE_deity": [
+	"Bhaal",
+	"Myrkul",
+	"Shar",
+	"Auril"
+  ],
+  "CE_deity": [
+	"Beshaba",
+	"Cyric",
+	"Malar",
+	"Talona",
+	"Talos",
+	"Lolth",
+	"Umberlee"
+  ],
+  "artifacts": [
+    "a sealed spellbook",
+    "a saint’s fingerbone",
+    "a crown of cold iron",
+    "a mirror that remembers",
+    "a blade that drinks promises",
+    "a map inked in dragon blood",
+    "a lantern that reveals lies",
+    "a coin that never spends",
+    "a chalice that heals once",
+    "a key that opens dreams"
+  ],
+  "vices": [
+    "pride",
+    "greed",
+    "envy",
+    "wrath",
+    "cowardice",
+    "cruelty",
+    "vanity",
+    "addiction",
+    "ambition",
+    "superstition"
+  ],
+  "virtues": [
+    "mercy",
+    "duty",
+    "honor",
+    "courage",
+    "patience",
+    "truth",
+    "compassion",
+    "freedom",
+    "balance",
+    "resolve"
+  ],
+  "threats": [
+    "a cult uprising",
+    "a border war",
+    "a plague of nightmares",
+    "a dragon’s tribute demand",
+    "an infernal contract",
+    "a famine",
+    "a civil feud",
+    "a magical blight",
+    "a succession crisis",
+    "a sea-raider fleet"
+  ],
+  "stakes": [
+    "an innocent’s life",
+    "their reputation",
+    "a fragile peace",
+    "a promised payment",
+    "a sacred oath",
+    "a hidden love",
+    "their freedom",
+    "their position",
+    "their true name",
+    "their last chance at redemption"
+  ],
+  "tells": [
+    "counts coins under the table",
+    "rubs a scar before deciding",
+    "adjusts their gloves when lying",
+    "taps a ring on wood to punctuate threats",
+    "never sits with their back to a door",
+    "recites a proverb at the end of arguments",
+    "smiles too late",
+    "keeps hands perfectly still",
+    "laughs at solemn moments",
+    "won’t meet anyone’s eyes while bargaining"
+  ]
+}

@@ -1,0 +1,728 @@
+{
+  "version": 1,
+  "source": "Professions.rtf",
+  "groups": [
+    {
+      "name": "Commoner trades and village work",
+      "id": "commoner-trades-and-village-work",
+      "categories": [
+        {
+          "name": "Commoner trades and village work",
+          "id": "commoner-trades-and-village-work",
+          "professions": [
+            {
+              "id": "commoner-trades-and-village-work::husbandman",
+              "name": "Husbandman",
+              "detail": "Smallholding farmer; manages a households fields/livestock (often tenant or free)."
+            },
+            {
+              "id": "commoner-trades-and-village-work::ploughman",
+              "name": "Ploughman",
+              "detail": "Operates plough teams (oxen/horses) and handles heavy fieldwork."
+            },
+            {
+              "id": "commoner-trades-and-village-work::reaper-mower",
+              "name": "Reaper / Mower",
+              "detail": "Seasonal harvester cutting grain or hay during peak months."
+            },
+            {
+              "id": "commoner-trades-and-village-work::dairymaid-dairyman",
+              "name": "Dairymaid / Dairyman",
+              "detail": "Tends milk stock and makes butter, cheese, and other dairy goods."
+            },
+            {
+              "id": "commoner-trades-and-village-work::shepherd",
+              "name": "Shepherd",
+              "detail": "Herds sheep; manages grazing, lambing, and basic flock care."
+            },
+            {
+              "id": "commoner-trades-and-village-work::swineherd",
+              "name": "Swineherd",
+              "detail": "Tends pigs, often ranging them in woodland for mast (acorns)."
+            },
+            {
+              "id": "commoner-trades-and-village-work::cowherd-neatherd",
+              "name": "Cowherd / Neatherd",
+              "detail": "Tends cattle; drives, grazes, and watches the herd."
+            },
+            {
+              "id": "commoner-trades-and-village-work::goatherd",
+              "name": "Goatherd",
+              "detail": "Tends goats; provides milk, meat, and hides, often on rough land."
+            },
+            {
+              "id": "commoner-trades-and-village-work::beekeeper",
+              "name": "Beekeeper",
+              "detail": "Keeps hives for honey and beeswax (wax used for candles and sealing)."
+            },
+            {
+              "id": "commoner-trades-and-village-work::woodcutter",
+              "name": "Woodcutter",
+              "detail": "Fells trees and prepares firewood and timber."
+            },
+            {
+              "id": "commoner-trades-and-village-work::charcoal-burner",
+              "name": "Charcoal burner",
+              "detail": "Produces charcoal in pits/kilns for smithing and urban fuel."
+            },
+            {
+              "id": "commoner-trades-and-village-work::thatcher",
+              "name": "Thatcher",
+              "detail": "Roofs buildings with straw/reed thatch; repairs weather damage."
+            },
+            {
+              "id": "commoner-trades-and-village-work::hedge-layer-ditcher",
+              "name": "Hedge-layer / Ditcher",
+              "detail": "Maintains boundaries, hedges, and drainage ditches."
+            },
+            {
+              "id": "commoner-trades-and-village-work::carter-teamster",
+              "name": "Carter / Teamster",
+              "detail": "Hauls goods with carts and draft animals; local transport labor."
+            },
+            {
+              "id": "commoner-trades-and-village-work::fisherman",
+              "name": "Fisherman",
+              "detail": "Catches freshwater or coastal fish for market and household use."
+            },
+            {
+              "id": "commoner-trades-and-village-work::fowler",
+              "name": "Fowler",
+              "detail": "Traps/hunts birds for meat, feathers, and sometimes pest control."
+            },
+            {
+              "id": "commoner-trades-and-village-work::trapper",
+              "name": "Trapper",
+              "detail": "Sets traps for small game and fur-bearing animals."
+            },
+            {
+              "id": "commoner-trades-and-village-work::forester-woodward",
+              "name": "Forester / Woodward",
+              "detail": "Watches and manages woods/game under a lords authority."
+            },
+            {
+              "id": "commoner-trades-and-village-work::miller",
+              "name": "Miller",
+              "detail": "Grinds grain into flour at a watermill/windmill; often a key village figure."
+            },
+            {
+              "id": "commoner-trades-and-village-work::alewife-brewer",
+              "name": "Alewife / Brewer",
+              "detail": "Brews ale for household and sale; common domestic business."
+            },
+            {
+              "id": "commoner-trades-and-village-work::baker",
+              "name": "Baker",
+              "detail": "Bakes bread for sale; may use communal ovens where required."
+            },
+            {
+              "id": "commoner-trades-and-village-work::butcher",
+              "name": "Butcher",
+              "detail": "Slaughters livestock and prepares meat for sale and preservation."
+            },
+            {
+              "id": "commoner-trades-and-village-work::gardener",
+              "name": "Gardener",
+              "detail": "Tends kitchen gardens, herbs, and sometimes orchards for food/medicine."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Urban trades and guild crafts",
+      "id": "urban-trades-and-guild-crafts",
+      "categories": [
+        {
+          "name": "Cloth, leather, and clothing",
+          "id": "cloth-leather-and-clothing",
+          "professions": [
+            {
+              "id": "cloth-leather-and-clothing::wool-merchant",
+              "name": "Wool merchant",
+              "detail": "Buys/sells raw wool and supplies cloth producers and exporters."
+            },
+            {
+              "id": "cloth-leather-and-clothing::weaver",
+              "name": "Weaver",
+              "detail": "Weaves yarn into cloth on looms; core craft in many towns."
+            },
+            {
+              "id": "cloth-leather-and-clothing::fuller-walker",
+              "name": "Fuller / Walker",
+              "detail": "Cleans, thickens, and finishes cloth (often using fulling mills)."
+            },
+            {
+              "id": "cloth-leather-and-clothing::dyer",
+              "name": "Dyer",
+              "detail": "Dyes cloth with plant/mineral pigments; quality control matters for value."
+            },
+            {
+              "id": "cloth-leather-and-clothing::shearman",
+              "name": "Shearman",
+              "detail": "Shears and smooths cloth surface to improve finish and appearance."
+            },
+            {
+              "id": "cloth-leather-and-clothing::tailor",
+              "name": "Tailor",
+              "detail": "Cuts and sews garments; alters and repairs clothing for clients."
+            },
+            {
+              "id": "cloth-leather-and-clothing::hosier",
+              "name": "Hosier",
+              "detail": "Makes/sells hose, stockings, and knit or sewn legwear."
+            },
+            {
+              "id": "cloth-leather-and-clothing::furrier",
+              "name": "Furrier",
+              "detail": "Prepares and sells fur garments and linings; luxury-adjacent trade."
+            },
+            {
+              "id": "cloth-leather-and-clothing::tanner",
+              "name": "Tanner",
+              "detail": "Converts hides into leather using pits and tanning agents (strong odors)."
+            },
+            {
+              "id": "cloth-leather-and-clothing::skinner",
+              "name": "Skinner",
+              "detail": "Prepares pelts/furs; often distinct from tanners in some towns."
+            },
+            {
+              "id": "cloth-leather-and-clothing::cordwainer",
+              "name": "Cordwainer",
+              "detail": "Makes new high-quality shoes from fine leather."
+            },
+            {
+              "id": "cloth-leather-and-clothing::cobbler",
+              "name": "Cobbler",
+              "detail": "Repairs worn shoes and boots; sometimes makes cheaper footwear."
+            },
+            {
+              "id": "cloth-leather-and-clothing::glover",
+              "name": "Glover",
+              "detail": "Makes gloves and small leather items; sometimes also sells them."
+            },
+            {
+              "id": "cloth-leather-and-clothing::saddler",
+              "name": "Saddler",
+              "detail": "Makes saddles, harnesses, and tack for riding and draft animals."
+            },
+            {
+              "id": "cloth-leather-and-clothing::belt-maker-girdler",
+              "name": "Belt-maker / Girdler",
+              "detail": "Produces belts, straps, and sometimes metal-fitted girdles."
+            }
+          ]
+        },
+        {
+          "name": "Metal, arms, and tools",
+          "id": "metal-arms-and-tools",
+          "professions": [
+            {
+              "id": "metal-arms-and-tools::blacksmith",
+              "name": "Blacksmith",
+              "detail": "Forges tools, nails, fittings, and general ironwork."
+            },
+            {
+              "id": "metal-arms-and-tools::farrier",
+              "name": "Farrier",
+              "detail": "Shoes horses and treats hoof problems; essential for travel and war."
+            },
+            {
+              "id": "metal-arms-and-tools::armorer",
+              "name": "Armorer",
+              "detail": "Makes/repairs armor (mail, helmets, later plate elements)."
+            },
+            {
+              "id": "metal-arms-and-tools::helmsmith",
+              "name": "Helmsmith",
+              "detail": "Specializes in forging helmets and head protection."
+            },
+            {
+              "id": "metal-arms-and-tools::bladesmith-swordsmith",
+              "name": "Bladesmith / Swordsmith",
+              "detail": "Forges edged weapons; may focus on swords and daggers."
+            },
+            {
+              "id": "metal-arms-and-tools::cutler",
+              "name": "Cutler",
+              "detail": "Makes/sells knives and small cutting tools; often includes sharpening."
+            },
+            {
+              "id": "metal-arms-and-tools::locksmith",
+              "name": "Locksmith",
+              "detail": "Produces locks, keys, and security fittings."
+            },
+            {
+              "id": "metal-arms-and-tools::nailsmith",
+              "name": "Nailsmith",
+              "detail": "Makes nails, rivets, and small iron fasteners in bulk."
+            },
+            {
+              "id": "metal-arms-and-tools::founder",
+              "name": "Founder",
+              "detail": "Casts metal objects (bells, cauldrons, fixtures) using molds."
+            },
+            {
+              "id": "metal-arms-and-tools::pewterer",
+              "name": "Pewterer",
+              "detail": "Makes pewter vessels and household wares."
+            },
+            {
+              "id": "metal-arms-and-tools::goldsmith-silversmith",
+              "name": "Goldsmith / Silversmith",
+              "detail": "Crafts jewelry, plate, and fine metalwork; handles precious metals."
+            },
+            {
+              "id": "metal-arms-and-tools::mint-worker",
+              "name": "Mint worker",
+              "detail": "Works in coin production (striking, assaying, die-cutting), where a mint exists."
+            }
+          ]
+        },
+        {
+          "name": "Wood, building, and construction",
+          "id": "wood-building-and-construction",
+          "professions": [
+            {
+              "id": "wood-building-and-construction::carpenter",
+              "name": "Carpenter",
+              "detail": "Builds structural woodwork: roofs, frames, scaffolds, bridges."
+            },
+            {
+              "id": "wood-building-and-construction::joiner",
+              "name": "Joiner",
+              "detail": "Makes fine fitted woodwork: doors, chests, furniture, paneling."
+            },
+            {
+              "id": "wood-building-and-construction::cooper",
+              "name": "Cooper",
+              "detail": "Makes barrels, casks, tubs, and watertight wooden containers."
+            },
+            {
+              "id": "wood-building-and-construction::wheelwright",
+              "name": "Wheelwright",
+              "detail": "Crafts wooden wheels; precise joinery for carts and wagons."
+            },
+            {
+              "id": "wood-building-and-construction::wainwright",
+              "name": "Wainwright",
+              "detail": "Builds and repairs wagons and carts (often with wheelwrights)."
+            },
+            {
+              "id": "wood-building-and-construction::turner",
+              "name": "Turner",
+              "detail": "Shapes bowls, spindles, and parts on a lathe."
+            },
+            {
+              "id": "wood-building-and-construction::mason",
+              "name": "Mason",
+              "detail": "Builds in stone; major role in churches, walls, bridges, and great houses."
+            },
+            {
+              "id": "wood-building-and-construction::stonecutter",
+              "name": "Stonecutter",
+              "detail": "Cuts and dresses stone blocks; may carve details for buildings."
+            },
+            {
+              "id": "wood-building-and-construction::slater",
+              "name": "Slater",
+              "detail": "Roofs buildings with slate; common where slate is available."
+            },
+            {
+              "id": "wood-building-and-construction::tiler",
+              "name": "Tiler",
+              "detail": "Makes and/or lays clay tiles for roofs and floors, depending on region."
+            },
+            {
+              "id": "wood-building-and-construction::plasterer",
+              "name": "Plasterer",
+              "detail": "Applies plaster to walls/ceilings; interior finishing and repair."
+            },
+            {
+              "id": "wood-building-and-construction::painter",
+              "name": "Painter",
+              "detail": "Paints decorative interiors, signs, heraldry, and sometimes religious art."
+            },
+            {
+              "id": "wood-building-and-construction::glazier",
+              "name": "Glazier",
+              "detail": "Cuts and sets window glass in lead cames; vital for churches and rich homes."
+            },
+            {
+              "id": "wood-building-and-construction::glassmaker-glassblower",
+              "name": "Glassmaker / Glassblower",
+              "detail": "Produces glass sheets or vessels where workshops exist."
+            },
+            {
+              "id": "wood-building-and-construction::roofer",
+              "name": "Roofer",
+              "detail": "Installs and repairs roofing (shingles, tile, slate, leadwork by locale)."
+            },
+            {
+              "id": "wood-building-and-construction::well-digger",
+              "name": "Well-digger",
+              "detail": "Digs and maintains wells and pits; helps secure town/manor water."
+            }
+          ]
+        },
+        {
+          "name": "Pottery, household goods, and food trades",
+          "id": "pottery-household-goods-and-food-trades",
+          "professions": [
+            {
+              "id": "pottery-household-goods-and-food-trades::potter",
+              "name": "Potter",
+              "detail": "Produces pots, jugs, bowls, and storage vessels."
+            },
+            {
+              "id": "pottery-household-goods-and-food-trades::chandler",
+              "name": "Chandler",
+              "detail": "Makes candles (tallow or beeswax) and sometimes sells lamp oils."
+            },
+            {
+              "id": "pottery-household-goods-and-food-trades::soap-boiler",
+              "name": "Soap-boiler",
+              "detail": "Produces soap from fats and lye for laundering and cleaning."
+            },
+            {
+              "id": "pottery-household-goods-and-food-trades::baker",
+              "name": "Baker",
+              "detail": "Produces bread for market; may be regulated for weight and price."
+            },
+            {
+              "id": "pottery-household-goods-and-food-trades::butcher",
+              "name": "Butcher",
+              "detail": "Slaughters animals and sells fresh/salted meat; controls offal disposal."
+            },
+            {
+              "id": "pottery-household-goods-and-food-trades::fishmonger",
+              "name": "Fishmonger",
+              "detail": "Sells fish (fresh, salted, or smoked) in markets and ports."
+            },
+            {
+              "id": "pottery-household-goods-and-food-trades::vintner",
+              "name": "Vintner",
+              "detail": "Makes, imports, or sells wine; often tied to taverns."
+            },
+            {
+              "id": "pottery-household-goods-and-food-trades::cook",
+              "name": "Cook",
+              "detail": "Works in an inn, guildhall, or great household kitchen preparing meals."
+            },
+            {
+              "id": "pottery-household-goods-and-food-trades::spicer",
+              "name": "Spicer",
+              "detail": "Sells spices, imported condiments, and medicinal herbs."
+            },
+            {
+              "id": "pottery-household-goods-and-food-trades::grocer",
+              "name": "Grocer",
+              "detail": "Trades in bulk foodstuffs and imported goods (usage varies by region)."
+            },
+            {
+              "id": "pottery-household-goods-and-food-trades::salter",
+              "name": "Salter",
+              "detail": "Trades in salt and oversees salting/curing for preservation."
+            },
+            {
+              "id": "pottery-household-goods-and-food-trades::cheesemonger",
+              "name": "Cheesemonger",
+              "detail": "Sells cheese and sometimes dairy provisions in larger markets."
+            }
+          ]
+        },
+        {
+          "name": "Trade, shipping, and travel",
+          "id": "trade-shipping-and-travel",
+          "professions": [
+            {
+              "id": "trade-shipping-and-travel::mercer",
+              "name": "Mercer",
+              "detail": "Dealer in fine textiles, silks, and luxury cloth goods."
+            },
+            {
+              "id": "trade-shipping-and-travel::haberdasher",
+              "name": "Haberdasher",
+              "detail": "Sells small wares: pins, needles, laces, ribbons, and notions."
+            },
+            {
+              "id": "trade-shipping-and-travel::ironmonger",
+              "name": "Ironmonger",
+              "detail": "Retailer of iron goods and hardware: tools, nails, pots, fittings."
+            },
+            {
+              "id": "trade-shipping-and-travel::chandler-ship-chandler",
+              "name": "Chandler (ship chandler)",
+              "detail": "Supplies ships with rope, tar, provisions, and gear (port towns)."
+            },
+            {
+              "id": "trade-shipping-and-travel::merchant-draper",
+              "name": "Merchant / Draper",
+              "detail": "General merchant or cloth dealer; drapers often specialize in cloth."
+            },
+            {
+              "id": "trade-shipping-and-travel::chapman-peddler",
+              "name": "Chapman / Peddler",
+              "detail": "Traveling seller of small goods from town to town."
+            },
+            {
+              "id": "trade-shipping-and-travel::carrier-carter-long-haul",
+              "name": "Carrier / Carter (long-haul)",
+              "detail": "Moves goods between towns by packhorse or wagon."
+            },
+            {
+              "id": "trade-shipping-and-travel::innkeeper-hosteler",
+              "name": "Innkeeper / Hosteler",
+              "detail": "Provides lodging, meals, and stabling for travelers."
+            },
+            {
+              "id": "trade-shipping-and-travel::ostler",
+              "name": "Ostler",
+              "detail": "Cares for travelers horses; manages stabling at an inn."
+            },
+            {
+              "id": "trade-shipping-and-travel::shipwright",
+              "name": "Shipwright",
+              "detail": "Builds and repairs ships and boats."
+            },
+            {
+              "id": "trade-shipping-and-travel::ropemaker",
+              "name": "Ropemaker",
+              "detail": "Twists hemp/flax into rope and cordage for ships and carts."
+            },
+            {
+              "id": "trade-shipping-and-travel::sailmaker",
+              "name": "Sailmaker",
+              "detail": "Cuts and sews sails; repairs canvas and rigging cloth."
+            },
+            {
+              "id": "trade-shipping-and-travel::stevedore-dock-laborer",
+              "name": "Stevedore / Dock laborer",
+              "detail": "Loads/unloads ships; moves cargo in and out of ports."
+            }
+          ]
+        },
+        {
+          "name": "Town governance and learned professions",
+          "id": "town-governance-and-learned-professions",
+          "professions": [
+            {
+              "id": "town-governance-and-learned-professions::bailiff",
+              "name": "Bailiff",
+              "detail": "Local official managing enforcement, rents, and administration for town or lord."
+            },
+            {
+              "id": "town-governance-and-learned-professions::reeve",
+              "name": "Reeve",
+              "detail": "Manorial manager overseeing labor, dues, and day-to-day estate work."
+            },
+            {
+              "id": "town-governance-and-learned-professions::beadle",
+              "name": "Beadle",
+              "detail": "Minor officer keeping order and assisting courts, guilds, or parishes."
+            },
+            {
+              "id": "town-governance-and-learned-professions::constable",
+              "name": "Constable",
+              "detail": "Keeps the peace; organizes watch and basic law enforcement."
+            },
+            {
+              "id": "town-governance-and-learned-professions::town-crier",
+              "name": "Town crier",
+              "detail": "Announces proclamations, market rules, and public news aloud."
+            },
+            {
+              "id": "town-governance-and-learned-professions::clerk",
+              "name": "Clerk",
+              "detail": "Literate administrator handling records, accounts, and correspondence."
+            },
+            {
+              "id": "town-governance-and-learned-professions::scrivener",
+              "name": "Scrivener",
+              "detail": "Professional writer/copyist drafting letters, contracts, and records."
+            },
+            {
+              "id": "town-governance-and-learned-professions::notary",
+              "name": "Notary",
+              "detail": "Authenticates legal acts and documents (especially common in Italy)."
+            },
+            {
+              "id": "town-governance-and-learned-professions::advocate-pleader",
+              "name": "Advocate / Pleader",
+              "detail": "Represents clients in court; argues cases and drafts pleadings."
+            },
+            {
+              "id": "town-governance-and-learned-professions::physician",
+              "name": "Physician",
+              "detail": "University-trained medical practitioner (urban/elite clientele)."
+            },
+            {
+              "id": "town-governance-and-learned-professions::surgeon",
+              "name": "Surgeon",
+              "detail": "Performs practical surgery: wound care, setting bones, minor operations."
+            },
+            {
+              "id": "town-governance-and-learned-professions::apothecary",
+              "name": "Apothecary",
+              "detail": "Prepares and sells remedies, herbs, and compounds for health."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Courtly and great-household professions",
+      "id": "courtly-and-great-household-professions",
+      "categories": [
+        {
+          "name": "Household offices",
+          "id": "household-offices",
+          "professions": [
+            {
+              "id": "household-offices::steward",
+              "name": "Steward",
+              "detail": "Senior administrator running household finances, supplies, and staff."
+            },
+            {
+              "id": "household-offices::chamberlain",
+              "name": "Chamberlain",
+              "detail": "Oversees private chambers, wardrobe, valuables, and often accounts."
+            },
+            {
+              "id": "household-offices::seneschal",
+              "name": "Seneschal",
+              "detail": "High estate/household officer; coordinates management and justice by region."
+            },
+            {
+              "id": "household-offices::marshal",
+              "name": "Marshal",
+              "detail": "Oversees stables, transport, and sometimes military organization."
+            },
+            {
+              "id": "household-offices::constable-of-a-castle",
+              "name": "Constable (of a castle)",
+              "detail": "Commands garrison and security; manages fortress operations."
+            },
+            {
+              "id": "household-offices::castellan",
+              "name": "Castellan",
+              "detail": "Keeper/governor of a castle on behalf of a lord."
+            },
+            {
+              "id": "household-offices::butler",
+              "name": "Butler",
+              "detail": "Manages wine and drink service; often a senior ceremonial office."
+            },
+            {
+              "id": "household-offices::pantler",
+              "name": "Pantler",
+              "detail": "Oversees bread service and pantry stores for the hall."
+            },
+            {
+              "id": "household-offices::ewerer",
+              "name": "Ewerer",
+              "detail": "Provides basins/water for washing at table and manages ewers/linens."
+            },
+            {
+              "id": "household-offices::carver",
+              "name": "Carver",
+              "detail": "Carves meat at the high table; ceremonial service role."
+            },
+            {
+              "id": "household-offices::master-cook",
+              "name": "Master Cook",
+              "detail": "Leads the kitchen; plans menus and supervises cooks and servants."
+            },
+            {
+              "id": "household-offices::larderer",
+              "name": "Larderer",
+              "detail": "Manages meat stores, salting, smoking, and pantry preservation."
+            },
+            {
+              "id": "household-offices::spence-spenser",
+              "name": "Spence / Spenser",
+              "detail": "Oversees provisions distribution; household purchasing/stores (regional term)."
+            },
+            {
+              "id": "household-offices::steward-of-the-hall",
+              "name": "Steward of the hall",
+              "detail": "Manages hall routines, seating, and household discipline."
+            },
+            {
+              "id": "household-offices::porter",
+              "name": "Porter",
+              "detail": "Controls gates/doors; regulates entry and deliveries."
+            },
+            {
+              "id": "household-offices::page",
+              "name": "Page",
+              "detail": "Young attendant performing errands and learning courtly service."
+            },
+            {
+              "id": "household-offices::squire",
+              "name": "Squire",
+              "detail": "Attendant to a knight; maintains arms/armor and trains for knighthood."
+            },
+            {
+              "id": "household-offices::groom",
+              "name": "Groom",
+              "detail": "Cares for horses and stable equipment; general stable servant."
+            },
+            {
+              "id": "household-offices::huntsman",
+              "name": "Huntsman",
+              "detail": "Manages hounds, hunting gear, and organizes hunts."
+            },
+            {
+              "id": "household-offices::falconer",
+              "name": "Falconer",
+              "detail": "Trains and cares for falcons/hawks used in elite hunting."
+            },
+            {
+              "id": "household-offices::herald",
+              "name": "Herald",
+              "detail": "Handles ceremony, messages, and identification by coats of arms."
+            },
+            {
+              "id": "household-offices::minstrel-jongleur",
+              "name": "Minstrel / Jongleur",
+              "detail": "Performs music, storytelling, and entertainment at court."
+            }
+          ]
+        },
+        {
+          "name": "Military roles attached to lords",
+          "id": "military-roles-attached-to-lords",
+          "professions": [
+            {
+              "id": "military-roles-attached-to-lords::knight",
+              "name": "Knight",
+              "detail": "Mounted noble warrior owing service; leads retainers and fights in battle."
+            },
+            {
+              "id": "military-roles-attached-to-lords::man-at-arms",
+              "name": "Man-at-arms",
+              "detail": "Professional armored soldier/retainer serving a lord for pay/land."
+            },
+            {
+              "id": "military-roles-attached-to-lords::sergeant-at-arms",
+              "name": "Sergeant-at-arms",
+              "detail": "Armed officer enforcing a lords authority; guard and household security."
+            },
+            {
+              "id": "military-roles-attached-to-lords::archer-crossbowman",
+              "name": "Archer / Crossbowman",
+              "detail": "Missile soldier using bow or crossbow (crossbow common on the continent)."
+            },
+            {
+              "id": "military-roles-attached-to-lords::captain-of-the-guard",
+              "name": "Captain (of the guard)",
+              "detail": "Commands the guard/watch; organizes patrols and defense."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

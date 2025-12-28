@@ -1,0 +1,350 @@
+/* ------------------------------------------------------------------
+   High Fantasy NPC Generator — Parchment theme
+   Matched to the user's reagent/item generator palette & typography
+   (dark red, parchment whites, silver/grey rules text)
+------------------------------------------------------------------- */
+
+/* Base */
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+body{
+  margin:0;
+  font-family:"Garamond","Georgia",serif;
+  color:#111;
+  background:#e6e6e6;
+}
+
+/* Header */
+.site-header{
+  padding:1.25rem 0 0.6rem;
+  text-align:center;
+}
+.site-header h1{
+  margin:0 0 0.35rem;
+  font-size:2rem;
+}
+.subtitle{
+  margin:0;
+  font-size:0.95rem;
+  font-style:italic;
+  color:#444;
+}
+
+/* Outer parchment card (use main.container as the wrapper) */
+.container{
+  max-width:1550px;
+  margin:0 auto;
+  padding:0 20px;
+}
+main.container{
+  padding:20px;
+  border:2px solid #660000;
+  border-radius:6px;
+  margin:1.5rem auto 1.5rem;
+  background:linear-gradient(180deg,#fafafa 0%,#f0f0f0 100%);
+  box-shadow:0 0 12px rgba(0,0,0,0.25);
+}
+
+/* Inner panels (aligned with .rg-panel / .ig-panel) */
+.panel{
+  border:2px solid #7b1113;
+  background:#ffffff;
+  padding:12px 14px;
+  border-radius:4px;
+  margin-top:0.75rem;
+}
+.panel-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding-bottom:0.4rem;
+  border-bottom:1px solid #c0c0c0;
+  margin-bottom:0.6rem;
+}
+.panel h2{
+  margin:0;
+  font-size:1.4rem;
+}
+
+/* Layout */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:0.6rem;
+}
+.field label{
+  display:block;
+  margin:0 0 0.25rem;
+  font-weight:bold;
+  white-space:nowrap;
+}
+.field-inline{
+  display:flex;
+  align-items:center;
+  gap:0.45rem;
+  flex-wrap:wrap;
+}
+.hint{
+  margin-top:0.35rem;
+  font-size:0.85rem;
+  font-style:italic;
+  color:#444;
+}
+.small{
+  font-size:0.85rem;
+  font-style:italic;
+  color:#444;
+  margin-top:0.75rem;
+}
+
+/* Inputs */
+.field select,
+.field input[type="text"],
+.field input[type="number"]{
+  width:100%;
+  padding:3px 5px;
+  border-radius:3px;
+  border:1px solid #888;
+  background:#ffffff;
+  color:#111;
+  font-size:0.95rem;
+  font-family:inherit;
+}
+.field input[type="checkbox"]{
+  margin-right:0.25rem;
+}
+.field select:focus,
+.field input:focus{
+  outline:none;
+  border-color:#660000;
+  box-shadow:0 0 0 2px rgba(102,0,0,0.15);
+}
+
+/* Segmented control */
+.segmented{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+.seg-btn{
+  border:1px solid #660000;
+  border-radius:4px;
+  padding:4px 10px;
+  cursor:pointer;
+  font-size:0.9rem;
+  font-weight:600;
+  font-family:inherit;
+  background:#ffffff;
+  color:#111;
+  box-shadow:0 2px 6px rgba(0,0,0,0.12);
+  transition:background 0.1s ease-out, box-shadow 0.1s ease-out, transform 0.05s ease-out;
+}
+.seg-btn:hover{
+  background:#f4f4f4;
+  box-shadow:0 4px 10px rgba(0,0,0,0.18);
+  transform:translateY(-1px);
+}
+.seg-btn.active{
+  background:#7b1113;
+  color:#fff;
+  box-shadow:0 2px 6px rgba(0,0,0,0.35);
+}
+
+/* Buttons */
+.actions{
+  margin-top:0.7rem;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+button{
+  border:1px solid #660000;
+  border-radius:4px;
+  padding:4px 10px;
+  cursor:pointer;
+  font-size:0.9rem;
+  font-weight:600;
+  font-family:inherit;
+  background:#ffffff;
+  color:#111;
+  box-shadow:0 2px 6px rgba(0,0,0,0.12);
+  transition:background 0.1s ease-out, box-shadow 0.1s ease-out, transform 0.05s ease-out;
+}
+button:hover{
+  background:#f4f4f4;
+  box-shadow:0 4px 10px rgba(0,0,0,0.18);
+  transform:translateY(-1px);
+}
+button:active{
+  transform:translateY(0);
+}
+button.primary{
+  background:#7b1113;
+  color:#fff;
+  box-shadow:0 2px 6px rgba(0,0,0,0.35);
+}
+button.primary:hover{
+  background:#990000;
+  box-shadow:0 4px 10px rgba(0,0,0,0.45);
+}
+button.danger{
+  background:#8b0000;
+  color:#fff;
+}
+button.danger:hover{
+  background:#a00000;
+}
+
+/* Output area */
+.output{
+  margin-top:0.4rem;
+}
+.empty{
+  border-radius:4px;
+  border:1px solid #c0c0c0;
+  padding:0.9rem 0.9rem 0.8rem;
+  background:#ffffff;
+  font-size:0.95rem;
+  color:#444;
+  font-style:italic;
+}
+
+/* NPC card */
+.npc-card{
+  border-radius:4px;
+  border:1px solid #c0c0c0;
+  padding:0.9rem 0.9rem 0.8rem;
+  background:#ffffff;
+  font-size:0.98rem;
+  margin-top:0.55rem;
+}
+.npc-card h3{
+  margin:0 0 0.5rem;
+  font-size:1.25rem;
+  text-align:left;
+}
+.meta{
+  display:flex;
+  gap:0.45rem;
+  flex-wrap:wrap;
+  margin:0.35rem 0 0.55rem;
+  font-size:0.9rem;
+}
+.badge{
+  border:1px solid #c0c0c0;
+  background:#f7f7f7;
+  padding:2px 8px;
+  border-radius:999px;
+  line-height:1.4;
+}
+.framing{
+  border-left:4px solid #7b1113;
+  padding:0.45rem 0.6rem;
+  background:#ffffff;
+  margin:0.4rem 0 0.65rem;
+  border-radius:3px;
+}
+.details,
+.role-extra{
+  border:1px solid #c0c0c0;
+  background:#ffffff;
+  padding:0.55rem 0.6rem;
+  border-radius:3px;
+  margin:0.4rem 0 0.65rem;
+  font-size:0.92rem;
+}
+
+/* List formatting */
+.npc-card ul{
+  margin:0.4rem 0 0.6rem;
+  padding-left:1.2rem;
+}
+.npc-card li{
+  margin:0.45rem 0;
+  line-height:1.45;
+}
+.npc-card b{
+  font-weight:bold;
+}
+
+/* Question mark tooltip */
+.qmark{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:1.05em;
+  height:1.05em;
+  margin:0 0.2rem 0 0.25rem;
+  border-radius:50%;
+  border:1px solid #888;
+  background:#f7f7f7;
+  color:#111;
+  font-size:0.85em;
+  font-weight:bold;
+  cursor:help;
+  vertical-align:middle;
+}
+
+/* Card actions */
+.card-actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:0.5rem;
+}
+
+/* Toast */
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:18px;
+  transform:translateX(-50%);
+  background:#111;
+  color:#fff;
+  padding:8px 12px;
+  border-radius:6px;
+  box-shadow:0 6px 16px rgba(0,0,0,0.25);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity 0.2s ease-in-out;
+  font-size:0.95rem;
+}
+.toast.show{ opacity:1; }
+
+/* Footer */
+.footer{
+  max-width:1550px;
+  margin:0 auto 1.25rem;
+  padding:0 20px;
+  color:#444;
+  font-size:0.85rem;
+  font-style:italic;
+}
+code{
+  font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size:0.9em;
+}
+
+/* Print */
+@media print{
+  body{ background:#fff; }
+  main.container{
+    box-shadow:none;
+    border:1px solid #660000;
+    background:#fff;
+  }
+  .panel{ border:1px solid #7b1113; }
+  .toast{ display:none !important; }
+}
+
+/* Responsive */
+@media (max-width:700px){
+  .container{ padding:0 14px; }
+  main.container{ padding:14px; }
+  .grid{ grid-template-columns:1fr; }
+  .panel-header{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+}
