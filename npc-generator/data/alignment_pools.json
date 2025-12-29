@@ -45,7 +45,7 @@
         "A sibling serving on the other side of a coming war.",
         "The orphanage they quietly fund and defend.",
         "A magistrate who believes in them when no one else does.",
-        "The promise they made to a dying enemy: “No more innocents.”",
+        "A deathbed vow to a fallen ally: “No more innocents will die because of me.”",
         "Their reputation — earned the hard way and easily shattered."
       ],
       "leverage": [
@@ -183,7 +183,7 @@
       "introduction": [
         "You meet them in a packed infirmary in the city of {city}, triaging wounds and insisting everyone gets seen.",
         "You meet them on the road to {region} region, handing out food and blankets to travelers in need.",
-        "You meet them negotiating a ceasefire between {faction} and a desperate village, urging mercy on both sides.",
+        "You meet them negotiating a ceasefire between {faction} faction and a desperate village, urging mercy on both sides.",
         "You meet them rebuilding homes after a disaster, working until their hands shake with fatigue.",
         "You meet them arguing with a hardline official, defending civilians with stubborn, quiet fury.",
         "You meet them sheltering a frightened stranger, asking you to help without asking questions.",
@@ -375,7 +375,7 @@
       "introduction": [
         "You meet them at a checkpoint outside the city of {city}, inspecting papers with practiced efficiency.",
         "You meet them in a courthouse hallway, reciting procedure while chaos unfolds around them.",
-        "You meet them auditing {faction} accounts, expression flat as they circle irregularities in ink.",
+        "You meet them auditing {faction} faction's accounts, expression flat as they circle irregularities in ink.",
         "You meet them at a watch-post with {order} order, refusing bribes and excuses in equal measure.",
         "You meet them cataloging {artifact} for transfer, insisting on signatures before anyone touches it.",
         "You meet them writing a report mid-crisis, because “if it isn’t recorded, it didn’t happen.”",
@@ -663,7 +663,7 @@
       "introduction": [
         "You meet them in a marble office in the city of {city}, offering tea while they negotiate from a position of power.",
         "You meet them overseeing a public sentencing, calm as a blade and just as sharp.",
-        "You meet them at a meeting of {faction}, smiling as they turn rules into weapons.",
+        "You meet them at a meeting of {faction} faction, smiling as they turn rules into weapons.",
         "You meet them arriving with contracts already drafted—and penalties already priced.",
         "You meet them rewarding loyal subordinates in public and punishing failures in private.",
         "You meet them hosting a charity banquet, collecting favors behind every toast.",
