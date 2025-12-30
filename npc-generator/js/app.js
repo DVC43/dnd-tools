@@ -718,8 +718,8 @@
       </div>
     `;
 
-    card.querySelector('[data-action="copy-rich"]').addEventListener("click", () => copyRich(card));
-    card.querySelector('[data-action="copy-text"]').addEventListener("click", () => copyText(card));
+    // card.querySelector('[data-action="copy-rich"]').addEventListener("click", () => copyRich(card));
+    // card.querySelector('[data-action="copy-text"]').addEventListener("click", () => copyText(card));
     card.querySelector('[data-action="download-html"]').addEventListener("click", () => downloadHTML(card, npc));
 
     return card;
