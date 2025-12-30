@@ -712,8 +712,8 @@
 		<li><b>Complication<span class="qmark" title="How they could collide with the PCs?">?</span>:</b> ${escapeHTML(npc.complication)}</li>
       </ul>
       <div class="card-actions">
-        <button type="button" data-action="copy-rich">Copy (rich)</button>
-        <button type="button" data-action="copy-text">Copy (text)</button>
+        <!-- <button type="button" data-action="copy-rich">Copy (rich)</button> -->
+        <!-- <button type="button" data-action="copy-text">Copy (text)</button> -->
         <button type="button" data-action="download-html">Download .html</button>
       </div>
     `;
