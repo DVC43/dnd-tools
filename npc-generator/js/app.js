@@ -29,9 +29,6 @@
 
   const generateBtn = $("#generateBtn");
   const clearBtn = $("#clearBtn");
-  const copyLatestBtn = $("#copyLatestBtn");
-  const copyLatestTextBtn = $("#copyLatestTextBtn");
-
   const ALIGNMENTS = ["LG","NG","CG","LN","N","CN","LE","NE","CE"];
 
   // --- Small helpers ---
@@ -698,7 +695,7 @@
 	// tell shown in UI as habit
     card.innerHTML = `
       <h3>${escapeHTML(npc.name)}</h3>
-      <div class="meta">${metaBits.join("")}</div>
+      <div class="meta">${metaBits.join(" ")}</div>
       <div class="framing"><b>Worldview:</b> ${escapeHTML(npc.framing.axis)}<br><span><b>Mentality:</b> ${escapeHTML(npc.framing.mind)}</span></div>
       ${npc.roleKind==="Profession" && npc.roleDetail ? `<div class="role-extra"><b>Profession category:</b> ${escapeHTML(npc.roleCategory)}<br><b>Profession detail:</b> ${escapeHTML(npc.roleDetail)}</div>` : ""}
       <ul>
@@ -712,40 +709,16 @@
 		<li><b>Complication<span class="qmark" title="How they could collide with the PCs?">?</span>:</b> ${escapeHTML(npc.complication)}</li>
       </ul>
       <div class="card-actions">
-        <button type="button" data-action="copy-rich">Copy (rich)</button>
-        <button type="button" data-action="copy-text">Copy (text)</button>
         <button type="button" data-action="download-html">Download .html</button>
       </div>
     `;
-
-    card.querySelector('[data-action="copy-rich"]').addEventListener("click", () => copyRich(card));
-    card.querySelector('[data-action="copy-text"]').addEventListener("click", () => copyText(card));
-    card.querySelector('[data-action="download-html"]').addEventListener("click", () => downloadHTML(card, npc));
+card.querySelector('[data-action="download-html"]').addEventListener("click", () => downloadHTML(card, npc));
 
     return card;
   }
 
-  async function copyRich(cardEl){
-    const clone = cloneForExport(cardEl);
-    const html = clone.outerHTML;
-    const text = cardToPlainText(clone);
-
-    try{
-      if (navigator.clipboard && window.ClipboardItem){
-        const item = new ClipboardItem({
-          "text/html": new Blob([html], {type:"text/html"}),
-          "text/plain": new Blob([text], {type:"text/plain"})
-        });
-        await navigator.clipboard.write([item]);
-        toast("Copied (rich).");
-        return;
-      }
-    }catch(e){ /* fall through */ }
-
-    // fallback: plain text
-    await navigator.clipboard.writeText(text);
-    toast("Copied (text-only fallback).");
-  }
+  // Copy helpers removed: this build is intended for embedded contexts
+  // (e.g., Google Sites) where clipboard APIs are often blocked.
 
   function cloneForExport(cardEl){
     const clone = cardEl.cloneNode(true);
@@ -755,30 +728,7 @@
     return clone;
   }
 
-  function cardToPlainText(cardEl){
-    const name = cardEl.querySelector("h3")?.innerText?.trim() || "";
-    const metaLines = Array.from(cardEl.querySelectorAll(".meta .badge"))
-      .map(b => (b.innerText || "").trim())
-      .filter(Boolean);
-    const framing = (cardEl.querySelector(".framing")?.innerText || "")
-      .replace(/\s+/g, " ")
-      .trim();
-    const items = Array.from(cardEl.querySelectorAll("ul li"))
-      .map(li => (li.innerText || "").trim())
-      .filter(Boolean);
-    return [name, ...metaLines, framing, ...items].filter(Boolean).join("\n");
-  }
-
-
-  async function copyText(cardEl){
-    try{
-      const clone = cloneForExport(cardEl);
-      await navigator.clipboard.writeText(cardToPlainText(clone));
-      toast("Copied (text).");
-    }catch(e){
-      toast("Copy failed (browser blocked clipboard).", false);
-    }
-  }
+  // cardToPlainText and copyText removed (unused with copy buttons stripped).
 
   function downloadHTML(cardEl, npc){
     const clone = cloneForExport(cardEl);
@@ -797,21 +747,7 @@
     URL.revokeObjectURL(url);
   }
 
-  function latestCard(){
-    const cards = Array.from(outputEl.querySelectorAll(".npc-card"));
-    return cards[cards.length-1] || null;
-  }
-
-  copyLatestBtn.addEventListener("click", async () => {
-    const card = latestCard();
-    if (!card) return toast("No NPC yet.", false);
-    await copyRich(card);
-  });
-  copyLatestTextBtn.addEventListener("click", async () => {
-    const card = latestCard();
-    if (!card) return toast("No NPC yet.", false);
-    await copyText(card);
-  });
+  // latestCard / copy-latest handlers removed.
 
   clearBtn.addEventListener("click", () => {
     outputEl.innerHTML = `<div class="empty">Generate an NPC to see output here.</div>`;

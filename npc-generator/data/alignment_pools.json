@@ -14,7 +14,7 @@
     "LG": {
       "goal": [
         "Bring a corrupt official to lawful judgment before {faction} faction collapses.",
-        "Secure {artifact} and lock it away where it can’t harm innocents again.",
+        "Secure an artifact and lock it away where it can’t harm innocents again.",
         "Rebuild a ruined shrine in the city of {city} and restore its protections.",
         "Escort refugees safely across {region} region, even if it delays other plans.",
         "Break a siege without needless bloodshed and spare those who surrender.",
@@ -73,12 +73,12 @@
         "Keeps their promises aloud so everyone can hold them to it."
       ],
       "complication": [
-        "The PCs want speed; this NPC demands warrants, witnesses, and due process.",
-        "They insist a captured villain stand trial — when the party wants vengeance.",
+        "The'll demands warrants, witnesses, and due process - no matter the urgency.",
+        "They'll insist a captured villain stand trial — when the party wants vengeance.",
         "They’ll oppose the party if collateral damage risks innocents.",
-        "They won’t lie to get past guards, even if it costs time and blood.",
-        "They demand the party surrender {artifact} for safekeeping immediately.",
-        "They keep helping… but keep reporting the party to authorities.",
+        "They'll never lie to get past guards, even if it costs time and blood.",
+        "They'll demand the party surrender evidence for safekeeping immediately.",
+        "They'll report the party to authorities for broken laws.",
         "They’ll protect a repentant enemy the party thinks is irredeemable.",
         "They’re bound to obey a flawed command unless shown lawful proof.",
         "They’ll break an alliance if the party uses “evil” methods for good ends.",
@@ -94,7 +94,7 @@
         "You meet them training recruits of {order} order, correcting stances with patience and praising honest effort.",
         "You meet them delivering restitution to a wronged family, personally ensuring the aid reaches the victims.",
         "You meet them at a courtroom door, inviting the party to testify—truthfully—before the magistrate.",
-        "You meet them guarding {artifact} in an evidence vault, weighing every request against duty and risk."
+        "You meet them guarding an evidence vault, weighing every request against duty and risk."
       ],
       "vice": [
         "They won’t rest or delegate; self-sacrifice is reflex.",
@@ -115,7 +115,7 @@
         "Expose a scam charity and redirect aid to where it truly helps.",
         "Build a sanctuary for the wounded on the edge of {region} region.",
         "Find a peaceful solution to a monster problem — if one exists.",
-        "Recover {artifact} to cure someone who can’t be cured any other way.",
+        "Recover a rare reagent to cure someone who can’t be cured any other way.",
         "Make peace with ‘the other’ — even if it costs them their standing.",
         "Protect a whistleblower hiding inside a rotten institution.",
         "Stop a cruel tradition that “everyone accepts” in the city of {city}."
@@ -208,7 +208,7 @@
         "Overthrow a local tyrant in the city of {city} and give power back to the people.",
         "Smuggle dissidents out of {region} region past the checkpoints of {faction} faction.",
         "Break a cruel law by making it impossible to enforce.",
-        "Steal {artifact} from an oppressive vault and return it to those it was taken from.",
+        "Steal a relic from an oppressive vault and return it to those it was taken from.",
         "Expose the hypocrisy of a “holy” authority by revealing their hidden sins.",
         "Start a riot in the right place at the right time — then vanish.",
         "Protect a persecuted group the authorities call “criminals.”",
@@ -272,7 +272,7 @@
         "They insist on freeing prisoners even if it risks the mission.",
         "They’ll publicly antagonize the villain to draw heat off others.",
         "They’ll spare a guard who ‘looked scared,’ causing problems later.",
-        "They’ll steal {artifact} from the PCs ‘for the cause.’",
+        "They’ll steal treasure from the PCs ‘for the cause.’",
         "They’ll break a treaty the PCs were relying on because it’s unjust.",
         "They’ll go too far, and the PCs must pull them back from bloodshed."
       ],
@@ -303,7 +303,7 @@
       "goal": [
         "Audit {faction} faction’s accounts and expose the rot without collapsing the city.",
         "Enforce a treaty border in {region} region before war becomes inevitable.",
-        "Secure {artifact} as evidence and chain-of-custody it properly.",
+        "Secure evidence in a recent crime then chain-of-custody it properly.",
         "Reorganize a failing watch in the city of {city} into something effective.",
         "Stamp out vigilantism by bringing both criminals and ‘heroes’ under law.",
         "Protect a trial from interference by any side — especially the PCs.",
@@ -370,14 +370,14 @@
         "They’ll side with the lesser evil if it preserves order.",
         "They’ll sabotage a heroic lie because truth matters to the system.",
         "They’ll protect a villain’s legal rights to prove the law is real.",
-        "They’ll insist the PCs hand over {artifact} as evidence."
+        "They’ll insist the PCs hand over recent treasures as evidence."
       ],
       "introduction": [
         "You meet them at a checkpoint outside the city of {city}, inspecting papers with practiced efficiency.",
         "You meet them in a courthouse hallway, reciting procedure while chaos unfolds around them.",
         "You meet them auditing {faction} faction's accounts, expression flat as they circle irregularities in ink.",
         "You meet them at a watch-post with {order} order, refusing bribes and excuses in equal measure.",
-        "You meet them cataloging {artifact} for transfer, insisting on signatures before anyone touches it.",
+        "You meet them cataloging for transfer a powerful relic, insisting on protocol before anyone examines it.",
         "You meet them writing a report mid-crisis, because “if it isn’t recorded, it didn’t happen.”",
         "You meet them delivering a summons, calm and unwavering no matter who answers the door.",
         "You meet them enforcing a curfew in {region} region, warning you once and only once.",
@@ -400,7 +400,7 @@
         "Keep their business alive in the city of {city} through the next the threat of {threats}.",
         "Stay out of the coming war by making everyone owe them favors.",
         "Protect their family’s farm on the edge of {region} region.",
-        "Recover {artifact} because it’s valuable — and because it’s dangerous.",
+        "Recover a powerful item because it’s valuable — and because it’s dangerous.",
         "Maintain balance between rival factions before either wins completely.",
         "Pay off a debt to {faction} faction without being ruined.",
         "Find a safe route for travelers that avoids both bandits and taxes.",
@@ -496,7 +496,7 @@
         "Pull off a legendary heist in the city of {city} — mostly to prove they can.",
         "Find a new road out of {region} region that no map admits exists.",
         "Get rich fast, spend it faster, and keep moving.",
-        "Steal {artifact} because it’s beautiful and nobody owns beauty.",
+        "Steal a priceless objet d'art because it’s beautiful and then give it away.",
         "Escape a contract with {faction} faction by making it impossible to enforce.",
         "Start a new crew and a new life by tomorrow night.",
         "Break a friend out of jail because cages are wrong.",
@@ -590,7 +590,7 @@
     "LE": {
       "goal": [
         "Climb the hierarchy of {faction} faction and take a seat at the table — by force or contract.",
-        "Secure {artifact} and use it as leverage over the city of {city}.",
+        "Secure a trade route and use it as leverage over the city of {city}.",
         "Convert a chaotic frontier into a taxed, policed province.",
         "Break a rival by turning their allies into informants.",
         "Bind the PCs to a ‘mutually beneficial’ agreement they can’t escape.",
@@ -686,7 +686,7 @@
     "NE": {
       "goal": [
         "Get rich off the threat of {threats} by selling the cure, the map, or the secret.",
-        "Steal {artifact} and fence it through {faction} faction.",
+        "Steal a powerful item and fence it through {faction} faction.",
         "Erase all records tying them to a murder in the city of {city}.",
         "Play both sides of a conflict until they own the winner.",
         "Acquire a blackmail ledger on the nobles in the city of {city}.",
@@ -750,7 +750,7 @@
         "They’ll betray a good NPC to save themselves — unless the PCs stop it.",
         "They’ll drag the party into criminal politics they don’t understand.",
         "They’ll ‘solve’ a problem with a brutal shortcut that stains the party.",
-        "They’ll keep a cursed {artifact} because it’s valuable.",
+        "They’ll keep vital information secret until they are paid handsomely.",
         "They’ll double-book alliances and cause a firefight.",
         "They’ll demand payment at the worst moment.",
         "They’ll frame an innocent to buy time.",
@@ -759,7 +759,7 @@
       "introduction": [
         "You meet them in the back room of an inn in the city of {city}, counting coin and smiling like it’s a knife.",
         "You meet them at a crossroads, offering directions that come with a price.",
-        "You meet them selling information about {artifact}, swearing it’s ‘just business.’",
+        "You meet them selling harmful secrets, swearing it’s ‘just business.’",
         "You meet them leaving a scene of violence, calm and unhurried, as if late for dinner.",
         "You meet them flattering the party while quietly measuring what you’re worth.",
         "You meet them offering help in exchange for a secret, not gold.",
@@ -783,7 +783,7 @@
       "goal": [
         "Burn down {faction} faction’s symbol of authority just to watch people panic.",
         "Unleash the threat of {threats} because terror tastes sweet.",
-        "Claim {artifact} and use it to break things that ‘deserve breaking.’",
+        "Claim a powerful item and use it to break things that ‘deserve breaking.’",
         "Start a war between rival gangs and profit from the screams.",
         "Kill the ‘hero’ of the city of {city} in public and dance in the ashes.",
         "Prove they’re the strongest by taking what they want openly.",
@@ -824,7 +824,7 @@
         "Promise them a fight worth remembering.",
         "Corner them with superior force; they respect strength.",
         "Offer an easy escape (scapegoat, chaos, open gate) — and point them at someone else.",
-        "Dangle {artifact} like bait; they’ll lunge.",
+        "Dangle the opportunity for carnage like bait; they’ll lunge.",
         "Insult them and they’ll lose control.",
         "Deny them fear: stay calm, don’t beg, don’t flinch."
       ],

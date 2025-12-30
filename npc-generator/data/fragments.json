@@ -110,16 +110,19 @@
 	"Umberlee"
   ],
   "artifacts": [
-    "a sealed spellbook",
-    "a saint’s fingerbone",
-    "a crown of cold iron",
-    "a mirror that remembers",
-    "a blade that drinks promises",
-    "a map inked in dragon blood",
-    "a lantern that reveals lies",
-    "a coin that never spends",
-    "a chalice that heals once",
-    "a key that opens dreams"
+    "a sealed grimoire",
+    "a saintly reliquary",
+    "a gem-bound spirit",
+    "a scrying mirror",
+    "an abyssal blade",
+	"an infernal brass soul-ledger",
+    "a lantern of warding",
+    "a bell of soul binding",
+    "a diadem of dreamwalking",
+	"an iron crown of domination",
+	"a codex of hidden roads",
+	"a ring of oathbinding",
+	"a bound phylactery"
   ],
   "vices": [
     "pride",
