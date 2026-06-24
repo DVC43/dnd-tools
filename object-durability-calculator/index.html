@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Object Durability Calculator</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <main class="container">
+    <section class="intro" aria-labelledby="page-title">
+      <h1 id="page-title">Object Durability Calculator</h1>
+    </section>
+
+    <section class="panel" aria-labelledby="setup-title">
+      <div class="panel-header">
+        <h2 id="setup-title">Object Setup</h2>
+      </div>
+
+      <p class="panel-copy">Choose the object's substance, size, and whether it is fragile or resilient. Results update immediately and use the DMG object guidelines as a baseline.</p>
+
+      <div class="grid setup-grid">
+        <div class="field">
+          <label for="objSubstance">Substance</label>
+          <select id="objSubstance">
+            <option value="cloth">Cloth, paper, rope</option>
+            <option value="crystal">Crystal, glass, ice</option>
+            <option value="wood">Wood, bone</option>
+            <option value="stone">Stone</option>
+            <option value="iron">Iron, steel</option>
+            <option value="mithral">Mithral</option>
+            <option value="adamantine">Adamantine</option>
+          </select>
+          <div class="hint">Substance sets the baseline Armor Class for the object.</div>
+        </div>
+
+        <div class="field">
+          <label for="objSize">Object Size</label>
+          <select id="objSize">
+            <option value="Tiny">Tiny</option>
+            <option value="Small">Small</option>
+            <option value="Medium">Medium</option>
+            <option value="Large">Large</option>
+            <option value="Huge">Huge</option>
+            <option value="Gargantuan">Gargantuan</option>
+          </select>
+          <div class="hint">Size determines occupied space and whether the DMG gives fixed hit points.</div>
+        </div>
+
+        <div class="field">
+          <label for="objTrait">Object Characteristics</label>
+          <select id="objTrait">
+            <option value="Fragile">Fragile</option>
+            <option value="Resilient">Resilient</option>
+          </select>
+          <div class="hint">Fragile and resilient use the DMG's standard object hit point bands for Tiny through Large objects.</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="resetDurabilityBtn" type="button">Reset Calculator</button>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="results-title">
+      <div class="panel-header">
+        <h2 id="results-title">Results</h2>
+      </div>
+
+      <div class="kpi-grid">
+        <article class="tile">
+          <h3>Object AC</h3>
+          <p id="kpiAc" class="num">11</p>
+          <p id="kpiAcNote" class="tile-note">Cloth, paper, rope.</p>
+        </article>
+
+        <article class="tile">
+          <h3>Object Hit Points</h3>
+          <p id="kpiHp" class="num">2 hp (1d4)</p>
+          <p id="kpiHpNote" class="tile-note">Fragile Tiny object.</p>
+        </article>
+
+        <article class="tile">
+          <h3>Space On Grid</h3>
+          <p id="kpiSpace" class="num">2½ ft × 2½ ft</p>
+          <p id="kpiSpaceNote" class="tile-note">Tiny object.</p>
+        </article>
+
+        <article class="tile tile-threshold">
+          <h3>Damage Threshold</h3>
+          <p id="kpiThreshold" class="num">None</p>
+          <p id="kpiThresholdNote" class="tile-note">Assign one only for especially tough objects.</p>
+        </article>
+      </div>
+
+      <div class="result-card" aria-live="polite">
+        <h3 id="resultSummary">Tiny fragile cloth, paper, rope object</h3>
+        <p id="resultGuidance">A Tiny object made of cloth, paper, or rope typically has AC 11, 2 hp (1d4), and occupies a 2½ ft × 2½ ft space on the grid.</p>
+        <p id="resultGuidanceSecondary">By default it has no damage threshold, though you can assign one when the object is unusually reinforced or central to the scene.</p>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="notes-title">
+      <div class="panel-header">
+        <h2 id="notes-title">Rules Notes</h2>
+      </div>
+
+      <div class="rules-note">
+        <p>Hit points for Tiny through Large objects follow the DMG object table directly.</p>
+        <p>Huge and Gargantuan objects do not have fixed hit points in the DMG. Their durability is usually handled by sections, multiple components, or narrative pacing.</p>
+        <p>The suggested damage threshold ranges here, `5–15` for Huge and `15–30` for Gargantuan, give you a quick minimum-damage guideline when you want large objects to ignore minor hits.</p>
+        <p><strong>For full details, see Objects (p.246–247) in the 2014 DMG.</strong></p>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>Always adjust to fit your table's tone and tier of play.</p>
+    </footer>
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

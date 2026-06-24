@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Group Stealth Calculator</title>
+  <base href="./group-stealth-calculator/" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <main class="container">
+    <section class="intro" aria-labelledby="page-title">
+      <h1 id="page-title">Group Stealth Calculator</h1>
+    </section>
+
+    <section class="panel" aria-labelledby="setup-title">
+      <div class="panel-header">
+        <h2 id="setup-title">Stealth Setup</h2>
+      </div>
+
+      <p class="panel-copy">Set the stealth leader, party size, enemy perception DC, and situational modifiers. Party member rows update automatically when the party size changes.</p>
+
+      <div class="grid grid-five stealth-setup-grid">
+        <div class="field">
+          <label for="leaderMod">Stealth Leader Modifier</label>
+          <input id="leaderMod" type="number" value="7" step="1" />
+          <div class="hint">The lead character's stealth modifier before group adjustments.</div>
+        </div>
+
+        <div class="field">
+          <label for="pb">Proficiency Bonus (PB)</label>
+          <input id="pb" type="number" value="3" step="1" />
+          <div class="hint">Proficient members add +PB. Non-proficient members apply a penalty equal to half PB, rounded down.</div>
+        </div>
+
+        <div class="field">
+          <label for="partySize">Party Size</label>
+          <input id="partySize" type="number" min="1" max="12" value="4" />
+          <div class="hint">Supports between 1 and 12 party members.</div>
+        </div>
+
+        <div class="field">
+          <label for="enemyDC">Enemy Perception DC</label>
+          <input id="enemyDC" type="number" value="13" />
+          <div class="hint">Use passive perception as a floor when it is higher than an active check.</div>
+        </div>
+
+        <div class="field situational-field">
+          <label>Situational A / B</label>
+          <div class="field-pair">
+            <select id="sitA" aria-label="Situational modifier A">
+              <option>None</option>
+              <option>Advantage</option>
+              <option>Disadvantage</option>
+            </select>
+            <select id="sitB" aria-label="Situational modifier B">
+              <option>None</option>
+              <option>Advantage</option>
+              <option>Disadvantage</option>
+            </select>
+          </div>
+          <div class="hint">Advantage and disadvantage cancel. The capped-adjustments dropdown controls whether the net situational modifier is limited to +/-5.</div>
+        </div>
+
+        <div class="field">
+          <label for="useCappedAdjustments">Use Capped Adjustments</label>
+          <select id="useCappedAdjustments">
+            <option value="true" selected>true</option>
+            <option value="false">false</option>
+          </select>
+          <div class="hint">Set this to false to use the uncapped group and situational totals instead.</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="groupStealthResetBtn" type="button">Reset Calculator</button>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="party-title">
+      <div class="panel-header">
+        <h2 id="party-title">Party Members</h2>
+      </div>
+
+      <div class="table-wrap">
+        <table class="member-table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Stealth Proficient</th>
+              <th scope="col">Heavy Armor</th>
+              <th scope="col">Prof. Adj</th>
+              <th scope="col">Armor / Disadv.</th>
+              <th scope="col">Net Member Adj</th>
+            </tr>
+          </thead>
+          <tbody id="partyBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="results-title">
+      <div class="panel-header">
+        <h2 id="results-title">Results</h2>
+      </div>
+
+      <div class="kpi-grid">
+        <article class="tile">
+          <h3>Net Situational</h3>
+          <p id="kpiSituational" class="num">0</p>
+          <p id="kpiSituationalNote" class="tile-note">Applied to results.</p>
+        </article>
+
+        <article class="tile">
+          <h3>Applied Group Adjustment</h3>
+          <p id="kpiGroupAdj" class="num">0</p>
+          <p id="kpiGroupAdjNote" class="tile-note">Using capped totals.</p>
+          <p id="kpiGroupAdjRaw" class="tile-note">Raw total: 0</p>
+        </article>
+
+        <article class="tile">
+          <h3>Adjusted Stealth Modifier</h3>
+          <p id="kpiAdjustedMod" class="num">0</p>
+          <p class="tile-note">Leader modifier plus the capped group adjustment.</p>
+        </article>
+
+        <article class="tile tile-passive">
+          <h3>Passive Stealth</h3>
+          <p id="kpiPassive" class="num">0</p>
+          <p class="tile-note">10 + adjusted modifier + situational modifier.</p>
+        </article>
+      </div>
+
+      <div class="result-grid">
+        <div class="field">
+          <label for="rolled">Rolled d20</label>
+          <input id="rolled" type="number" value="10" />
+        </div>
+
+        <div class="field">
+          <label for="rolledTotal">Total Rolled Stealth</label>
+          <input id="rolledTotal" type="number" value="0" disabled />
+        </div>
+
+        <div class="field">
+          <label for="diffPassive">Result vs DC (Passive)</label>
+          <input id="diffPassive" type="number" value="0" disabled />
+          <div class="pill-wrap">
+            <span id="outPassive" class="pill info">-</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="diffRolled">Result vs DC (Rolled)</label>
+          <input id="diffRolled" type="number" value="0" disabled />
+          <div class="pill-wrap">
+            <span id="outRolled" class="pill info">-</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="notes-title">
+      <div class="panel-header">
+        <h2 id="notes-title">Rules Notes</h2>
+      </div>
+
+      <div class="rules-note">
+        <p>Enemy perception DC can come from passive perception or from an active perception check result. Passive perception is often the right floor to use.</p>
+        <p>A member of either side can sometimes use the Help action, when appropriate, to justify a situational advantage. This tool folds those circumstances into the situational selectors.</p>
+        <p>Non-proficient members apply a penalty equal to half the proficiency bonus, rounded down, while heavy armor or inherent disadvantage still applies -5.</p>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>Always adjust to fit your table's tone and tier of play.</p>
+    </footer>
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
