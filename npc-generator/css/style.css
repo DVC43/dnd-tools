@@ -6,12 +6,30 @@
 
 /* Base */
 *{ box-sizing:border-box; }
+
+:root{
+  --page-bg:#000000;
+  --parchment-top:#fafafa;
+  --parchment-bottom:#f0f0f0;
+  --panel-bg:#ffffff;
+  --ink:#111111;
+  --muted:#444444;
+  --accent:#660000;
+  --accent-strong:#7b1113;
+  --accent-hover:#990000;
+  --line:#c0c0c0;
+  --line-strong:#888888;
+  --toast-bg:#111111;
+  --toast-ink:#ffffff;
+  --badge-bg:#f7f7f7;
+}
+
 html,body{ height:100%; }
 body{
   margin:0;
   font-family:"Garamond","Georgia",serif;
-  color:#111;
-  background:#000000;
+  color:var(--ink);
+  background:var(--page-bg);
 }
 
 /* Header */
@@ -27,7 +45,7 @@ body{
   margin:0;
   font-size:0.95rem;
   font-style:italic;
-  color:#444;
+  color:var(--muted);
 }
 
 /* Outer parchment card (use main.container as the wrapper) */
@@ -38,17 +56,17 @@ body{
 }
 main.container{
   padding:20px;
-  border:2px solid #660000;
+  border:2px solid var(--accent);
   border-radius:6px;
   margin:1.5rem auto 1.5rem;
-  background:linear-gradient(180deg,#fafafa 0%,#f0f0f0 100%);
+  background:linear-gradient(180deg,var(--parchment-top) 0%,var(--parchment-bottom) 100%);
   box-shadow:0 0 12px rgba(0,0,0,0.25);
 }
 
 /* Inner panels (aligned with .rg-panel / .ig-panel) */
 .panel{
-  border:2px solid #7b1113;
-  background:#ffffff;
+  border:2px solid var(--accent-strong);
+  background:var(--panel-bg);
   padding:12px 14px;
   border-radius:4px;
   margin-top:0.75rem;
@@ -59,7 +77,7 @@ main.container{
   justify-content:space-between;
   gap:10px;
   padding-bottom:0.4rem;
-  border-bottom:1px solid #c0c0c0;
+  border-bottom:1px solid var(--line);
   margin-bottom:0.6rem;
 }
 .panel h2{
@@ -89,12 +107,12 @@ main.container{
   margin-top:0.35rem;
   font-size:0.85rem;
   font-style:italic;
-  color:#444;
+  color:var(--muted);
 }
 .small{
   font-size:0.85rem;
   font-style:italic;
-  color:#444;
+  color:var(--muted);
   margin-top:0.75rem;
 }
 
@@ -105,9 +123,9 @@ main.container{
   width:100%;
   padding:3px 5px;
   border-radius:3px;
-  border:1px solid #888;
-  background:#ffffff;
-  color:#111;
+  border:1px solid var(--line-strong);
+  background:var(--panel-bg);
+  color:var(--ink);
   font-size:0.95rem;
   font-family:inherit;
 }
@@ -117,7 +135,7 @@ main.container{
 .field select:focus,
 .field input:focus{
   outline:none;
-  border-color:#660000;
+  border-color:var(--accent);
   box-shadow:0 0 0 2px rgba(102,0,0,0.15);
 }
 
@@ -128,15 +146,15 @@ main.container{
   gap:6px;
 }
 .seg-btn{
-  border:1px solid #660000;
+  border:1px solid var(--accent);
   border-radius:4px;
   padding:4px 10px;
   cursor:pointer;
   font-size:0.9rem;
   font-weight:600;
   font-family:inherit;
-  background:#ffffff;
-  color:#111;
+  background:var(--panel-bg);
+  color:var(--ink);
   box-shadow:0 2px 6px rgba(0,0,0,0.12);
   transition:background 0.1s ease-out, box-shadow 0.1s ease-out, transform 0.05s ease-out;
 }
@@ -146,8 +164,8 @@ main.container{
   transform:translateY(-1px);
 }
 .seg-btn.active{
-  background:#7b1113;
-  color:#fff;
+  background:var(--accent-strong);
+  color:#ffffff;
   box-shadow:0 2px 6px rgba(0,0,0,0.35);
 }
 
@@ -159,15 +177,15 @@ main.container{
   flex-wrap:wrap;
 }
 button{
-  border:1px solid #660000;
+  border:1px solid var(--accent);
   border-radius:4px;
   padding:4px 10px;
   cursor:pointer;
   font-size:0.9rem;
   font-weight:600;
   font-family:inherit;
-  background:#ffffff;
-  color:#111;
+  background:var(--panel-bg);
+  color:var(--ink);
   box-shadow:0 2px 6px rgba(0,0,0,0.12);
   transition:background 0.1s ease-out, box-shadow 0.1s ease-out, transform 0.05s ease-out;
 }
@@ -180,17 +198,17 @@ button:active{
   transform:translateY(0);
 }
 button.primary{
-  background:#7b1113;
-  color:#fff;
+  background:var(--accent-strong);
+  color:#ffffff;
   box-shadow:0 2px 6px rgba(0,0,0,0.35);
 }
 button.primary:hover{
-  background:#990000;
+  background:var(--accent-hover);
   box-shadow:0 4px 10px rgba(0,0,0,0.45);
 }
 button.danger{
   background:#8b0000;
-  color:#fff;
+  color:#ffffff;
 }
 button.danger:hover{
   background:#a00000;
@@ -202,20 +220,20 @@ button.danger:hover{
 }
 .empty{
   border-radius:4px;
-  border:1px solid #c0c0c0;
+  border:1px solid var(--line);
   padding:0.9rem 0.9rem 0.8rem;
-  background:#ffffff;
+  background:var(--panel-bg);
   font-size:0.95rem;
-  color:#444;
+  color:var(--muted);
   font-style:italic;
 }
 
 /* NPC card */
 .npc-card{
   border-radius:4px;
-  border:1px solid #c0c0c0;
+  border:1px solid var(--line);
   padding:0.9rem 0.9rem 0.8rem;
-  background:#ffffff;
+  background:var(--panel-bg);
   font-size:0.98rem;
   margin-top:0.55rem;
 }
@@ -232,23 +250,23 @@ button.danger:hover{
   font-size:0.9rem;
 }
 .badge{
-  border:1px solid #c0c0c0;
-  background:#f7f7f7;
+  border:1px solid var(--line);
+  background:var(--badge-bg);
   padding:2px 8px;
   border-radius:999px;
   line-height:1.4;
 }
 .framing{
-  border-left:4px solid #7b1113;
+  border-left:4px solid var(--accent-strong);
   padding:0.45rem 0.6rem;
-  background:#ffffff;
+  background:var(--panel-bg);
   margin:0.4rem 0 0.65rem;
   border-radius:3px;
 }
 .details,
 .role-extra{
-  border:1px solid #c0c0c0;
-  background:#ffffff;
+  border:1px solid var(--line);
+  background:var(--panel-bg);
   padding:0.55rem 0.6rem;
   border-radius:3px;
   margin:0.4rem 0 0.65rem;
@@ -277,9 +295,9 @@ button.danger:hover{
   height:1.05em;
   margin:0 0.2rem 0 0.25rem;
   border-radius:50%;
-  border:1px solid #888;
-  background:#f7f7f7;
-  color:#111;
+  border:1px solid var(--line-strong);
+  background:var(--badge-bg);
+  color:var(--ink);
   font-size:0.85em;
   font-weight:bold;
   cursor:help;
@@ -300,8 +318,8 @@ button.danger:hover{
   left:50%;
   bottom:18px;
   transform:translateX(-50%);
-  background:#111;
-  color:#fff;
+  background:var(--toast-bg);
+  color:var(--toast-ink);
   padding:8px 12px;
   border-radius:6px;
   box-shadow:0 6px 16px rgba(0,0,0,0.25);
@@ -317,7 +335,7 @@ button.danger:hover{
   max-width:1550px;
   margin:0 auto 1.25rem;
   padding:0 20px;
-  color:#444;
+  color:var(--muted);
   font-size:0.85rem;
   font-style:italic;
 }
@@ -331,10 +349,10 @@ code{
   body{ background:#fff; }
   main.container{
     box-shadow:none;
-    border:1px solid #660000;
+    border:1px solid var(--accent);
     background:#fff;
   }
-  .panel{ border:1px solid #7b1113; }
+  .panel{ border:1px solid var(--accent-strong); }
   .toast{ display:none !important; }
 }
 

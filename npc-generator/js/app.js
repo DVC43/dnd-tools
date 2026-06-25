@@ -1,5 +1,6 @@
 
 (async function(){
+  const NPC_GENERATOR_STORE_KEY = "npcGeneratorState_v1";
   const $ = (sel) => document.querySelector(sel);
   const $$ = (sel) => Array.from(document.querySelectorAll(sel));
 
@@ -187,6 +188,87 @@
 
   function titleCase(s){
     return s.split(" ").map(w=>w ? w[0].toUpperCase()+w.slice(1) : w).join(" ");
+  }
+
+  function hasOption(selectEl, value){
+    if (!selectEl) return false;
+    return Array.from(selectEl.options).some((opt) => opt.value === value);
+  }
+
+  function setSelectValue(selectEl, value, fallback){
+    if (!selectEl) return;
+    if (value !== undefined && value !== null && hasOption(selectEl, value)){
+      selectEl.value = value;
+      return;
+    }
+    if (fallback !== undefined && fallback !== null && hasOption(selectEl, fallback)){
+      selectEl.value = fallback;
+    }
+  }
+
+  function getFormState(){
+    return {
+      npcType: npcTypeSelect ? npcTypeSelect.value : "race_class",
+      monsterRoleMode: monsterRoleMode ? monsterRoleMode.value : "class",
+      race: raceSelect ? raceSelect.value : "random",
+      classRole: classSelect ? classSelect.value : "random",
+      professionCategory: professionCategorySelect ? professionCategorySelect.value : "any",
+      profession: professionSelect ? professionSelect.value : "random",
+      alignment: alignmentSelect ? alignmentSelect.value : "random",
+      intelligence: intelligenceSelect ? intelligenceSelect.value : "random",
+      monster: monsterSelect ? monsterSelect.value : "random",
+      epithetMode: epithetMode ? epithetMode.value : "auto"
+    };
+  }
+
+  function persistFormState(){
+    try{
+      localStorage.setItem(NPC_GENERATOR_STORE_KEY, JSON.stringify(getFormState()));
+    }catch(_error){
+      // Ignore storage issues in restricted contexts.
+    }
+  }
+
+  function loadStoredFormState(){
+    try{
+      const raw = localStorage.getItem(NPC_GENERATOR_STORE_KEY);
+      if (!raw) return null;
+      return JSON.parse(raw);
+    }catch(_error){
+      return null;
+    }
+  }
+
+  function applyFormState(state){
+    const next = {
+      npcType: "race_class",
+      monsterRoleMode: "class",
+      race: "random",
+      classRole: "random",
+      professionCategory: "any",
+      profession: "random",
+      alignment: "random",
+      intelligence: "random",
+      monster: "random",
+      epithetMode: "auto",
+      ...(state || {})
+    };
+
+    setSelectValue(npcTypeSelect, next.npcType, "race_class");
+    setSelectValue(monsterRoleMode, next.monsterRoleMode, "class");
+    setNPCType(npcTypeSelect ? npcTypeSelect.value : next.npcType);
+
+    setSelectValue(raceSelect, next.race, "random");
+    setSelectValue(classSelect, next.classRole, "random");
+    setSelectValue(alignmentSelect, next.alignment, "random");
+    setSelectValue(intelligenceSelect, next.intelligence, "random");
+    setSelectValue(monsterSelect, next.monster, "random");
+    setSelectValue(epithetMode, next.epithetMode, "auto");
+    setSelectValue(professionCategorySelect, next.professionCategory, "any");
+
+    rebuildProfessionSelectOptions();
+    setSelectValue(professionSelect, next.profession, "random");
+    updateProfessionDetailsUI();
   }
 
   // --- Load data ---
@@ -390,10 +472,16 @@
   }
 
   if (professionCategorySelect){
-    professionCategorySelect.addEventListener("change", rebuildProfessionSelectOptions);
+    professionCategorySelect.addEventListener("change", () => {
+      rebuildProfessionSelectOptions();
+      persistFormState();
+    });
   }
   if (professionSelect){
-    professionSelect.addEventListener("change", updateProfessionDetailsUI);
+    professionSelect.addEventListener("change", () => {
+      updateProfessionDetailsUI();
+      persistFormState();
+    });
   }
 
   function updateMonsterRoleVisibility(){
@@ -402,6 +490,7 @@
     classField.style.display = (mode === "class") ? "" : "none";
     professionField.style.display = (mode === "profession") ? "" : "none";
     rebuildProfessionSelectOptions();
+    persistFormState();
   }
 
   function setNPCType(next){
@@ -435,18 +524,37 @@
 
     // Refresh profession options (adds/removes Monstrous-only "Never")
     rebuildProfessionSelectOptions();
+    persistFormState();
   }
 
   if (npcTypeSelect){
-    npcTypeSelect.addEventListener("change", () => setNPCType(npcTypeSelect.value));
+    npcTypeSelect.addEventListener("change", () => {
+      setNPCType(npcTypeSelect.value);
+      persistFormState();
+    });
   }
   // Legacy support (if segmented buttons exist)
-  $$(".seg-btn").forEach(btn => btn.addEventListener("click", () => setNPCType(btn.dataset.npcType)));
+  $$(".seg-btn").forEach(btn => btn.addEventListener("click", () => {
+    setNPCType(btn.dataset.npcType);
+    persistFormState();
+  }));
   if (monsterRoleMode){
     monsterRoleMode.addEventListener("change", updateMonsterRoleVisibility);
   }
-  setNPCType(npcTypeSelect ? npcTypeSelect.value : "race_class");
-  rebuildProfessionSelectOptions();
+  applyFormState(loadStoredFormState());
+  persistFormState();
+
+  [
+    raceSelect,
+    classSelect,
+    alignmentSelect,
+    intelligenceSelect,
+    monsterSelect,
+    epithetMode
+  ].forEach((selectEl) => {
+    if (!selectEl) return;
+    selectEl.addEventListener("change", persistFormState);
+  });
 
   function getNamePoolForRace(raceId){
     const r = races.find(x => x.id === raceId);
@@ -751,6 +859,7 @@ card.querySelector('[data-action="download-html"]').addEventListener("click", ()
 
   clearBtn.addEventListener("click", () => {
     outputEl.innerHTML = `<div class="empty">Generate an NPC to see output here.</div>`;
+    persistFormState();
     toast("Cleared.");
   });
 
@@ -957,6 +1066,7 @@ function resolveAlignment(rng){
 
     outputEl.appendChild(card);
     card.scrollIntoView({behavior:"smooth", block:"start"});
+    persistFormState();
     toast("Generated.");
   });
 
